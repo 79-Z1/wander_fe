@@ -1,0 +1,53 @@
+.abc-progress {
+  @apply relative h-4 overflow-hidden rounded bg-gray-50;
+  &__bar {
+    @apply h-full w-1/2 bg-primary-500 text-center leading-0 transition-width duration-150;
+  }
+  &__text {
+    @apply mx-2.5 cursor-default text-xs font-medium;
+  }
+  // Themes
+  &.theme-primary {
+    .abc-progress__bar {
+      @apply bg-primary-400;
+    }
+  }
+  &.theme-secondary {
+    .abc-progress__bar {
+      @apply bg-secondary-400;
+    }
+  }
+  &.theme-danger {
+    .abc-progress__bar {
+      @apply bg-red-400;
+    }
+  }
+  &.theme-warning {
+    .abc-progress__bar {
+      @apply bg-amber-400;
+    }
+  }
+  &.theme-success {
+    .abc-progress__bar {
+      @apply bg-green-500;
+    }
+  }
+  &.theme-info {
+    .abc-progress__bar {
+      @apply bg-sky-400;
+    }
+  }
+  &.theme-dark {
+    .abc-progress__bar {
+      @apply bg-slate-700;
+    }
+    .abc-progress__text {
+      @apply text-gray-50;
+    }
+  }
+  &.theme-violet {
+    .abc-progress__bar {
+      @apply bg-violet-600;
+    }
+  }
+}

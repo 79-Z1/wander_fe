@@ -1,0 +1,90 @@
+.abc-switcher {
+  @apply inline-flex items-center justify-center align-middle leading-none;
+  &:not(:disabled, .abc-switcher--disabled):hover {
+    label {
+      @apply cursor-pointer;
+    }
+  }
+  .abc-switcher__track {
+    @apply pointer-events-auto h-6 w-12 rounded-full p-0.5 ring-1 ring-inset transition-all duration-150 ease-in-out;
+  }
+  .abc-switcher__dot {
+    @apply h-5 w-5 rounded-full bg-white ring-1 ring-slate-700/10 transition-all duration-150 ease-in-out;
+  }
+  &.primary {
+    &.abc-switcher--checked .abc-switcher__track {
+      @apply bg-violet-600 ring-violet-700;
+    }
+  }
+  &.secondary {
+    &.abc-switcher--checked .abc-switcher__track {
+      @apply bg-secondary-500 ring-secondary-600;
+    }
+  }
+  &.danger {
+    &.abc-switcher--checked .abc-switcher__track {
+      @apply bg-red-500 ring-red-600;
+    }
+  }
+  &.warning {
+    &.abc-switcher--checked .abc-switcher__track {
+      @apply bg-amber-500 ring-amber-600;
+    }
+  }
+  &.success {
+    &.abc-switcher--checked .abc-switcher__track {
+      @apply bg-emerald-500 ring-emerald-600;
+    }
+  }
+  &.info {
+    &.abc-switcher--checked .abc-switcher__track {
+      @apply bg-sky-500 ring-sky-600;
+    }
+  }
+  &--disabled {
+    &.primary {
+      &.abc-switcher--checked .abc-switcher__track {
+        @apply bg-primary-100 ring-primary-200;
+      }
+    }
+    &.secondary {
+      &.abc-switcher--checked .abc-switcher__track {
+        @apply bg-slate-100 ring-slate-200;
+      }
+    }
+    &.danger {
+      &.abc-switcher--checked .abc-switcher__track {
+        @apply bg-red-100 ring-red-200;
+      }
+    }
+    &.warning {
+      &.abc-switcher--checked .abc-switcher__track {
+        @apply bg-amber-100 ring-amber-200;
+      }
+    }
+    &.success {
+      &.abc-switcher--checked .abc-switcher__track {
+        @apply bg-emerald-100 ring-emerald-200;
+      }
+    }
+    &.info {
+      &.abc-switcher--checked .abc-switcher__track {
+        @apply bg-sky-100 ring-sky-200;
+      }
+    }
+  }
+  &--checked .abc-switcher__track {
+    @apply bg-primary-500 ring-black/20;
+  }
+  &--checked .abc-switcher__dot {
+    @apply translate-x-6;
+  }
+  &--unchecked .abc-switcher__track {
+    @apply bg-gray-300;
+  }
+  &--error {
+    &.abc-switcher--checked .abc-switcher__track {
+      @apply bg-red-500 ring-red-600 #{!important};
+    }
+  }
+}

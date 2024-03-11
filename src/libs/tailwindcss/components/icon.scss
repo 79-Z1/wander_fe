@@ -1,0 +1,99 @@
+.abc-icon {
+  @apply leading-none transition-all duration-200;
+  &.size-12 {
+    @apply text-[12px];
+    &:before {
+      @apply text-[12px];
+    }
+  }
+  &.size-14 {
+    @apply text-[14px];
+    &:before {
+      @apply text-[14px];
+    }
+  }
+  &.size-16 {
+    @apply text-[16px];
+    &:before {
+      @apply text-[16px];
+    }
+  }
+  &.size-18 {
+    @apply text-[18px];
+    &:before {
+      @apply text-[18px];
+    }
+  }
+  &.size-20 {
+    @apply text-[20px];
+    &:before {
+      @apply text-[20px];
+    }
+  }
+  &.size-24 {
+    @apply text-[24px];
+    &:before {
+      @apply text-[24px];
+    }
+  }
+  &.size-28 {
+    @apply text-[28px];
+    &:before {
+      @apply text-[28px];
+    }
+  }
+  &.size-32 {
+    @apply text-[32px];
+    &:before {
+      @apply text-[32px];
+    }
+  }
+  &.size-36 {
+    @apply text-[36px];
+    &:before {
+      @apply text-[36px];
+    }
+  }
+  &.size-40 {
+    @apply text-[40px];
+    &:before {
+      @apply text-[40px];
+    }
+  }
+  &.size-44 {
+    @apply text-[44px];
+    &:before {
+      @apply text-[44px];
+    }
+  }
+  &.size-48 {
+    @apply text-[48px];
+    &:before {
+      @apply text-[48px];
+    }
+  }
+  &.size-52 {
+    @apply text-[52px];
+    &:before {
+      @apply text-[52px];
+    }
+  }
+  &.size-56 {
+    @apply text-[56px];
+    &:before {
+      @apply text-[56px];
+    }
+  }
+  &.size-60 {
+    @apply text-[60px];
+    &:before {
+      @apply text-[60px];
+    }
+  }
+  &.size-64 {
+    @apply text-[64px];
+    &:before {
+      @apply text-[64px];
+    }
+  }
+}

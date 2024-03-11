@@ -1,0 +1,32 @@
+.abc-loading {
+  @apply relative z-10 flex h-10 w-10 content-center justify-center;
+  div {
+    @apply h-full w-full rounded-full border-4 border-b-primary-500 border-l-primary-500 border-r-primary-500 border-t-slate-300;
+    transform: translateZ(0);
+    animation: spin 1.1s infinite linear;
+    &.primary {
+      @apply border-b-primary-500 border-l-primary-500 border-r-primary-500;
+    }
+    &.secondary {
+      @apply border-b-slate-500 border-l-slate-500 border-r-slate-500;
+    }
+    &.danger {
+      @apply border-b-red-500 border-l-red-500 border-r-red-500;
+    }
+    &.warning {
+      @apply border-b-amber-500 border-l-amber-500 border-r-amber-500;
+    }
+    &.success {
+      @apply border-b-emerald-500 border-l-emerald-500 border-r-emerald-500;
+    }
+    &.info {
+      @apply border-b-sky-500 border-l-sky-500 border-r-sky-500;
+    }
+    &.dark {
+      @apply border-b-slate-700 border-l-slate-700 border-r-slate-700;
+    }
+    &.light {
+      @apply border-b-gray-50 border-l-gray-50 border-r-gray-50;
+    }
+  }
+}

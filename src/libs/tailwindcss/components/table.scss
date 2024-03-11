@@ -1,0 +1,83 @@
+@import '../variables';
+
+// Table variables
+$table-cell-padding-y: 0.75rem !default;
+$table-cell-padding-x: 0.75rem !default;
+$table-cell-padding-y-sm: 0.25rem !default;
+$table-cell-padding-x-sm: 0.25rem !default;
+
+$table-cell-vertical-align: top !default;
+
+$table-color: var(--#{$prefix}body-color) !default;
+$table-bg: var(--#{$prefix}body-bg) !default;
+$table-accent-bg: transparent !default;
+
+$table-active-color: $table-color !default;
+$table-active-bg-factor: 0.1 !default;
+$table-active-bg: rgba(var(--#{$prefix}black), $table-active-bg-factor) !default;
+
+$table-hover-color: $table-color !default;
+$table-hover-bg-factor: 0.075 !default;
+$table-hover-bg: rgba(var(--#{$prefix}black), $table-hover-bg-factor) !default;
+
+$table-border-factor: 0.1 !default;
+$table-border-width: 1px !default;
+$table-border-color: var(--#{$prefix}slate-200) !default;
+
+$table-caption-color: var(--#{$prefix}secondary-color) !default;
+
+.abc-table {
+  --#{$prefix}table-color: #{$table-color};
+  --#{$prefix}table-bg: #{$table-bg};
+  --#{$prefix}table-border-color: #{$table-border-color};
+  --#{$prefix}table-accent-bg: #{$table-accent-bg};
+  --#{$prefix}table-active-color: #{$table-active-color};
+  --#{$prefix}table-active-bg: #{$table-active-bg};
+  --#{$prefix}table-hover-color: #{$table-hover-color};
+  --#{$prefix}table-hover-bg: #{$table-hover-bg};
+
+  @apply w-full;
+  text-align: left;
+  vertical-align: $table-cell-vertical-align;
+  border-color: var(--#{$prefix}table-border-color);
+  > :not(caption) > * > * {
+    padding: $table-cell-padding-y $table-cell-padding-x;
+    background-color: var(--#{$prefix}table-bg);
+    border-bottom-width: $table-border-width;
+    box-shadow: inset 0 0 0 9999px var(--#{$prefix}table-accent-bg);
+  }
+  > tbody {
+    vertical-align: middle;
+  }
+  > thead {
+    vertical-align: middle;
+  }
+}
+// Table variants
+.abc-table--bordered {
+  > :not(caption) > * {
+    border-color: var(--#{$prefix}table-border-color);
+    border-width: $table-border-width 0;
+    > * {
+      border-color: var(--#{$prefix}table-border-color);
+      border-width: 0 $table-border-width;
+    }
+  }
+}
+.abc-table--borderless {
+  > :not(caption) > * > * {
+    border-bottom-width: 0;
+  }
+
+  > :not(:first-child) {
+    border-top-width: 0;
+  }
+}
+.abc-table--active {
+  --#{$prefix}table-accent-bg: var(--#{$prefix}table-active-bg);
+}
+.abc-table-hover {
+  > tbody > tr:hover > * {
+    --#{$prefix}table-accent-bg: var(--#{$prefix}table-hover-bg);
+  }
+}

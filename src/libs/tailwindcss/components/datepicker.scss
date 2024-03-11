@@ -1,0 +1,17 @@
+.rdp.abc-date-picker {
+  @apply m-0;
+  .rdp-day_today:not(.rdp-day_outside) {
+    @apply text-xl font-bold text-primary-500;
+  }
+  .rdp-day_selected {
+    @apply bg-primary-500;
+  }
+  .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+    @apply bg-primary-200;
+  }
+  .rdp-day_selected,
+  .rdp-day_selected:focus-visible,
+  .rdp-day_selected:hover {
+    @apply bg-primary-500;
+  }
+}

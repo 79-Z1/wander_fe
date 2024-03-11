@@ -1,0 +1,24 @@
+.input-group {
+  @apply relative flex w-full flex-wrap items-stretch;
+  > .form-input {
+    @apply relative w-[1%] min-w-0 flex-auto;
+  }
+  > :first-child {
+    @apply rounded-bl-md rounded-tl-md;
+  }
+  > :not(:first-child) {
+    @apply -ml-[1px] rounded-bl-none rounded-tl-none;
+  }
+  > :last-child {
+    @apply rounded-br-md rounded-tr-md;
+  }
+  > :not(:last-child) {
+    @apply rounded-br-none rounded-tr-none;
+  }
+  .input-group-text {
+    @apply inline-flex items-center whitespace-nowrap text-center;
+    &:not(input, button) {
+      @apply border border-slate-300 bg-slate-100 px-3;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+.abc-popover {
+  @apply relative z-20;
+  &__trigger-button {
+    @apply whitespace-nowrap px-3 py-1.5 text-left;
+  }
+  &__content {
+    @apply border border-slate-300 bg-white;
+    @apply rounded;
+    .abc-popover {
+      @apply hover:bg-primary-100;
+      @apply transition-all duration-150;
+      &:first-child {
+        @apply rounded-t;
+        .abc-popover__trigger-button {
+          @apply rounded-t;
+        }
+      }
+      &:last-child {
+        @apply rounded-b;
+        .abc-popover__trigger-button {
+          @apply rounded-b;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,86 @@
+.abc-toast {
+  @apply fixed bottom-0 right-2.5 z-50;
+  @apply w-full max-w-xs;
+  @apply transition-all duration-300;
+  &__item {
+    @apply relative text-gray-50;
+    &--show {
+      animation: toastShowAnim 600ms cubic-bezier(0.78, -0.205, 0.26, 1.275);
+    }
+    &--hide {
+      animation: toastHideAnim 600ms cubic-bezier(0.78, -0.205, 0.26, 1.275) forwards;
+    }
+  }
+  &__inner {
+    @apply relative flex w-full rounded p-4;
+    &.bg-info {
+      @apply bg-sky-500;
+    }
+    &.bg-success {
+      @apply bg-green-500;
+    }
+    &.bg-danger,
+    &.bg-error {
+      @apply bg-red-800;
+    }
+    &.bg-warning {
+      @apply bg-amber-500;
+    }
+    &.bg-primary {
+      @apply bg-primary-500;
+    }
+    &.bg-secondary {
+      @apply bg-secondary-500;
+    }
+    &.bg-dark {
+      @apply bg-slate-700;
+    }
+    &.bg-light {
+      @apply bg-gray-50;
+    }
+  }
+  &__icon {
+    @apply mr-2.5 w-full max-w-[40px] border-r border-solid border-slate-50 pr-2.5;
+  }
+  &__head {
+    @apply font-bold;
+  }
+  &__close {
+    @apply h-7 w-7 text-2xl;
+    @apply absolute right-0.5 top-0.5;
+    @apply flex items-center justify-center;
+    @apply text-xl font-light;
+  }
+  &__spacer {
+    @apply h-2.5;
+  }
+}
+
+@keyframes toastShowAnim {
+  from {
+    transform: translate3d(350px, 0, 0);
+    opacity: 0;
+    max-height: 0;
+    visibility: hidden;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+    max-height: 1000px;
+    visibility: visible;
+  }
+}
+
+@keyframes toastHideAnim {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+    max-height: 1000px;
+  }
+  100% {
+    transform: translate3d(350px, 0, 0);
+    opacity: 0;
+    max-height: 0;
+    visibility: hidden;
+  }
+}

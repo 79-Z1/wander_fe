@@ -1,0 +1,52 @@
+@import './variables';
+@import './animations/keyframes';
+@import './animations/btn-animation';
+
+@tailwind base;
+@layer base {
+  @import './bases/body';
+  @import './bases/heading';
+  @import './bases/html';
+  @import './bases/input';
+  @import './bases/root';
+  @import './bases/table';
+}
+
+@tailwind components;
+@layer components {
+  @import './components/backdrop';
+  @import './components/button-group';
+  @import './components/button';
+  @import './components/card';
+  @import './components/checkbox';
+  @import './components/datepicker';
+  @import './components/drawer';
+  @import './components/dropdown';
+  @import './components/error';
+  @import './components/icon-button';
+  @import './components/icon';
+  @import './components/input-button';
+  @import './components/input-group';
+  // @import './components/input';
+  @import './components/link';
+  @import './components/loading';
+  @import './components/modal';
+  @import './components/pagination';
+  @import './components/popover';
+  @import './components/progressbar';
+  @import './components/radio';
+  @import './components/range-slider';
+  @import './components/range';
+  @import './components/scrollbar';
+  @import './components/select';
+  @import './components/spacer';
+  @import './components/switcher';
+  @import './components/tab';
+  @import './components/table';
+  @import './components/toast';
+}
+
+@tailwind utilities;
+@layer utilities {
+  @import './utilities/effects';
+}

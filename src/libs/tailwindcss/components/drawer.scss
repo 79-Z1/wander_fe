@@ -1,0 +1,45 @@
+.drawer-container {
+  @apply pointer-events-none ml-auto h-full w-full md:max-w-[300px];
+  @apply fixed z-20;
+  @apply transition-all duration-300;
+  &.right {
+    @apply -right-full top-0 md:-right-[300px];
+    &.show {
+      @apply right-0;
+    }
+  }
+  &.left {
+    @apply -left-full top-0 md:-left-[300px];
+    &.show {
+      @apply left-0;
+    }
+  }
+  &.top {
+    @apply -top-[300px] max-h-[300px] max-w-full;
+    &.show {
+      @apply top-0;
+    }
+  }
+  &.bottom {
+    @apply -bottom-[300px] max-h-[300px] max-w-full;
+    &.show {
+      @apply bottom-0;
+    }
+  }
+  .drawer-content {
+    @apply pointer-events-auto flex h-full w-full flex-col bg-slate-500;
+    @apply relative z-20;
+    .drawer-header {
+      @apply relative;
+      .drawer-title {
+        @apply mx-3 flex items-center text-gray-50;
+      }
+      button {
+        @apply absolute right-3 top-2 z-20 text-gray-50;
+      }
+    }
+    .drawer-body {
+      @apply relative h-full flex-grow px-3 py-5;
+    }
+  }
+}

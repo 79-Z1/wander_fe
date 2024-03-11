@@ -1,0 +1,9 @@
+.input-button {
+  .icon-btn {
+    @apply rounded border border-slate-300 bg-white;
+  }
+
+  .form-input {
+    @apply disabled:rounded;
+  }
+}

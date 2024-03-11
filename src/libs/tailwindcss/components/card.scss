@@ -1,0 +1,11 @@
+.abc-card {
+  @apply bg-white;
+  @apply border-gray-200;
+  &__header {
+    @apply px-3 py-1;
+    @apply bg-gray-200;
+  }
+  &__body {
+    @apply p-3;
+  }
+}

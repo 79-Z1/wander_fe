@@ -1,0 +1,42 @@
+.fade-up {
+  animation: fadeUp 300ms ease-in-out;
+}
+.fade-down {
+  animation: fadeDown 300ms ease-in-out;
+}
+.fade-in {
+  animation: fadeIn 200ms ease-in-out;
+}
+.fade-out {
+  animation: fadeOut 200ms ease-in-out;
+}
+.zoom-fade-in {
+  animation: zoomFadeIn 300ms ease-in-out;
+}
+.zoom-fade-out {
+  animation: zoomFadeOut 300ms ease-in-out;
+}
+
+.float-up {
+  animation: floatUp 300ms ease-in-out forwards;
+}
+
+.float-down {
+  animation: floatDown 300ms ease-in-out forwards;
+}
+
+.float-in {
+  animation: floatIn 300ms ease-in-out forwards;
+}
+
+.float-out {
+  animation: floatOut 300ms ease-in-out forwards;
+}
+
+.float-fade-in {
+  animation: floatFadeIn 300ms ease-in-out forwards;
+}
+
+.float-fade-out {
+  animation: floatFadeOut 300ms ease-in-out forwards;
+}

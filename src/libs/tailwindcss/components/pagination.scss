@@ -1,0 +1,49 @@
+.abc-pagination {
+  @apply flex;
+  &__list {
+    @apply inline-flex items-center justify-center space-x-1;
+  }
+
+  &__number {
+    @apply text-gray-50;
+  }
+
+  &__item {
+    @apply overflow-hidden rounded-lg border border-transparent font-extrabold text-gray-50 transition-all duration-150;
+    &:not(.abc-pagination__icon--disabled, .abc-pagination__item--active) {
+      @apply hover:box-content hover:border-gray-50 hover:text-gray-50;
+    }
+    &--active {
+      @apply bg-gray-50 text-secondary-500;
+    }
+    button {
+      @apply flex h-7 w-7 items-center justify-center;
+      &:disabled {
+        i {
+          @apply text-gray-400;
+        }
+      }
+    }
+  }
+
+  &__icon {
+    @apply bg-transparent;
+    &--disabled {
+      @apply text-gray-400;
+    }
+    i {
+      @apply text-2xl;
+    }
+  }
+
+  .light:not(.abc-pagination__icon) {
+    @apply bg-gray-600;
+  }
+
+  .dark + .abc-pagination__item:not(.abc-pagination__icon--disabled, .abc-pagination__icon) {
+    @apply hover:bg-gray-600;
+  }
+  &__item.abc-pagination__icon.dark:not(.abc-pagination__icon--disabled) {
+    @apply text-gray-700;
+  }
+}

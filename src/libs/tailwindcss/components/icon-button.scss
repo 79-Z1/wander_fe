@@ -1,0 +1,7 @@
+.icon-btn {
+  @apply p-1 leading-none;
+  @apply transition-all duration-300;
+  &:disabled {
+    @apply text-slate-500;
+  }
+}

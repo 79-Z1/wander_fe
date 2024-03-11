@@ -1,0 +1,12 @@
+.abc-dropdown {
+  position: relative;
+
+  &__trigger {
+    @apply bg-red-50;
+  }
+
+  &__content {
+    @apply border border-slate-300 bg-white p-2;
+    @apply z-10;
+  }
+}
