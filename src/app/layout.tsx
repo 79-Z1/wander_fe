@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <Html>
       <Head />
-      <Body className={classNames(fontBody.variable, 'font-roboto text-default-text')}>
+      <Body className={classNames(fontBody.variable, 'h-full font-roboto text-default-text')}>
         <Root>{children}</Root>
       </Body>
     </Html>
