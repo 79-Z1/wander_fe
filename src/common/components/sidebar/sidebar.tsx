@@ -23,7 +23,7 @@ const Sidebar: FC<TSidebarProps> = ({className}) => {
       <div className="flex h-24 items-start">
         <div className="flex items-center gap-4">
           <Image src={logo} alt="Wander" width={48} height={48} />
-          <p className="text-xl font-bold">Wander</p>
+          <p className="text-xl font-bold text-[#EF7A6F]">Wander</p>
         </div>
       </div>
       <div className="flex grow flex-col gap-4">
@@ -31,9 +31,12 @@ const Sidebar: FC<TSidebarProps> = ({className}) => {
           <Link
             key={item.name}
             href={item.path}
-            className={cn('flex items-center gap-2 rounded-lg p-2 text-gray-400 no-underline active:no-underline', {
-              'bg-primary text-[#fcfcfc]': pathName === item.path
-            })}
+            className={cn(
+              'flex items-center gap-2 rounded-lg p-2 text-gray-400 no-underline hover:no-underline active:no-underline',
+              {
+                'bg-primary text-[#fcfcfc]': pathName === item.path
+              }
+            )}
           >
             <Icon name={`ico-${item.icon}`} />
             <p className="font-bold">{item.name}</p>
