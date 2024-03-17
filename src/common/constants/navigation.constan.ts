@@ -5,6 +5,11 @@ export const sidebarMenuItems = [
     icon: 'home-dash'
   },
   {
+    name: 'Chuyến đi',
+    path: '/trip',
+    icon: 'flag-triangle'
+  },
+  {
     name: 'Lịch trình',
     path: '/schedule',
     icon: 'calendar-heart'
