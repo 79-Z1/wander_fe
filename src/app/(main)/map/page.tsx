@@ -16,7 +16,7 @@ export type TMapPageProps = IComponentBaseProps;
 
 const MapPage: FC<TMapPageProps> = ({className}) => {
   return (
-    <div className={cn('compname', className)} data-testid="Map">
+    <div className={cn('map-page h-full w-full', className)} data-testid="Map">
       <Map />
     </div>
   );
