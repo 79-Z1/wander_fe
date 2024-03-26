@@ -6,6 +6,12 @@
       @apply text-[12px];
     }
   }
+  &.size-5 {
+    @apply text-[5px];
+    &:before {
+      @apply text-[5px];
+    }
+  }
   &.size-14 {
     @apply text-[14px];
     &:before {

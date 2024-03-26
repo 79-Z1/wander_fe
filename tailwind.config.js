@@ -2,7 +2,7 @@ const plugin = require('tailwindcss/plugin');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{html,njk,js,jsx,ts,tsx}'],
+  content: ['./src/**/*.{html,njk,js,jsx,ts,tsx}', './node_modules/react-tailwindcss-datepicker/dist/index.esm.js'],
   corePlugins: {
     preflight: true
   },

@@ -7,6 +7,7 @@ export {default as Close} from './close';
 export {default as Collapse} from './collapse';
 export {default as Container} from './container';
 export {default as DatePicker} from './date-picker';
+export {default as DateRangePicker} from './date-range-picker';
 export {default as Drawer} from './drawer';
 export {default as Dropdown} from './dropdown';
 export {default as Heading} from './heading';

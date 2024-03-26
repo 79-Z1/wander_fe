@@ -16,11 +16,27 @@ dayjs.extend(timezone);
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
 
+export const formatVNDate = (date?: Date) => {
+  return dayjs(date).format('DD/MM/YYYY');
+};
+
+export const getRemainingDays = (from?: string, to?: string): number => {
+  if (!from || !to) return 0;
+
+  const dateFrom = dayjs(from, 'DD/MM/YYYY');
+  const dateTo = dayjs(to, 'DD/MM/YYYY');
+
+  const dateDiff = dateFrom.diff(dateTo, 'day') + 1;
+  if (dateDiff < 0) return 0;
+
+  return dateDiff;
+};
+
 export function setDayJsLocale(locale: string) {
   dayjs.locale(locale);
 }
 
-export function dateParse(date: string) {
+export function dateParse(date?: string) {
   return dayjs(date, 'DD/MM/YYYY').toDate();
 }
 

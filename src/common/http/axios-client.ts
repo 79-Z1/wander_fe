@@ -12,15 +12,19 @@ export async function getToken() {
 
   const accessToken = session?.user.accessToken;
   const refreshToken = session?.user.refreshToken;
+  const userId = session?.user.id;
 
-  return {accessToken, refreshToken};
+  return {accessToken, refreshToken, userId};
 }
 
 const onRequest = async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
   const headers = config.headers;
-  const {accessToken} = await getToken();
+  const {accessToken, userId} = await getToken();
 
-  if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+  if (accessToken) {
+    headers.authorization = accessToken;
+    headers['x-client-id'] = userId;
+  }
 
   return config;
 };
@@ -35,7 +39,7 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
 
 const onResponseError = (error: AxiosError): Promise<AxiosError> => {
   if (Number(error.response?.status) === 401) {
-    signOut();
+    // signOut();
   }
   return Promise.reject(error);
 };
