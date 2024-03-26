@@ -1,6 +1,6 @@
 import {API_ENDPOINTS} from '@/common/configs/endpoint.config';
+import {IAuthResponse} from '@/common/entities/auth.entity';
 
-import {IAuthResponse} from '@/modules/auth/entities/auth.entity';
 import {TLoginCredential} from '@/modules/users/entities/user.entity';
 
 import * as HttpRequest from '@/common/http/http-request';

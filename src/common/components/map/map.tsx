@@ -11,10 +11,13 @@ import {IComponentBaseProps} from '@/common/interfaces';
 import MarkerIcon from '../../../../node_modules/leaflet/dist/images/marker-icon.png';
 import MarkerShadow from '../../../../node_modules/leaflet/dist/images/marker-shadow.png';
 
-import RoutingMachine from './routeline-machine';
+import LocationMarker from './map-marker';
+import MapSearch from './map-search';
 
+// import RoutingMachine from './routeline-machine';
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-fullscreen/styles.css';
+import 'leaflet-geosearch/dist/geosearch.css';
 
 export type TMapProps = IComponentBaseProps;
 
@@ -26,7 +29,9 @@ const Map: FC<TMapProps> = ({className}) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <RoutingMachine />
+        {/* <RoutingMachine /> */}
+        <MapSearch />
+        <LocationMarker />
         <Marker
           position={[51.505, -0.09]}
           icon={

@@ -7,7 +7,7 @@ export interface IOAuthParams {
 }
 
 export interface IUserAttribute {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   career: string;
@@ -40,7 +40,7 @@ export type AuthProvider = 'credentials' | 'facebook' | 'google';
 
 export interface IAuthResponse {
   user: {
-    id: string;
+    _id: string;
     email: string;
     name: string;
     avatar: string;

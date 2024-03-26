@@ -47,13 +47,12 @@ export const authOptions: NextAuthOptions = {
 
           if (signInRes?.metadata.user) {
             return {
-              id: signInRes.metadata.user.id,
+              id: signInRes.metadata.user['_id'],
               name: signInRes.metadata.user.name,
               email: signInRes.metadata.user.email,
               image: signInRes.metadata.user.avatar,
               avatar: signInRes.metadata.user.avatar,
               career: signInRes.metadata.user.career,
-              planExpiredDate: signInRes.metadata.user.planExpiredDate,
               gender: signInRes.metadata.user.gender,
               dateOfBirth: String(signInRes.metadata.user.dateOfBirth),
               accessToken: signInRes.metadata.accessToken,
@@ -82,12 +81,9 @@ export const authOptions: NextAuthOptions = {
       if (account?.provider === ENUM_O_AUTH_PROVIDER.GOOGLE) {
         const googleResponse = await AuthApi.googleSignIn(account.id_token);
         if (googleResponse.metadata.user) {
-          user.id = googleResponse.metadata.user.id;
+          user.id = googleResponse.metadata.user['_id'];
           user.name = googleResponse.metadata.user.name;
           user.avatar = googleResponse.metadata.user.avatar;
-          user.career = googleResponse.metadata.user.career;
-          user.gender = googleResponse.metadata.user.gender;
-          user.dateOfBirth = String(googleResponse.metadata.user.dateOfBirth);
           user.email = googleResponse.metadata.user.email;
           user.accessToken = googleResponse.metadata.accessToken;
           user.refreshToken = googleResponse.metadata.refreshToken;
@@ -103,12 +99,9 @@ export const authOptions: NextAuthOptions = {
         const facebookResponse = await AuthApi.facebookSignIn(account.access_token);
 
         if (facebookResponse.metadata.user) {
-          user.id = facebookResponse.metadata.user.id;
+          user.id = facebookResponse.metadata.user['_id'];
           user.name = facebookResponse.metadata.user.name;
           user.avatar = facebookResponse.metadata.user.avatar;
-          user.career = facebookResponse.metadata.user.career;
-          user.gender = facebookResponse.metadata.user.gender;
-          user.dateOfBirth = String(facebookResponse.metadata.user.dateOfBirth);
           user.email = facebookResponse.metadata.user.email;
           user.accessToken = facebookResponse.metadata.accessToken;
           user.refreshToken = facebookResponse.metadata.refreshToken;
@@ -129,9 +122,6 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.name = user.name;
         token.avatar = user.avatar;
-        token.career = user.career;
-        token.gender = user.gender;
-        token.dateOfBirth = user.dateOfBirth;
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
         token.slug = user.slug;
@@ -146,7 +136,6 @@ export const authOptions: NextAuthOptions = {
         }
         if (session?.image) {
           token.picture = session?.image;
-          token.image = session?.image;
           token.avatar = session?.image;
         }
         if (session?.email) {
@@ -173,18 +162,6 @@ export const authOptions: NextAuthOptions = {
         if (session?.isVerified) {
           token.isVerified = session?.isVerified;
         }
-
-        if (session?.plan) {
-          token.plan = session?.plan;
-        }
-
-        if (session?.planDuration) {
-          token.planDuration = session?.planDuration;
-        }
-
-        if (session?.planExpiredDate) {
-          token.planExpiredDate = session?.planExpiredDate;
-        }
       }
 
       return token;
@@ -196,7 +173,6 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id;
         session.user.name = token.name;
         session.user.email = token.email;
-        session.user.image = token.avatar; //TODO remove
         session.user.avatar = token.avatar;
         session.user.career = token.career;
         session.user.gender = token.gender;

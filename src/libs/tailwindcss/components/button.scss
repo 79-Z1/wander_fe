@@ -4,7 +4,7 @@
   @apply transition-all duration-300;
   @apply pointer-events-auto cursor-pointer select-none;
   @apply min-h-[38px] px-3 py-1.5;
-  @apply appearance-none rounded;
+  @apply appearance-none rounded-lg;
   @apply hover:no-underline;
   // Variants
   &.contained {

@@ -39,7 +39,7 @@ export type ModalVariantType = 'top' | 'center' | 'scrollable' | 'scrollable-ful
 
 export type FontWeightType = 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
 
-export type IconSizeType = 12 | 14 | 16 | 18 | 20 | 24 | 28 | 32 | 36 | 40 | 44 | 48 | 52 | 56 | 60 | 64;
+export type IconSizeType = 5 | 12 | 14 | 16 | 18 | 20 | 24 | 28 | 32 | 36 | 40 | 44 | 48 | 52 | 56 | 60 | 64;
 
 export type LoadingSizeType = 16 | 20 | 24 | 28 | 32 | 36 | 40 | 44 | 48;
 

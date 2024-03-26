@@ -2,7 +2,6 @@
 
 import React, {ReactNode} from 'react';
 import {SessionProvider} from 'next-auth/react';
-import {Provider} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createAsyncStoragePersister} from '@tanstack/query-async-storage-persister';
 import {QueryClient} from '@tanstack/react-query';
@@ -13,8 +12,6 @@ import {CoreUIProvider, defaultTheme} from '@/core-ui';
 import Tracking from '@/core-ui/third-party/tracking';
 
 import {MediaContextProvider} from '@/common/components/media';
-
-import {store} from '@/common/redux/store';
 
 import ErrorBoundary from './error-fall-back';
 import ServiceWorker from './service-worker';
@@ -46,18 +43,16 @@ type ProvidersProps = {
 function Providers({children}: ProvidersProps) {
   return (
     <PersistQueryClientProvider client={queryClient} persistOptions={{persister: asyncStoragePersister}}>
-      <Provider store={store}>
-        <ErrorBoundary>
-          <Tracking />
-          <ServiceWorker />
-          <CoreUIProvider theme={defaultTheme}>
-            <MediaContextProvider disableDynamicMediaQueries>
-              <SessionProvider>{children}</SessionProvider>
-            </MediaContextProvider>
-          </CoreUIProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </ErrorBoundary>
-      </Provider>
+      <ErrorBoundary>
+        <Tracking />
+        <ServiceWorker />
+        <CoreUIProvider theme={defaultTheme}>
+          <MediaContextProvider disableDynamicMediaQueries>
+            <SessionProvider>{children}</SessionProvider>
+          </MediaContextProvider>
+        </CoreUIProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </ErrorBoundary>
     </PersistQueryClientProvider>
   );
 }

@@ -2,8 +2,8 @@ import {TLoginCredential} from '@/modules/users/entities/user.entity';
 
 import {API_ENDPOINTS} from '@/common/constants/api-endpoint.constant';
 
+import {IAuthResponse, IOAuthParams} from '../../../common/entities/auth.entity';
 import * as HttpRequest from '../../../common/http/http-request';
-import {IAuthResponse, IOAuthParams} from '../entities/auth.entity';
 
 type OAuthProvider = 'google' | 'facebook';
 
