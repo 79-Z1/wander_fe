@@ -8,11 +8,11 @@ import {IComponentBaseProps} from '@/common/interfaces';
 
 import noResult from '@/assets/no-result.svg';
 
-export type TPageNotFoundProps = IComponentBaseProps;
+export type TNotFoundScreenProps = IComponentBaseProps;
 
-const PageNotFound: FC<TPageNotFoundProps> = ({className}) => {
+const NotFoundScreen: FC<TNotFoundScreenProps> = ({className}) => {
   return (
-    <div className={cn('compname', className)} data-testid="PageNotFound">
+    <div className={cn('compname', className)} data-testid="NotFoundScreen">
       <div className="grid min-h-screen place-items-center p-4 sm:p-8">
         <div className="text-center">
           <p className="text-body-dark mb-4 text-sm uppercase tracking-widest sm:mb-5">Error code: 404</p>
@@ -34,6 +34,6 @@ const PageNotFound: FC<TPageNotFoundProps> = ({className}) => {
   );
 };
 
-PageNotFound.displayName = 'PageNotFound';
+NotFoundScreen.displayName = 'NotFoundScreen';
 
-export default PageNotFound;
+export default NotFoundScreen;

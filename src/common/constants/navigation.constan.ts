@@ -15,6 +15,11 @@ export const sidebarMenuItems = [
     icon: 'calendar-heart'
   },
   {
+    name: 'Bạn bè',
+    path: '/friend',
+    icon: 'users-alt'
+  },
+  {
     name: 'Tin nhắn',
     path: '/messages',
     icon: 'messages-dots'

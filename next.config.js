@@ -18,6 +18,10 @@ const nextConfig = async () => {
         },
         {
           protocol: 'https',
+          hostname: 'lh3.googleusercontent.com'
+        },
+        {
+          protocol: 'https',
           hostname: 'robohash.org'
         },
         {
