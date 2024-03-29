@@ -3,8 +3,6 @@ import React, {FC} from 'react';
 import Image from 'next/image';
 import {useSession} from 'next-auth/react';
 
-import {Avatar} from '@/core-ui';
-
 import {cn} from '@/components/utils';
 
 import {IComponentBaseProps} from '@/common/interfaces';
@@ -28,7 +26,14 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
       <Search />
       <Image src={bellNotificationSVG} alt="avatar" width={28} height={28} />
       <p className="text-sm font-bold">My name</p>
-      <Avatar src={''} size={44} alt="avatar" className="rounded-lg" />
+      <div className="relative h-[40px] w-[40px]">
+        <Image
+          src={session.data?.user?.image || ''}
+          fill
+          alt="avatar"
+          className="absolute rounded-lg object-cover object-center"
+        />
+      </div>
     </div>
   );
 };
