@@ -2,7 +2,7 @@
   overflow: auto;
   scrollbar-gutter: var(--gutter, auto);
   scrollbar-color: var(--abc-primary-500) var(--abc-primary-50);
-  scrollbar-width: auto;
+  scrollbar-width: thin;
   &::-webkit-scrollbar {
     @apply h-2 w-2;
   }

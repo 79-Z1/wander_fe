@@ -8,14 +8,17 @@ import {Button, Icon} from '@/core-ui';
 import {Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs';
 import {cn} from '@/components/utils';
 
+import useFriendState from '@/common/hooks/use-friend-state';
+
 import {ENUM_FRIEND_TAB} from '@/common/constants';
 
 import {IComponentBaseProps} from '@/common/interfaces';
 
 import NotFoundModule from '../not-found/not-found';
 
-import TabFriendRequest from './components/tab-friend-request';
-import TabFriendRequestSent from './components/tab-friend-request-send';
+import FriendLoading from './components/friend-loading';
+import TabFriendRequest from './components/tab-friend-received';
+import TabFriendSent from './components/tab-friend-sent';
 import TabMyFriend from './components/tab-my-friend';
 
 export type TFriendModuleProps = IComponentBaseProps;
@@ -25,23 +28,25 @@ const FriendModule: FC<TFriendModuleProps> = ({className}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const tab = (searchParams.get('tab') as ENUM_FRIEND_TAB) || ENUM_FRIEND_TAB.MY_FRIEND;
+  const friendState = useFriendState();
 
   useEffect(() => {
-    // if (session.status === 'authenticated' && session.data.user.email) ;
+    if (session.data?.user && session.status === 'authenticated') {
+      friendState.getFriendForFriendPage(tab);
+    }
   }, [tab, session.status]);
 
   const handleChangeOption = (tab: string) => {
+    // friendState.sendFriendRequest('6607dacc864beeaf70a1f4be', GlobalConnectSocket);
+    friendState.setLoading(true);
     router.replace(`/friend?tab=${tab}`);
   };
 
-  if (!session.data && session.status === 'unauthenticated') return <NotFoundModule />;
+  if (!session.data?.user && session.status === 'unauthenticated') return <NotFoundModule />;
+
   return (
     <div className={cn('FriendModule', 'flex h-full flex-col gap-5 p-6', className)} data-testid="FriendModule">
-      <Tabs
-        defaultValue={ENUM_FRIEND_TAB.MY_FRIEND}
-        className="flex h-full flex-col"
-        onValueChange={handleChangeOption}
-      >
+      <Tabs defaultValue={tab} className="flex h-full flex-col" onValueChange={handleChangeOption}>
         <div className="flex flex-col rounded-lg bg-zinc-50 p-6">
           <div className="flex flex-wrap justify-between">
             <TabsList className="flex justify-center gap-5 bg-zinc-50 md:gap-6 lg:justify-start">
@@ -69,9 +74,21 @@ const FriendModule: FC<TFriendModuleProps> = ({className}) => {
               <p>Thêm bạn bè</p>
             </Button>
           </div>
-          <TabMyFriend value={ENUM_FRIEND_TAB.MY_FRIEND} />
-          <TabFriendRequest value={ENUM_FRIEND_TAB.FRIEND_REQUEST} />
-          <TabFriendRequestSent value={ENUM_FRIEND_TAB.FRIEND_REQUEST_SENT} />
+          {!friendState.isFetching ? (
+            <>
+              <TabMyFriend value={ENUM_FRIEND_TAB.MY_FRIEND} myFriends={friendState.userFriend.friends} />
+              <TabFriendRequest
+                value={ENUM_FRIEND_TAB.FRIEND_REQUEST}
+                friendRecieves={friendState.userFriend.friendsRequestReceved}
+              />
+              <TabFriendSent
+                value={ENUM_FRIEND_TAB.FRIEND_REQUEST_SENT}
+                friendSents={friendState.userFriend.friendsRequestSent}
+              />
+            </>
+          ) : (
+            <FriendLoading className="mt-4" />
+          )}
         </div>
       </Tabs>
     </div>

@@ -1,11 +1,10 @@
 import React, {FC} from 'react';
 import Image from 'next/image';
-import {GlobalConnectSocket} from '@/common/sockets/global-connect.socket';
+
+import {Button, Icon} from '@/core-ui';
 
 import {TabsContent} from '@/components/ui/tabs';
 import {cn} from '@/components/utils';
-
-import useFriendState from '@/common/hooks/use-friend-state';
 
 import Line from '@/common/components/line';
 
@@ -14,34 +13,28 @@ import {ENUM_FRIEND_TAB} from '@/common/constants';
 import {formatVNDate} from '@/common/utils';
 
 import {IComponentBaseProps} from '@/common/interfaces';
-import {IFriend} from '@/common/interfaces/friend.interface';
+import {IFriendSent} from '@/common/interfaces/friend.interface';
 
 import FriendEmpty from './friend-empty';
-import FriendPopOver from './friend-pop-over';
 
-export type TTabMyFriendProps = IComponentBaseProps & {
+export type TTabFriendSentProps = IComponentBaseProps & {
   value: ENUM_FRIEND_TAB;
-  myFriends: IFriend[];
+  friendSents: IFriendSent[];
 };
 
-const TabMyFriend: FC<TTabMyFriendProps> = ({className, value, myFriends = []}) => {
-  const friendState = useFriendState();
-
-  function unFriend(friendId: string) {
-    friendState.unFriend(friendId, GlobalConnectSocket);
-  }
+const TabFriendSent: FC<TTabFriendSentProps> = ({className, value, friendSents = []}) => {
   return (
-    <div className={cn('TabMyFriend h-full', className)} data-testid="TabMyFriend">
-      <TabsContent value={value} className="h-full">
-        {myFriends.length > 0 ? (
-          myFriends.map((value, index) => (
+    <div className={cn('TabFriendSent', className)} data-testid="TabFriendSent">
+      <TabsContent value={value}>
+        {friendSents.length > 0 ? (
+          friendSents.map((value, index) => (
             <div key={index}>
               {index !== 0 && <Line className="my-1 border-[#E5E7EB] md:my-3" />}
               <div className="flex items-center justify-between p-6">
                 <div className="flex w-fit items-center gap-1">
                   <div className="relative mr-2 h-[60px] w-[60px]">
                     <Image
-                      alt={value?.user?.name}
+                      alt=""
                       src={value?.user?.avatar}
                       fill
                       className="absolute rounded-lg object-cover object-center"
@@ -52,18 +45,21 @@ const TabMyFriend: FC<TTabMyFriendProps> = ({className, value, myFriends = []}) 
                     <span className="text-gray-600">{`${formatVNDate(value?.updatedAt)}`}</span>
                   </p>
                 </div>
-                <FriendPopOver onClick={() => unFriend(value?.user?._id)} />
+                <Button className="flex gap-2 rounded-lg bg-orange-500 p-2 text-[#FCFCFC]">
+                  <Icon name="ico-angle-down" />
+                  <p className="font-bold">Đã gửi lời mời</p>
+                </Button>
               </div>
             </div>
           ))
         ) : (
-          <FriendEmpty text="Bạn chưa có người bạn nào" />
+          <FriendEmpty text="Hiện chưa gửi lời mời kết bạn nào" />
         )}
       </TabsContent>
     </div>
   );
 };
 
-TabMyFriend.displayName = 'TabMyFriend';
+TabFriendSent.displayName = 'TabFriendSent';
 
-export default TabMyFriend;
+export default TabFriendSent;

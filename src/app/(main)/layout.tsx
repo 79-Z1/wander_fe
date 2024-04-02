@@ -1,4 +1,5 @@
 import type {Metadata} from 'next';
+import InitSocket from '@/common/layout/init-socket';
 
 import Sidebar from '@/common/components/sidebar/sidebar';
 import Topbar from '@/common/components/topbar/topbar';
@@ -14,12 +15,15 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex h-full w-full">
-      <Sidebar />
-      <div className="flex h-full w-full flex-col">
-        <Topbar />
-        <main className="h-ful w-full grow bg-gray-100 p-6">{children}</main>
+    <>
+      <InitSocket />
+      <div className="flex h-full w-full">
+        <Sidebar />
+        <div className="flex h-full w-full flex-col">
+          <Topbar />
+          <main className="h-ful w-full grow bg-gray-100 p-6">{children}</main>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
