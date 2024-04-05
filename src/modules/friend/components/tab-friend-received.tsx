@@ -23,13 +23,14 @@ import FriendEmpty from './friend-empty';
 export type TTabFriendRecievedProps = IComponentBaseProps & {
   value: ENUM_FRIEND_TAB;
   friendRecieves: IFriendRecieved[];
+  userId: string;
 };
 
-const TabFriendRecieved: FC<TTabFriendRecievedProps> = ({className, value, friendRecieves = []}) => {
+const TabFriendRecieved: FC<TTabFriendRecievedProps> = ({className, value, userId, friendRecieves = []}) => {
   const {acceptFriendRequest, rejectFriendRequest} = useFriendState();
 
   function handleAcceptFriendRequest(friendId: string) {
-    acceptFriendRequest(friendId, GlobalConnectSocket);
+    acceptFriendRequest(userId, friendId, GlobalConnectSocket);
   }
 
   function handleRejectFriendRequest(friendId: string) {

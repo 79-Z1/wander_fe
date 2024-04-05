@@ -1,11 +1,15 @@
 import * as HttpRequest from '@/common/http/http-request';
 
 import {ENUM_FRIEND_TAB} from '../constants';
-import {IFriend, IFriendSent, IUserFriend} from '../interfaces/friend.interface';
+import {IFriend, IFriendRecieved, IFriendSent, IUserFriend} from '../interfaces/friend.interface';
 import {generateQueryParams} from '../utils/generate-query-params.util';
 
 const sendFriendRequest = async (friendId: string) => {
   return await HttpRequest.patch<IFriendSent[]>('friend/send-request', {friendId});
+};
+
+const cancelFriendRequest = async (friendId: string) => {
+  return await HttpRequest.patch<IFriendSent[]>('friend/remove-request', {friendId});
 };
 
 const getFriendForFriendPage = (tab?: ENUM_FRIEND_TAB) => {
@@ -15,11 +19,11 @@ const getFriendForFriendPage = (tab?: ENUM_FRIEND_TAB) => {
 };
 
 const acceptFriendRequest = async (friendId: string) => {
-  return await HttpRequest.patch<boolean>('friend/accept', {friendId});
+  return await HttpRequest.patch<IFriendRecieved[]>('friend/accept', {friendId});
 };
 
 const rejectFriendRequest = async (friendId: string) => {
-  return await HttpRequest.patch<boolean>('friend/reject', {friendId});
+  return await HttpRequest.patch<IFriendRecieved[]>('friend/reject', {friendId});
 };
 
 const unFriend = async (friendId: string) => {
@@ -28,6 +32,7 @@ const unFriend = async (friendId: string) => {
 
 export const FriendApi = {
   sendFriendRequest,
+  cancelFriendRequest,
   getFriendForFriendPage,
   acceptFriendRequest,
   rejectFriendRequest,
