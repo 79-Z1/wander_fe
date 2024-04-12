@@ -2,15 +2,14 @@ import {useEffect} from 'react';
 import {Session} from 'next-auth';
 
 import {ENUM_SOCKET_EMIT, ENUM_SOCKET_LISTENER} from '../constants/socket.enum';
+import useChatState from '../hooks/use-chat-state';
 import useFriendState from '../hooks/use-friend-state';
 import {TSocket} from '../interfaces';
-
-// import { useSinglePlayState } from './single-play/single-play.state';
 
 export default function useCommonListener(params: {socket: TSocket; session?: Session}) {
   const {socket, session} = params;
   const friendState = useFriendState();
-  // const singlePlayState = useSinglePlayState();
+  const chatState = useChatState();
 
   useEffect(() => {
     socket.auth = {accessToken: session?.user.accessToken};
@@ -34,6 +33,22 @@ export default function useCommonListener(params: {socket: TSocket; session?: Se
 
     // socket.io.on('reconnect_attempt', () => {
     // });
+  }, []);
+
+  useEffect(() => {
+    socket.on(ENUM_SOCKET_LISTENER.UPDATE_FRIEND_REQUEST, params => {
+      friendState.updateFriendRecievedList(params);
+    });
+  }, []);
+
+  useEffect(() => {
+    socket.on(ENUM_SOCKET_LISTENER.UPDATE_MESSSAGES, params => {
+      chatState.updateMessages(params.messages);
+    });
+
+    return () => {
+      socket.off(ENUM_SOCKET_LISTENER.UPDATE_MESSSAGES);
+    };
   }, []);
 
   useEffect(() => {
@@ -80,5 +95,5 @@ export default function useCommonListener(params: {socket: TSocket; session?: Se
     };
   }, []);
 
-  return {friendState};
+  return {friendState, chatState};
 }

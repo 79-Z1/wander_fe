@@ -1,7 +1,6 @@
 'use client';
 import {useEffect, useState} from 'react';
 import {usePathname} from 'next/navigation';
-import {useSession} from 'next-auth/react';
 import classNames from 'classnames';
 import InitSocket from '@/common/layout/init-socket';
 
@@ -44,8 +43,8 @@ export default function MainLayout({
     <>
       <InitSocket />
       <MediaContextProvider>
-        <Media greaterThanOrEqual="md" className="h-full">
-          <div className="flex h-full" id="layout-container">
+        <Media greaterThanOrEqual="md" className="h-full w-full">
+          <div className="flex h-full w-full" id="layout-container">
             <Sidebar isExpand={isOpenSidebar} onCollapseClick={handleCollapseSidebar} />
             <div
               className={classNames(
@@ -56,14 +55,14 @@ export default function MainLayout({
               <div className="flex min-h-[72px] items-center justify-end gap-x-4 bg-zinc-50 pr-6">
                 <Topbar />
               </div>
-              <div className="home-page h-full w-full grow bg-gray-100 p-6">{children}</div>
+              <div className="h-full w-full bg-gray-100 p-6">{children}</div>
             </div>
           </div>
         </Media>
         <Media lessThan="md">
           {/* <TopBarMobile showMenu={showMenu} onShowMenu={() => setShowMenu(!showMenu)} onCloseMenu={onCloseMenu} /> */}
           {/* <MenuHamburger  showMenu={showMenu} onClick={() => setShowMenu(!showMenu)} /> */}
-          <div className={classNames('home-page h-full grow bg-zinc-50 p-6', showMenu && 'hidden')}>{children}</div>
+          <div className={classNames('h-full grow bg-zinc-50 p-6', showMenu && 'hidden')}>{children}</div>
         </Media>
       </MediaContextProvider>
     </>

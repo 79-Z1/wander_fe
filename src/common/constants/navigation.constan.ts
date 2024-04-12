@@ -21,7 +21,7 @@ export const sidebarMenuItems = [
   },
   {
     name: 'Tin nhắn',
-    path: '/messages',
+    path: '/chat',
     icon: 'messages-dots'
   },
   {

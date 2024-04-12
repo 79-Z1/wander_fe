@@ -9,9 +9,11 @@ export const FetchRequest = async (url: string, init?: RequestInit | undefined) 
 
   const session = await getServerSession(authOptions);
   const accessToken = session?.user.accessToken;
+  const userId = session?.user.id || '';
 
   if (accessToken) {
-    headers.Authorization = `Bearer ${accessToken}`;
+    headers.authorization = accessToken;
+    headers['x-client-id'] = userId;
   }
 
   return fetch(`${fetchBaseURL}/${url}`, {headers, next: {revalidate: 60}, ...init});
