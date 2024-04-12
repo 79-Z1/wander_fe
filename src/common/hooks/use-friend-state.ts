@@ -15,20 +15,21 @@ interface IState extends IInitState {
 }
 
 interface IActions {
-  sendFriendRequest: (friendId: string, socket: Socket) => void;
-  updateFriendRecieved: (friendRecieves: IFriendRecieved[]) => void;
+  sendFriendRequest: (userId: string, friendId: string, socket: Socket) => void;
+  cancelFriendRequest: (userId: string, friendId: string, socket: Socket) => void;
+  updateFriendRecievedList: (friendRecieves: IFriendRecieved[]) => void;
   getFriendForFriendPage: (tab: ENUM_FRIEND_TAB) => void;
-  acceptFriendRequest: (friendId: string, socket: Socket) => void;
+  acceptFriendRequest: (userId: string, friendId: string, socket: Socket) => void;
   rejectFriendRequest: (friendId: string, socket: Socket) => void;
   unFriend: (friendId: string, socket: Socket) => void;
   updateFriendList: (payload: IFriend[]) => void;
-  updateFriendSent: (payload: IFriendSent[]) => void;
+  updateFriendSentList: (payload: IFriendSent[]) => void;
   setLoading: (status: boolean) => void;
 }
 
 const useFriendState = create<IState & IActions>()(
   devtools(
-    immer((set, get) => ({
+    immer(set => ({
       isFetching: true,
       userFriend: {
         friends: [],
@@ -37,7 +38,7 @@ const useFriendState = create<IState & IActions>()(
         _id: '',
         friendId: ''
       } as IUserFriend,
-      updateFriendSent: payload => {
+      updateFriendSentList: payload => {
         try {
           set(state => {
             state.userFriend.friendsRequestSent = payload;
@@ -60,10 +61,12 @@ const useFriendState = create<IState & IActions>()(
           set({isFetching: false}, false);
         }
       },
-      sendFriendRequest: async (friendId, socket) => {
+      sendFriendRequest: async (userId, friendId, socket) => {
         try {
           const res = await FriendApi.sendFriendRequest(friendId);
-          socket.emit(ENUM_SOCKET_EMIT.SEND_FRIEND_REQUEST, {friendId});
+          if (res.metadata) {
+            socket.emit(ENUM_SOCKET_EMIT.SEND_FRIEND_REQUEST, {friendId, userId});
+          }
           set(state => {
             state.userFriend.friendsRequestSent = res.metadata;
             state.statusCode = res.statusCode;
@@ -75,7 +78,24 @@ const useFriendState = create<IState & IActions>()(
           set({isFetching: false}, false);
         }
       },
-      updateFriendRecieved: async friendRecieves => {
+      cancelFriendRequest: async (userId, friendId, socket) => {
+        try {
+          const res = await FriendApi.cancelFriendRequest(friendId);
+          if (res.metadata) {
+            socket.emit(ENUM_SOCKET_EMIT.CANCEL_FRIEND_REQUEST, {friendId, userId});
+          }
+          set(state => {
+            state.userFriend.friendsRequestSent = res.metadata;
+            state.statusCode = res.statusCode;
+            state.error = res.error;
+            state.message = res.message;
+            state.isFetching = false;
+          }, false);
+        } catch (error) {
+          set({isFetching: false}, false);
+        }
+      },
+      updateFriendRecievedList: async friendRecieves => {
         try {
           set(state => {
             state.userFriend.friendsRequestReceved = friendRecieves;
@@ -88,7 +108,9 @@ const useFriendState = create<IState & IActions>()(
       unFriend: async (friendId, socket) => {
         try {
           const res = await FriendApi.unFriend(friendId);
-          socket.emit(ENUM_SOCKET_EMIT.UN_FRIEND, {friendId});
+          if (res.metadata) {
+            socket.emit(ENUM_SOCKET_EMIT.UN_FRIEND, {friendId});
+          }
           set(state => {
             state.userFriend.friends = res.metadata;
             state.statusCode = res.statusCode;
@@ -116,14 +138,12 @@ const useFriendState = create<IState & IActions>()(
       },
       rejectFriendRequest: async (friendId, socket) => {
         try {
-          let newFriendRecieved = get().userFriend.friendsRequestReceved;
           const res = await FriendApi.rejectFriendRequest(friendId);
           if (res.metadata) {
-            newFriendRecieved = get().userFriend.friendsRequestReceved.filter(friend => friend.user._id !== friendId);
             socket.emit(ENUM_SOCKET_EMIT.REJECT_FRIEND_REQUEST, {friendId});
           }
           set(state => {
-            state.userFriend.friendsRequestReceved = newFriendRecieved;
+            state.userFriend.friendsRequestReceved = res.metadata;
             state.statusCode = res.statusCode;
             state.error = res.error;
             state.message = res.message;
@@ -133,16 +153,14 @@ const useFriendState = create<IState & IActions>()(
           set({isFetching: false}, false);
         }
       },
-      acceptFriendRequest: async (friendId, socket) => {
+      acceptFriendRequest: async (userId, friendId, socket) => {
         try {
-          let newFriendRecieved = get().userFriend.friendsRequestReceved;
           const res = await FriendApi.acceptFriendRequest(friendId);
           if (res.metadata) {
-            newFriendRecieved = get().userFriend.friendsRequestReceved.filter(friend => friend.user._id !== friendId);
-            socket.emit(ENUM_SOCKET_EMIT.ACCEPT_FRIEND_REQUEST, {friendId});
+            socket.emit(ENUM_SOCKET_EMIT.ACCEPT_FRIEND_REQUEST, {friendId, userId});
           }
           set(state => {
-            state.userFriend.friendsRequestReceved = newFriendRecieved;
+            state.userFriend.friendsRequestReceved = res.metadata;
             state.statusCode = res.statusCode;
             state.error = res.error;
             state.message = res.message;
@@ -153,7 +171,7 @@ const useFriendState = create<IState & IActions>()(
         }
       },
       setLoading: status => {
-        set({isFetching: status}, false, 'voucher/setLoading');
+        set({isFetching: status}, false);
       }
     }))
   )

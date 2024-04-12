@@ -78,6 +78,7 @@ const FriendModule: FC<TFriendModuleProps> = ({className}) => {
             <>
               <TabMyFriend value={ENUM_FRIEND_TAB.MY_FRIEND} myFriends={friendState.userFriend.friends} />
               <TabFriendRequest
+                userId={session.data?.user.id || ''}
                 value={ENUM_FRIEND_TAB.FRIEND_REQUEST}
                 friendRecieves={friendState.userFriend.friendsRequestReceved}
               />

@@ -1,4 +1,5 @@
 import React, {FC} from 'react';
+import {Metadata} from 'next';
 
 import {cn} from '@/components/utils';
 
@@ -15,6 +16,10 @@ const PageHome: FC<TPageHomeProps> = ({className}) => {
     </div>
   );
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {title: 'Home', description: 'Home Description'};
+}
 
 PageHome.displayName = 'PageHome';
 

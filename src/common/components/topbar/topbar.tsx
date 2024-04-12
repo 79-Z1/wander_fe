@@ -23,7 +23,7 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
 
   function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter') {
-      friendState.sendFriendRequest(text, GlobalConnectSocket);
+      friendState.sendFriendRequest(session.data?.user.id || '', text, GlobalConnectSocket);
     }
   }
 

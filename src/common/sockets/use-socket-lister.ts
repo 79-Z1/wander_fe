@@ -38,19 +38,27 @@ export default function useCommonListener(params: {socket: TSocket; session?: Se
 
   useEffect(() => {
     socket.on(ENUM_SOCKET_LISTENER.UPDATE_FRIEND, param => {
+      if (param.type === 'send') {
+        const friendRecieved = [...friendState.userFriend.friends, param.friend];
+        friendState.updateFriendRecievedList(friendRecieved);
+      }
+      if (param.type === 'cancel-send') {
+        const friendRecieved = [...friendState.userFriend.friends, param.friend];
+        friendState.updateFriendRecievedList(friendRecieved);
+      }
       if (param.type === 'accept') {
         const newFriendSent = friendState.userFriend.friendsRequestSent?.filter(
           friend => friend.user._id !== param.friend.user._id
         );
         const friendList = [...friendState.userFriend.friends, param.friend];
         friendState.updateFriendList(friendList);
-        friendState.updateFriendSent(newFriendSent);
+        friendState.updateFriendSentList(newFriendSent);
       }
       if (param.type === 'reject') {
         const newFriendSent = friendState.userFriend.friendsRequestSent?.filter(
           friend => friend.user._id !== param.friend.user._id
         );
-        friendState.updateFriendSent(newFriendSent);
+        friendState.updateFriendSentList(newFriendSent);
       }
 
       if (param.type === 'un-friend') {
@@ -63,7 +71,7 @@ export default function useCommonListener(params: {socket: TSocket; session?: Se
 
     socket.on(ENUM_SOCKET_LISTENER.UPDATE_FRIEND_REQUEST, params => {
       const friendRecieves = params;
-      friendState.updateFriendRecieved(friendRecieves);
+      friendState.updateFriendRecievedList(friendRecieves);
     });
 
     return () => {

@@ -1,4 +1,4 @@
-import {getSession, signOut} from 'next-auth/react';
+import {getSession} from 'next-auth/react';
 import Axios, {AxiosError, AxiosResponse, InternalAxiosRequestConfig} from 'axios';
 
 const axiosClient = Axios.create({

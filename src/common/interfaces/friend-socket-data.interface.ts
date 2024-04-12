@@ -4,7 +4,7 @@ import {ENUM_SOCKET_EMIT, ENUM_SOCKET_LISTENER} from '../constants/socket.enum';
 
 import {IFriendRecieved, IUpdateFriend} from './friend.interface';
 
-export type TSendFriendRequest = {friendId: string};
+export type TSendFriendRequest = {friendId: string; userId: string};
 export type TAcceptFriendRequest = {friendId: string};
 export type TRejectFriendRequest = {friendId: string};
 export type TUnFriend = {friendId: string};
