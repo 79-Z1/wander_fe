@@ -1,5 +1,11 @@
 import {IUserAttribute} from '../entities';
 
+export type TSendFriendRequest = {friendId: string; userId: string};
+export type TAcceptFriendRequest = {friendId: string};
+export type TRejectFriendRequest = {friendId: string};
+export type TUnFriend = {friendId: string};
+export type TSetUserSocketId = {userId?: string};
+
 export interface IUserFriend {
   _id: string;
   friendId: string;

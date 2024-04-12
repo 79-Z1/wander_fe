@@ -12,7 +12,7 @@ import {IComponentBaseProps} from '@/common/interfaces';
 
 import bellNotificationSVG from '@/assets/icons/bell-notification.svg';
 
-import Search from './search';
+import Search from '../search';
 
 export type TTopbarProps = IComponentBaseProps;
 
