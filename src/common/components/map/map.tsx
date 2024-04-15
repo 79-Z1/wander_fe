@@ -1,10 +1,14 @@
 'use client';
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import Leaflet from 'leaflet';
 import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
 import {FullscreenControl} from 'react-leaflet-fullscreen';
 
+import {Loading} from '@/core-ui';
+
 import {cn} from '@/components/utils';
+
+import useGeolocation from '@/common/hooks/use-geo-location';
 
 import {IComponentBaseProps} from '@/common/interfaces';
 
@@ -23,18 +27,30 @@ import 'leaflet-geosearch/dist/geosearch.css';
 export type TMapProps = IComponentBaseProps;
 
 const Map: FC<TMapProps> = ({className}) => {
+  const {data, isLoading} = useGeolocation();
+  if (isLoading) return <Loading />;
+
+  function handleLocationMarkerClick(location: [number, number]) {
+    console.log(location);
+  }
+
   return (
     <div className={cn('map h-full w-full', className)} data-testid="Map">
-      <MapContainer className="h-full w-full rounded-lg" center={[51.505, -0.09]} zoom={13} zoomControl={true}>
+      <MapContainer
+        className="h-full w-full rounded-lg"
+        center={[data?.latitude || 0, data.longitude || 0]}
+        zoom={13}
+        zoomControl={true}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <RoutingMachine />
         <MapSearch />
-        {/* <LocationMarker /> */}
+        <RoutingMachine currentUserLatLng={Leaflet.latLng(data?.latitude || 0, data?.longitude || 0)} />
+        {/* <LocationMarker onClick={handleLocationMarkerClick} /> */}
         <Marker
-          position={[51.505, -0.09]}
+          position={[data?.latitude || 0, data.longitude || 0]}
           icon={
             new Leaflet.Icon({
               iconUrl: MarkerIcon.src,
@@ -47,9 +63,7 @@ const Map: FC<TMapProps> = ({className}) => {
             })
           }
         >
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
+          <Popup>Vị trí của bạn</Popup>
         </Marker>
         <FullscreenControl forceSeparateButton={true} position="topright" />
       </MapContainer>

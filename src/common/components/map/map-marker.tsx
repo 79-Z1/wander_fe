@@ -1,21 +1,30 @@
-import {useState} from 'react';
-import L from 'leaflet';
+import {FC, useState} from 'react';
+import L, {LatLngExpression} from 'leaflet';
 import {Marker, Popup, useMapEvents} from 'react-leaflet';
+
+import {IComponentBaseProps} from '@/common/interfaces';
 
 import icon from './icon';
 
-function LocationMarker() {
-  const [position, setPosition] = useState(null);
-  useMapEvents({
+export type TMapMarkerProps = IComponentBaseProps & {
+  flyTo?: boolean;
+  onClick?: (position: [number, number]) => void;
+};
+
+const LocationMarker: FC<TMapMarkerProps> = ({onClick}) => {
+  const [position, setPosition] = useState<LatLngExpression>([0, 0]);
+
+  const handleClick = ([lat, lng]: [number, number]) => {
+    setPosition?.([lat, lng]);
+    onClick?.([lat, lng]);
+  };
+
+  const map = useMapEvents({
     click(e: any) {
-      setPosition(e?.latlng); // Store latlng from 'locationfound'
-      //   const {lat, lng} = e.latlng;
-      //   L.marker([lat, lng], {icon}).addTo(map);
-      //   map.locate();
-    },
-    locationfound(e: any) {
-      setPosition(e?.latlng); // Store latlng from 'locationfound'
-      //   map.flyTo(e.latlng, map.getZoom());
+      const {lat, lng} = e.latlng;
+      handleClick([lat, lng]);
+      L.marker([lat, lng], {icon}).addTo(map);
+      map.flyTo(e.latlng, map.getZoom());
     }
   });
 
@@ -26,6 +35,6 @@ function LocationMarker() {
       </Popup>
     </Marker>
   );
-}
+};
 
 export default LocationMarker;
