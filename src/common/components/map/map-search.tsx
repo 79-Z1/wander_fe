@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import L from 'leaflet';
 import {GeoSearchControl, OpenStreetMapProvider} from 'leaflet-geosearch';
-import {useMap} from 'react-leaflet';
+import {useMapEvents} from 'react-leaflet';
 
 import {IComponentBaseProps} from '@/common/interfaces';
 
@@ -12,16 +12,10 @@ import 'leaflet-routing-machine';
 export type TMapSearchProps = IComponentBaseProps;
 
 const MapSearch: FC<TMapSearchProps> = () => {
-  const map = useMap();
+  const map = useMapEvents({});
 
   useEffect(() => {
     if (!map) return;
-
-    function searchEventHandler(result: any) {
-      // console.log(result.location);
-    }
-
-    map.on('geosearch/showlocation', searchEventHandler);
 
     const provider = new OpenStreetMapProvider();
 
