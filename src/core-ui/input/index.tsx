@@ -8,6 +8,7 @@ import {ColorType, ICoreUIBaseProps, TextInputType} from '../types';
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   variant?: ColorType;
   type?: TextInputType;
+  ref?: ForwardedRef<HTMLInputElement>;
 }
 
 const Input: FC<IInputProps & ICoreUIBaseProps> = forwardRef(

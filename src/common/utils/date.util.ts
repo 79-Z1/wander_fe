@@ -86,3 +86,12 @@ export function getFormatRelative(date: Date, locale = 'en-us') {
 
   return formatRelative(date, new Date(), {locale: currentLocale});
 }
+
+export function forMatMessageTime(date?: string) {
+  if (!date) return '';
+  const dateParse = dayjs(date);
+  if (dateParse.day() === new Date().getDay()) {
+    return getFormatDistance(dateParse.toDate(), true, 'vi-vn');
+  }
+  return getFormatRelative(dateParse.toDate(), 'vi-vn');
+}

@@ -1,5 +1,7 @@
 import FetchRequest from '@/common/http/fetch-request';
 
+import {IClassifiedUserConversation} from '../entities/chat.entity';
+import HttpRequest from '../http/http-request';
 import {IConversation} from '../interfaces';
 
 const readConversationBySlugSeverSide = async (slug: string) => {
@@ -13,8 +15,13 @@ const readConversationBySlugSeverSide = async (slug: string) => {
   }
 };
 
+const getUserConservations = async () => {
+  return HttpRequest.get<IClassifiedUserConversation>(`chat/user-conversations`);
+};
+
 export const ChatApi = {
-  readConversationBySlugSeverSide
+  readConversationBySlugSeverSide,
+  getUserConservations
 };
 
 export default ChatApi;

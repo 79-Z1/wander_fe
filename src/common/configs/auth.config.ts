@@ -115,7 +115,7 @@ export const authOptions: NextAuthOptions = {
       return false;
     },
     jwt: async params => {
-      const {user, trigger, token, session} = params;
+      const {user, trigger, token} = params;
 
       if (trigger === 'signIn' && user) {
         token.id = user.id;
@@ -129,41 +129,6 @@ export const authOptions: NextAuthOptions = {
         token.isVerified = user.isVerified;
         token.provider = user.provider;
       }
-
-      if (trigger === 'update' && session) {
-        if (session?.name) {
-          token.name = session?.name;
-        }
-        if (session?.image) {
-          token.picture = session?.image;
-          token.avatar = session?.image;
-        }
-        if (session?.email) {
-          token.email = session?.email;
-        }
-        if (session?.career) {
-          token.career = session?.career;
-        }
-        if (session?.gender) {
-          token.gender = session?.gender;
-        }
-        if (session?.dateOfBirth) {
-          token.dateOfBirth = session?.dateOfBirth;
-        }
-
-        if (session?.slug) {
-          token.slug = session?.slug;
-        }
-
-        if (session?.description) {
-          token.description = session?.description;
-        }
-
-        if (session?.isVerified) {
-          token.isVerified = session?.isVerified;
-        }
-      }
-
       return token;
     },
     session: async params => {

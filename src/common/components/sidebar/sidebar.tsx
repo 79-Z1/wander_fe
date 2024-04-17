@@ -31,7 +31,7 @@ const Sidebar: FC<SidebarProps> = ({className, isExpand = true, onCollapseClick,
         data-testid="sidebar"
         {...rest}
       >
-        <div className="scrollbar flex grow flex-col pr-2">
+        <div className="flex grow flex-col pr-2">
           <div className="relative flex h-10 min-h-[2.5rem] w-full items-center gap-x-2 pl-2">
             <div
               className={`absolute left-0 top-3 transition-opacity ${

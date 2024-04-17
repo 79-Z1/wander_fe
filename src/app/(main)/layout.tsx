@@ -43,7 +43,7 @@ export default function MainLayout({
     <>
       <InitSocket />
       <MediaContextProvider>
-        <Media greaterThanOrEqual="md" className="h-full w-full">
+        <Media greaterThanOrEqual="md" className="h-screen w-full">
           <div className="flex h-full w-full" id="layout-container">
             <Sidebar isExpand={isOpenSidebar} onCollapseClick={handleCollapseSidebar} />
             <div
@@ -55,7 +55,7 @@ export default function MainLayout({
               <div className="flex min-h-[72px] items-center justify-end gap-x-4 bg-zinc-50 pr-6">
                 <Topbar />
               </div>
-              <div className="h-full w-full bg-gray-100 p-6">{children}</div>
+              <div className="grow bg-gray-100 p-6">{children}</div>
             </div>
           </div>
         </Media>

@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import Image from 'next/image';
 import {GlobalConnectSocket} from '@/common/sockets/global-connect.socket';
 
@@ -18,25 +18,37 @@ export type TMessageSectionProps = IComponentBaseProps & {
 };
 
 const MessageSection: FC<TMessageSectionProps> = ({userId, conversation}) => {
-  const [message, setMessage] = useState('');
-
   const {messages, setMessages, sendMessage} = useChatState();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     setMessages(conversation.messages);
   }, []);
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({behavior: 'smooth'});
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   function handleSendMessage() {
-    sendMessage('661271c6600d68ed02a385be', message, GlobalConnectSocket);
+    sendMessage(conversation._id, message, GlobalConnectSocket);
+    setMessage('');
+    inputRef.current?.focus();
   }
 
   return (
     <>
-      <div className="flex h-full items-center gap-x-2 border-b border-slate-300 p-3">
+      <div className="flex items-center gap-x-2 border-b border-slate-300 p-3">
         <div className="relative h-[44px] w-[44px]">
           <Image src={''} fill alt="avatar" className="absolute rounded-lg object-cover object-center" />
         </div>
-        <div className="flex h-full flex-col gap-y-3">
+        <div className="flex flex-col gap-y-3">
           <p className="flex items-center justify-between text-sm font-bold">My name</p>
           <div className="flex items-center justify-between text-xs text-[#8B8D97]">
             <div className="flex items-center gap-x-1">
@@ -49,14 +61,16 @@ const MessageSection: FC<TMessageSectionProps> = ({userId, conversation}) => {
           </div>
         </div>
       </div>
-      <div className="row-span-6 flex flex-col px-6">
-        <div className="scrollbar flex flex-col overflow-y-auto">
+      <div className="flex h-full grow flex-col px-6">
+        <div className="scrollbar flex max-h-[80vh] grow flex-col">
           {messages.map((message, index) => (
             <Message key={index} userId={userId || ''} message={message} />
           ))}
+          <div ref={messagesEndRef} />
         </div>
         <div className="mt-3 flex items-center gap-x-1">
           <Input
+            ref={inputRef}
             className="w-full rounded-lg bg-gray-100 px-2 py-3 text-gray-500"
             value={message}
             onChange={e => setMessage(e.target.value)}

@@ -15,11 +15,7 @@ export default async function CreateChatMainPage({params}: CreateChatPageProps) 
 
   if (!data) return <NotFoundModule />;
 
-  return (
-    <div className="h-full w-full">
-      <ChatModule conversation={data} />
-    </div>
-  );
+  return <ChatModule conversation={data} />;
 }
 
 export async function generateMetadata({params: {slug}}: CreateChatPageProps): Promise<Metadata> {

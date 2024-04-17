@@ -1,12 +1,13 @@
 'use client';
 import React, {FC} from 'react';
 import Image from 'next/image';
-import {usePathname, useRouter} from 'next/navigation';
 import {useSession} from 'next-auth/react';
 import {debounce} from 'lodash-es';
+import {GlobalConnectSocket} from '@/common/sockets/global-connect.socket';
 
 import {cn} from '@/components/utils';
 
+import useFriendState from '@/common/hooks/use-friend-state';
 import useUserState from '@/common/hooks/use-user-state';
 
 import {IComponentBaseProps} from '@/common/interfaces';
@@ -19,9 +20,10 @@ export type TTopbarProps = IComponentBaseProps;
 
 const Topbar: FC<TTopbarProps> = ({className}) => {
   const session = useSession();
-  const router = useRouter();
-  const pathname = usePathname();
+  // const router = useRouter();
+  // const pathname = usePathname();
   const {users, isFetching, searchByName, setUsers} = useUserState();
+  const friendState = useFriendState();
 
   // function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
   //   if (e.key === 'Enter') {
@@ -39,6 +41,10 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
     else setUsers([]);
   }
 
+  function handleSelectSearchResult(friendId: string) {
+    friendState.sendFriendRequest(session.data?.user.id || '', friendId, GlobalConnectSocket);
+  }
+
   return (
     <div
       className={cn('topbar flex w-full items-center justify-end gap-4 bg-zinc-50 p-6', className)}
@@ -48,7 +54,8 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
         isLoading={isFetching}
         emptyMessage="Không có kết quả"
         users={users}
-        onValueChange={text => handleSearchChange(text)}
+        onValueChange={handleSearchChange}
+        onSelectOption={handleSelectSearchResult}
       />
       <Image src={bellNotificationSVG} alt="avatar" width={28} height={28} />
       <p className="text-sm font-bold">My name</p>

@@ -16,6 +16,7 @@ type SearchBarSuggestionProps = {
   disabled?: boolean;
   placeholder?: string;
   onValueChange?: (value: string) => void;
+  onSelectOption?: (userId: string) => void;
 };
 
 const SearchBarSuggestion = ({
@@ -24,7 +25,8 @@ const SearchBarSuggestion = ({
   emptyMessage,
   disabled,
   isLoading = false,
-  onValueChange
+  onValueChange,
+  onSelectOption
 }: SearchBarSuggestionProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -60,6 +62,7 @@ const SearchBarSuggestion = ({
       setInputValue(selectedOption.name);
 
       onValueChange?.(inputValue);
+      onSelectOption?.(selectedOption._id);
 
       // This is a hack to prevent the input from being focused after the user selects an option
       // We can call this hack: "The next tick"

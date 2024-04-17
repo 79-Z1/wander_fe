@@ -1,7 +1,10 @@
 'use client';
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {useSession} from 'next-auth/react';
+import {debounce} from 'lodash-es';
+import ChatApi from '@/common/api/chat.api';
+import {IClassifiedUserConversation} from '@/common/entities';
 import {GlobalConnectSocket} from '@/common/sockets/global-connect.socket';
 
 import {Icon} from '@/core-ui';
@@ -9,7 +12,10 @@ import {Icon} from '@/core-ui';
 import {Button} from '@/components/ui/button';
 import {cn} from '@/components/utils';
 
-import Search from '@/common/components/search';
+import useFriendState from '@/common/hooks/use-friend-state';
+import useUserState from '@/common/hooks/use-user-state';
+
+import SearchBarSuggestion from '@/common/components/search-bar-suggestion';
 
 import {ENUM_SOCKET_EMIT} from '@/common/constants/socket.enum';
 
@@ -27,18 +33,49 @@ export type TChatModuleProps = IComponentBaseProps & {
 const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
   const session = useSession();
   const router = useRouter();
+  const {users, isFetching, searchByName, setUsers} = useUserState();
+  const friendState = useFriendState();
 
-  function handleClickFriendAvatar() {
-    router.push('/chat/661271c6600d68ed02a385be');
+  const [contactList, setContactList] = useState<IClassifiedUserConversation>({
+    privateConversations: [],
+    groupConversations: []
+  });
+
+  useEffect(() => {
+    const fetchUserConservations = async () => {
+      try {
+        const response = await ChatApi.getUserConservations();
+        setContactList(response.metadata || {});
+      } catch (error) {
+        error;
+      }
+    };
+    fetchUserConservations();
+  }, []);
+
+  function handleClickFriendAvatar(conversationId?: string) {
+    router.push(`/chat/${conversationId}`);
     GlobalConnectSocket.emit(ENUM_SOCKET_EMIT.JOIN_CONVERSATION, {
-      conversationId: '661271c6600d68ed02a385be'
+      conversationId: conversationId ?? ''
     });
+  }
+
+  function handleSearchChange(text: string) {
+    if (text)
+      debounce(() => {
+        searchByName(text);
+      }, 500)();
+    else setUsers([]);
+  }
+
+  function handleSelectSearchResult(friendId: string) {
+    friendState.sendFriendRequest(session.data?.user.id || '', friendId, GlobalConnectSocket);
   }
 
   if (!session.data?.user && session.status === 'unauthenticated') return <NotFoundModule />;
 
   return (
-    <div className={cn('ChatModule', 'flex h-full flex-col', className)} data-testid="ChatModule">
+    <div className={cn('ChatModule', 'flex h-full max-h-full flex-col', className)} data-testid="ChatModule">
       <div className="flex w-full items-center justify-between">
         <p className="text-2xl font-bold">Cuộc trò chuyện với bạn bè</p>
         <Button className="gap-x-2 text-xl font-bold">
@@ -47,26 +84,35 @@ const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
         </Button>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-x-4">
-        <div className="flex h-full flex-col gap-y-6 rounded-lg bg-zinc-50 p-6">
+      <div className="mt-6 flex h-full gap-x-4">
+        <div className="flex h-full basis-1/2 flex-col gap-y-6 rounded-lg bg-zinc-50 p-6">
           <div className="flex items-center justify-between">
             <p>Liên hệ</p>
             <p>34</p>
           </div>
           <div className="mb-6 mt-3">
-            <Search />
+            <SearchBarSuggestion
+              isLoading={isFetching}
+              emptyMessage="Không có kết quả"
+              users={users}
+              onValueChange={handleSearchChange}
+              onSelectOption={handleSelectSearchResult}
+            />
           </div>
           <div>
             <div>
-              <FriendAvatarSection onClick={handleClickFriendAvatar} />
-              <FriendAvatarSection onClick={handleClickFriendAvatar} />
-              <FriendAvatarSection onClick={handleClickFriendAvatar} />
-              <FriendAvatarSection onClick={handleClickFriendAvatar} />
+              {contactList?.privateConversations.length > 0 ? (
+                contactList?.privateConversations.map((contact, index) => (
+                  <FriendAvatarSection key={index} contact={contact} onClick={handleClickFriendAvatar} />
+                ))
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="grid max-h-[calc(100vh-120px)] grid-rows-7 flex-col gap-y-6 rounded-lg bg-zinc-50 py-6 ">
+        <div className="flex h-full max-h-full basis-1/2 flex-col gap-y-6 rounded-lg bg-zinc-50 py-6">
           {conversation ? <MessageSection userId={session.data?.user?.id} conversation={conversation} /> : <></>}
         </div>
       </div>

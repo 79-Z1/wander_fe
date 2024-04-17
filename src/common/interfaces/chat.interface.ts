@@ -3,6 +3,7 @@ export type TJoinConversation = {conversationId: string};
 export type TUpdateMessages = {messages: IMessage[]};
 
 export interface IMessage {
+  _id: string;
   sender: string;
   text: string;
   pinned: boolean;
@@ -22,6 +23,7 @@ export interface IParticipant {
 }
 
 export interface IConversation {
+  _id: string;
   creatorId: string;
   name: string;
   participants: IParticipant[];
