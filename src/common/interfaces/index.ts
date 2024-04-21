@@ -7,3 +7,4 @@ export * from './layout.interface';
 export * from './page.interface';
 export * from './socket-data.interface';
 export * from './state.interface';
+export * from './upload-image.interface';

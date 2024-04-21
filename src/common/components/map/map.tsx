@@ -37,7 +37,7 @@ const Map: FC<TMapProps> = ({className}) => {
   return (
     <div className={cn('map h-full w-full', className)} data-testid="Map">
       <MapContainer
-        className="h-full w-full rounded-lg"
+        className="!z-1 h-full w-full rounded-lg"
         center={[data?.latitude || 0, data.longitude || 0]}
         zoom={13}
         zoomControl={true}

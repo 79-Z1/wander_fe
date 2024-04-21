@@ -1,6 +1,7 @@
 import * as HttpRequest from '@/common/http/http-request';
 
 import {ENUM_FRIEND_TAB} from '../constants';
+import {IUser} from '../entities/user.entity';
 import {IFriend, IFriendRecieved, IFriendSent, IUserFriend} from '../interfaces/friend.interface';
 import {generateQueryParams} from '../utils/generate-query-params.util';
 
@@ -30,13 +31,18 @@ const unFriend = async (friendId: string) => {
   return await HttpRequest.patch<IFriend[]>('friend/unfriend', {friendId});
 };
 
+const getFriendList = () => {
+  return HttpRequest.get<IUser[]>('friend/friend-list');
+};
+
 export const FriendApi = {
   sendFriendRequest,
   cancelFriendRequest,
   getFriendForFriendPage,
   acceptFriendRequest,
   rejectFriendRequest,
-  unFriend
+  unFriend,
+  getFriendList
 };
 
 export default FriendApi;

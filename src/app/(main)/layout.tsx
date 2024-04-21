@@ -5,7 +5,9 @@ import classNames from 'classnames';
 import InitSocket from '@/common/layout/init-socket';
 
 import useBackNavigationHistory from '@/common/hooks/use-back-navigation-history';
+import useGlobalState from '@/common/hooks/use-global-state';
 
+import GlobalLoading from '@/common/components/global-loading';
 import {Media, MediaContextProvider} from '@/common/components/media';
 import Sidebar from '@/common/components/sidebar/sidebar';
 import Topbar from '@/common/components/topbar/topbar';
@@ -23,6 +25,7 @@ export default function MainLayout({
   const pathname = usePathname();
   // const session = useSession();
   const backNavigationHistory = useBackNavigationHistory();
+  const {isLoading} = useGlobalState();
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -43,27 +46,33 @@ export default function MainLayout({
     <>
       <InitSocket />
       <MediaContextProvider>
-        <Media greaterThanOrEqual="md" className="h-screen w-full">
-          <div className="flex h-full w-full" id="layout-container">
-            <Sidebar isExpand={isOpenSidebar} onCollapseClick={handleCollapseSidebar} />
-            <div
-              className={classNames(
-                'home-content flex h-full grow flex-col transition-all duration-500',
-                isOpenSidebar ? 'w-[calc(100%-20rem)] md:ml-[236px]' : 'w-[calc(100%-6rem)] md:ml-24'
-              )}
-            >
-              <div className="flex min-h-[72px] items-center justify-end gap-x-4 bg-zinc-50 pr-6">
-                <Topbar />
+        {isLoading ? (
+          <GlobalLoading />
+        ) : (
+          <>
+            <Media greaterThanOrEqual="md" className="relative h-screen w-full">
+              <div className="flex h-full w-full" id="layout-container">
+                <Sidebar isExpand={isOpenSidebar} onCollapseClick={handleCollapseSidebar} />
+                <div
+                  className={classNames(
+                    'home-content flex h-full grow flex-col transition-all duration-500',
+                    isOpenSidebar ? 'w-[calc(100%-20rem)] md:ml-[236px]' : 'w-[calc(100%-6rem)] md:ml-24'
+                  )}
+                >
+                  <div className="flex min-h-[72px] items-center justify-end gap-x-4 bg-zinc-50 pr-6">
+                    <Topbar />
+                  </div>
+                  <div className="grow bg-gray-100 p-6">{children}</div>
+                </div>
               </div>
-              <div className="grow bg-gray-100 p-6">{children}</div>
-            </div>
-          </div>
-        </Media>
-        <Media lessThan="md">
-          {/* <TopBarMobile showMenu={showMenu} onShowMenu={() => setShowMenu(!showMenu)} onCloseMenu={onCloseMenu} /> */}
-          {/* <MenuHamburger  showMenu={showMenu} onClick={() => setShowMenu(!showMenu)} /> */}
-          <div className={classNames('h-full grow bg-zinc-50 p-6', showMenu && 'hidden')}>{children}</div>
-        </Media>
+            </Media>
+            <Media lessThan="md">
+              {/* <TopBarMobile showMenu={showMenu} onShowMenu={() => setShowMenu(!showMenu)} onCloseMenu={onCloseMenu} /> */}
+              {/* <MenuHamburger  showMenu={showMenu} onClick={() => setShowMenu(!showMenu)} /> */}
+              <div className={classNames('h-full grow bg-zinc-50 p-6', showMenu && 'hidden')}>{children}</div>
+            </Media>
+          </>
+        )}
       </MediaContextProvider>
     </>
   );

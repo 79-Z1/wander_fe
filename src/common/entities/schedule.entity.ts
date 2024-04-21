@@ -8,15 +8,14 @@ export interface ILocation {
 export interface IPlan {
   title: string;
   cost: number;
-  startAt: Date;
-  endAt: Date;
+  startAt: string;
   address: string;
   location: ILocation;
 }
 
 export interface IMember {
   memberId: string;
-  permission: ENUM_MEMBER_PERMISSION;
+  permission?: ENUM_MEMBER_PERMISSION;
 }
 
 export interface ICreateSchedule {

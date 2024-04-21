@@ -27,7 +27,6 @@ const SideBarNavigation: FC<ISideBarNavigation> = ({isExpand = true, className, 
     <div className={classNames('sidebar-nav space-y-4', className)} data-testid="sidebar-navigation" {...rest}>
       <div className={`flex flex-col justify-center gap-y-3 ${isExpand ? '' : 'items-center'}`}>
         {sidebarMenuItems.map((item, idx) => {
-          // const isActiveParent = item.sub && item.sub.find(subItem => subItem.path === activePath);
           const activeMenuBackground =
             activePath === item.path ? 'bg-orange-500 hover:bg-orange-700 !text-[#fcfcfc]' : 'bg-transparent';
           return (
