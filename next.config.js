@@ -31,6 +31,10 @@ const nextConfig = async () => {
         {
           protocol: 'https',
           hostname: 'loremflickr.com'
+        },
+        {
+          protocol: 'https',
+          hostname: 'xunpzhnkuyqxmhga.public.blob.vercel-storage.com'
         }
       ]
     },

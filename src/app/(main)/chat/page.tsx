@@ -1,21 +1,12 @@
-import React, {FC} from 'react';
+import React from 'react';
+import type {Metadata} from 'next';
 
 import ChatModule from '@/modules/chat/chat-module';
 
-import {cn} from '@/components/utils';
+export default async function Voucher() {
+  return <ChatModule />;
+}
 
-import {IComponentBaseProps} from '@/common/interfaces';
-
-export type TPageChatProps = IComponentBaseProps;
-
-const PageChat: FC<TPageChatProps> = ({className}) => {
-  return (
-    <div className={cn('PageChat h-full', className)} data-testid="PageChat">
-      <ChatModule />
-    </div>
-  );
-};
-
-PageChat.displayName = 'PageChat';
-
-export default PageChat;
+export async function generateMetadata(): Promise<Metadata> {
+  return {title: 'Chat', description: 'Chat Description'};
+}

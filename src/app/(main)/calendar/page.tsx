@@ -1,28 +1,12 @@
-'use client';
-import React, {FC} from 'react';
-import {useSession} from 'next-auth/react';
+import React from 'react';
+import type {Metadata} from 'next';
 
 import CalendarModule from '@/modules/calendar/calendar.module';
 
-import {cn} from '@/components/utils';
+export default async function Voucher() {
+  return <CalendarModule />;
+}
 
-import {IComponentBaseProps} from '@/common/interfaces';
-
-export type TCalendarPageProps = IComponentBaseProps;
-
-const CalendarPage: FC<TCalendarPageProps> = ({className}) => {
-  const session = useSession();
-  if (session.status === 'loading') {
-    return null;
-  }
-
-  return (
-    <div className={cn('CalendarPage', className)} data-testid="CalendarPage">
-      <CalendarModule />
-    </div>
-  );
-};
-
-CalendarPage.displayName = 'CalendarPage';
-
-export default CalendarPage;
+export async function generateMetadata(): Promise<Metadata> {
+  return {title: 'Calendar', description: 'Calendar Description'};
+}

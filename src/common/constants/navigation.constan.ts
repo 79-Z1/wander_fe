@@ -11,7 +11,7 @@ export const sidebarMenuItems = [
   },
   {
     name: 'Lịch trình',
-    path: '/schedule',
+    path: '/calendar',
     icon: 'calendar-heart'
   },
   {

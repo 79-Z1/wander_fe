@@ -58,7 +58,7 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
         onSelectOption={handleSelectSearchResult}
       />
       <Image src={bellNotificationSVG} alt="avatar" width={28} height={28} />
-      <p className="text-sm font-bold">My name</p>
+      <p className="text-sm font-bold">{session.data?.user?.name || ''}</p>
       <div className="relative h-[40px] w-[40px]">
         <Image
           src={session.data?.user?.image || ''}

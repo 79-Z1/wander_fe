@@ -16,7 +16,7 @@ type PopupUploadImageProps = IComponentBaseProps & {
   trigger?: ReactNode;
   loading?: boolean;
   onClose?: () => void;
-  handleUpFile: (file: File | FileList | null | undefined) => void;
+  handleUpFile: (file: File) => void;
 };
 
 const PopupUploadImage: FC<PopupUploadImageProps> = ({

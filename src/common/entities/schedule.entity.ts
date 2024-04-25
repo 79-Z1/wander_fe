@@ -8,6 +8,7 @@ export interface ILocation {
 export interface IPlan {
   title: string;
   cost: number;
+  imageUrl?: string;
   startAt: string;
   address: string;
   location: ILocation;

@@ -1,5 +1,5 @@
 'use client';
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import Leaflet from 'leaflet';
 import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
 import {FullscreenControl} from 'react-leaflet-fullscreen';
@@ -15,7 +15,6 @@ import {IComponentBaseProps} from '@/common/interfaces';
 import MarkerIcon from '../../../../node_modules/leaflet/dist/images/marker-icon.png';
 import MarkerShadow from '../../../../node_modules/leaflet/dist/images/marker-shadow.png';
 
-import LocationMarker from './map-marker';
 import MapSearch from './map-search';
 import RoutingMachine from './routeline-machine';
 
@@ -30,9 +29,9 @@ const Map: FC<TMapProps> = ({className}) => {
   const {data, isLoading} = useGeolocation();
   if (isLoading) return <Loading />;
 
-  function handleLocationMarkerClick(location: [number, number]) {
-    console.log(location);
-  }
+  // function handleLocationMarkerClick(location: [number, number]) {
+  //   // console.log(location);
+  // }
 
   return (
     <div className={cn('map h-full w-full', className)} data-testid="Map">

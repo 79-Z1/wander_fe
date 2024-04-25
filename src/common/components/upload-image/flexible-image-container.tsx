@@ -18,7 +18,7 @@ export type TAspectRatioCropContainerProps = IComponentBaseProps & {
   pickAspectRatios: (keyof typeof ASPECT_RATIO_LIST)[];
   imageName: string | null;
   imageType: string | null;
-  onSaveFile: (file: File | FileList | null | undefined) => void;
+  onSaveFile: (file: File) => void;
   onClose: () => void;
 };
 

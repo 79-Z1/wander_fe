@@ -6,6 +6,7 @@ import FriendApi from '@/common/api/friend.api';
 import {IMember, IPlan} from '@/common/entities';
 import {IUser} from '@/common/entities/user.entity';
 import {zodResolver} from '@hookform/resolvers/zod';
+import type {PutBlobResult} from '@vercel/blob';
 
 import {DateRangePicker, Icon, Label} from '@/core-ui';
 import Input from '@/core-ui/input';
@@ -62,6 +63,7 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
   const [memberList, setMemberList] = useState<IUser[]>([]);
   const [friendList, setFriendList] = useState<IUser[]>([]);
   const [planList, setPlanList] = useState<IPlan[]>([]);
+  const [blob, setBlob] = useState<PutBlobResult | null>(null);
 
   useEffect(() => {
     const getFriendList = async () => {
@@ -75,8 +77,15 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
     getFriendList();
   }, []);
 
-  const handleUpFile = (file: File | FileList | null | undefined) => {
-    console.log('🚀 ~ handleUpFile ~ file:::', file);
+  const handleUpFile = async (file: File) => {
+    const response = await fetch(`/api/avatar/upload?filename=${file.name}`, {
+      method: 'POST',
+      body: file
+    });
+
+    const newBlob = (await response.json()) as PutBlobResult;
+
+    setBlob(newBlob);
   };
   const handleDateRangeChange = (newDateRange: DateRange) => {
     if (newDateRange) {
@@ -102,6 +111,7 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
   function handleChangePlanCost(index: number, cost: number) {
     const newPlanList = [...planList];
     newPlanList[index].cost = cost;
+    setValue(`plans.${index}.cost`, cost);
     setPlanList(newPlanList);
   }
 
@@ -120,6 +130,19 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
     clearErrors(`plans.${index}.startAt`);
   }
 
+  async function handleChangePlanImage(index: number, file: File) {
+    const response = await fetch(`/api/avatar/upload?filename=${file.name}`, {
+      method: 'POST',
+      body: file
+    });
+
+    const newImage = (await response.json()) as PutBlobResult;
+    const newPlanList = [...planList];
+    newPlanList[index].imageUrl = newImage.url;
+    setValue(`plans.${index}.imageUrl`, newImage.url);
+    setPlanList(newPlanList);
+  }
+
   const onSubmit: SubmitHandler<IFormData> = async formData => {
     try {
       const formatMemberList: IMember[] = memberList.map(member => {
@@ -129,6 +152,7 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
       });
       formData.members = formatMemberList;
       formData.plans = planList;
+      formData.imageUrl = blob?.url || '';
       scheduleState.create?.(formData);
       if (Object.keys(errors).length === 0) {
         toast({
@@ -143,7 +167,7 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
         }, 500);
       }
     } catch (error) {
-      console.log('🚀 ~ error:::', error);
+      // console.log('🚀 ~ error:::', error);
     }
   };
 
@@ -163,7 +187,7 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
             </div>
             <div className="flex grow flex-col space-y-2">
               <Label text="Tải ảnh lên" color="dark" className="font-semibold" />
-              <UploadImageSection className="grow" handleUpFile={handleUpFile} />
+              <UploadImageSection imageUrl={blob?.url} className="grow" handleUpFile={handleUpFile} />
             </div>
           </div>
           <div className="flex flex-col gap-3">
@@ -213,7 +237,6 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
                     className={`text-gray-text-gray-400 w-full rounded-lg border-none bg-gray-100 px-2 py-3 text-xs md:text-sm`}
                     placeholder={'Nhập chi phí...'}
                     type="number"
-                    value={plan.cost ?? 0}
                     min={0}
                     {...register(`plans.${index}.cost`)}
                     onChange={e => handleChangePlanCost(index, Number(e.target.value))}
@@ -227,7 +250,8 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
                 <Label text="Thời gian" color="dark" className="font-semibold" />
                 <DateTimePicker
                   className={cn('w-full')}
-                  fromDate={plan.startAt ? new Date(plan.startAt) : new Date()}
+                  fromDate={form.getValues('startDate') ? form.getValues('startDate') : new Date()}
+                  toDate={form.getValues('endDate') ? form.getValues('endDate') : new Date()}
                   defaultDate={plan.startAt ? new Date(plan.startAt) : undefined}
                   onChange={date => {
                     handleChangePlanStartAt(index, date);
@@ -258,7 +282,11 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
                 </div>
                 <div className="flex flex-col gap-2">
                   <Label text="Tải ảnh lên" color="dark" className="font-semibold" />
-                  <UploadImageSection className="grow" handleUpFile={handleUpFile} />
+                  <UploadImageSection
+                    className="grow"
+                    handleUpFile={(file: File) => handleChangePlanImage(index, file)}
+                    imageUrl={plan.imageUrl}
+                  />
                 </div>
               </div>
             </div>

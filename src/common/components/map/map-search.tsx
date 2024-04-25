@@ -14,9 +14,9 @@ export type TMapSearchProps = IComponentBaseProps;
 const MapSearch: FC<TMapSearchProps> = () => {
   const map = useMapEvents({});
 
-  function searchEventHandler(searchResult: any) {}
+  // function searchEventHandler(searchResult: any) {}
 
-  map.on('geosearch/showlocation', searchEventHandler);
+  // map.on('geosearch/showlocation', searchEventHandler);
 
   useEffect(() => {
     if (!map) return;

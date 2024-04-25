@@ -11,7 +11,7 @@ export const CreateTripValidator = zod.object({
         address: zod.string().min(1, 'Không được để trống điểm đến'),
         startAt: zod.string().min(1, 'Không được để trống thời gian'),
         title: zod.string().min(1, 'Không được để trống tên'),
-        cost: zod.number().min(1, 'Không được để trống chi phí')
+        cost: zod.string().optional()
       })
     )
     .optional()

@@ -27,17 +27,17 @@ export default function MainLayout({
   const backNavigationHistory = useBackNavigationHistory();
   const {isLoading} = useGlobalState();
 
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu] = useState(false);
 
-  const [isOpenSidebar, setIsOpenSidebar] = useState(false);
+  const [isOpenSidebar, setIsOpenSidebar] = useState(true);
 
   const handleCollapseSidebar = () => {
     setIsOpenSidebar(!isOpenSidebar);
   };
 
-  const onCloseMenu = () => {
-    setShowMenu(false);
-  };
+  // const onCloseMenu = () => {
+  //   setShowMenu(false);
+  // };
 
   useEffect(() => {
     backNavigationHistory.addPage(pathname);

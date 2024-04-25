@@ -1,22 +1,12 @@
-'use client';
-import React, {FC} from 'react';
+import React from 'react';
+import type {Metadata} from 'next';
 
 import CreateTripModule from '@/modules/schedules/components/create-trip/create-trip-module';
 
-import {cn} from '@/components/utils';
+export default async function Voucher() {
+  return <CreateTripModule />;
+}
 
-import {IComponentBaseProps} from '@/common/interfaces';
-
-export type TCreateTripPageProps = IComponentBaseProps;
-
-const CreateTripPage: FC<TCreateTripPageProps> = ({className}) => {
-  return (
-    <div className={cn('create-trip-page h-full', className)} data-testid="CreateTripPage">
-      <CreateTripModule />
-    </div>
-  );
-};
-
-CreateTripPage.displayName = 'CreateTripPage';
-
-export default CreateTripPage;
+export async function generateMetadata(): Promise<Metadata> {
+  return {title: 'Create Trip', description: 'Create Trip Description'};
+}

@@ -18,8 +18,9 @@ export type TDateTimeProps = IComponentBaseProps & {
   defaultDate?: Date;
   onChange?: (date: Date) => void;
   fromDate?: Date;
+  toDate?: Date;
 };
-const DateTimePicker: FC<TDateTimeProps> = ({defaultDate, onChange, fromDate, className}) => {
+const DateTimePicker: FC<TDateTimeProps> = ({defaultDate, onChange, fromDate, toDate, className}) => {
   const [date, setDate] = useState<Date | undefined>(defaultDate);
 
   useEffect(() => {
@@ -42,7 +43,14 @@ const DateTimePicker: FC<TDateTimeProps> = ({defaultDate, onChange, fromDate, cl
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        <Calendar mode="single" fromDate={fromDate} selected={date} onSelect={handleSelectDate} initialFocus />
+        <Calendar
+          mode="single"
+          fromDate={fromDate}
+          toDate={toDate}
+          selected={date}
+          onSelect={handleSelectDate}
+          initialFocus
+        />
         <div className="border-t border-border p-3">
           <TimePickerDemo setDate={handleSelectDate} date={date} />
         </div>
