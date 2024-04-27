@@ -29,29 +29,21 @@ import {CreateTripValidator} from '../../validators/create-trip.validator';
 
 export interface IFormData {
   topic: string;
+  total: number;
   description: string;
   imageUrl: string;
   startDate?: Date;
   endDate?: Date;
-  members: IMember[];
+  members: IUser[] | IMember[];
   plans?: IPlan[];
 }
 
-const defaultValues: IFormData = {
-  topic: '',
-  startDate: new Date(),
-  endDate: new Date(),
-  description: '',
-  imageUrl: '',
-  members: [],
-  plans: []
-};
-
 export type TFormCreateTripProps = IComponentBaseProps & {
+  defaultValues?: IFormData;
   onCreate?: (formData: IFormData) => void;
 };
 
-const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
+const FormCreateTrip: FC<TFormCreateTripProps> = ({className, defaultValues, ...rest}) => {
   const form = useForm<IFormData>({resolver: zodResolver(CreateTripValidator), defaultValues});
   const {register, handleSubmit, formState, setValue, clearErrors} = form;
   const {errors} = formState;
@@ -60,10 +52,11 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
   const scheduleState = useScheduleState();
   const {setLoading} = useGlobalState();
 
-  const [memberList, setMemberList] = useState<IUser[]>([]);
+  const [memberList, setMemberList] = useState<IUser[] | IMember[]>(defaultValues?.members || []);
   const [friendList, setFriendList] = useState<IUser[]>([]);
-  const [planList, setPlanList] = useState<IPlan[]>([]);
-  const [blob, setBlob] = useState<PutBlobResult | null>(null);
+  const [planList, setPlanList] = useState<IPlan[]>(defaultValues?.plans || []);
+  const [mainImageUrl, setMainImageUrl] = useState<string>(defaultValues?.imageUrl || '');
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
   useEffect(() => {
     const getFriendList = async () => {
@@ -83,14 +76,15 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
       body: file
     });
 
-    const newBlob = (await response.json()) as PutBlobResult;
+    const newImage = (await response.json()) as PutBlobResult;
 
-    setBlob(newBlob);
+    setMainImageUrl(newImage.url);
   };
   const handleDateRangeChange = (newDateRange: DateRange) => {
     if (newDateRange) {
       form.setValue('startDate', newDateRange.from!);
       form.setValue('endDate', newDateRange.to!);
+      setDateRange(newDateRange);
     }
   };
 
@@ -145,14 +139,14 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
 
   const onSubmit: SubmitHandler<IFormData> = async formData => {
     try {
-      const formatMemberList: IMember[] = memberList.map(member => {
+      const formatMemberList: IMember[] = (memberList as IUser[]).map(member => {
         return {
           memberId: member._id
         };
       });
       formData.members = formatMemberList;
       formData.plans = planList;
-      formData.imageUrl = blob?.url || '';
+      formData.imageUrl = mainImageUrl || '';
       scheduleState.create?.(formData);
       if (Object.keys(errors).length === 0) {
         toast({
@@ -187,7 +181,7 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
             </div>
             <div className="flex grow flex-col space-y-2">
               <Label text="Tải ảnh lên" color="dark" className="font-semibold" />
-              <UploadImageSection imageUrl={blob?.url} className="grow" handleUpFile={handleUpFile} />
+              <UploadImageSection imageUrl={mainImageUrl} className="grow" handleUpFile={handleUpFile} />
             </div>
           </div>
           <div className="flex flex-col gap-3">
@@ -210,9 +204,28 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
           </div>
         </div>
         <div className="space-y-6">
-          <div className="flex w-full flex-col gap-2">
-            <Label text="Mời bạn bè" color="dark" className="font-semibold" />
-            <FriendsSuggestion onClick={handleClickFriendAvatar} friends={friendList} />
+          <div className="grid grid-cols-2 gap-6">
+            <div className="flex flex-col gap-3">
+              <div className="space-y-2">
+                <Label text="Tổng Chi phí" color="dark" className="font-semibold" />
+                <Input
+                  className={`text-gray-text-gray-400 w-full rounded-lg border-none bg-gray-100 px-2 py-3 text-xs md:text-sm`}
+                  placeholder={'Nhập tổng chi phí...'}
+                  type="number"
+                  min={0}
+                  {...register('total')}
+                />
+                {errors && errors.total && <span className="text-rose-500">{errors.total.message}</span>}
+              </div>
+            </div>
+            <div className="flex h-full w-full flex-col gap-2">
+              <Label text="Mời bạn bè" color="dark" className="font-semibold" />
+              <FriendsSuggestion
+                onClick={handleClickFriendAvatar}
+                friends={friendList}
+                defaultSelectedList={memberList}
+              />
+            </div>
           </div>
 
           {planList.map((plan, index) => (
@@ -250,8 +263,8 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, ...rest}) => {
                 <Label text="Thời gian" color="dark" className="font-semibold" />
                 <DateTimePicker
                   className={cn('w-full')}
-                  fromDate={form.getValues('startDate') ? form.getValues('startDate') : new Date()}
-                  toDate={form.getValues('endDate') ? form.getValues('endDate') : new Date()}
+                  fromDate={dateRange?.from ? dateRange?.from : new Date()}
+                  toDate={dateRange?.to ? dateRange?.to : new Date()}
                   defaultDate={plan.startAt ? new Date(plan.startAt) : undefined}
                   onChange={date => {
                     handleChangePlanStartAt(index, date);

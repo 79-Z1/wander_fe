@@ -20,7 +20,7 @@ const Portal: FC<IPortalProps> & IPortalComposition = ({children}) => {
     return () => setMounted(false);
   }, []);
 
-  return mounted ? createPortal(children, document.querySelector('#react-modal-root') as HTMLDivElement) : null;
+  return mounted ? createPortal(children as any, document.querySelector('#react-modal-root') as HTMLDivElement) : null;
 };
 
 Portal.Anchor = PortalAnchor;

@@ -5,9 +5,20 @@ import {cn} from '@/components/utils';
 
 import {IComponentBaseProps} from '@/common/interfaces';
 
-import FormCreateTrip from './form-create-trip';
+import FormCreateTrip, {IFormData} from './form-create-trip';
 
 export type TCreateTripModuleProps = IComponentBaseProps;
+
+const defaultValues: IFormData = {
+  topic: '',
+  total: 0,
+  startDate: new Date(),
+  endDate: new Date(),
+  description: '',
+  imageUrl: '',
+  members: [],
+  plans: []
+};
 
 const CreateTripModule: FC<TCreateTripModuleProps> = ({className}) => {
   return (
@@ -16,7 +27,7 @@ const CreateTripModule: FC<TCreateTripModuleProps> = ({className}) => {
       data-testid="CreateTripModule"
     >
       <h1 className="px-4 pb-3 text-center text-2xl font-bold">Tạo hành trình mới</h1>
-      <FormCreateTrip />
+      <FormCreateTrip defaultValues={defaultValues} />
     </div>
   );
 };

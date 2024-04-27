@@ -15,11 +15,16 @@ import TripCardInfo from './trip-card-info';
 
 export type TTripCardProps = IComponentBaseProps & {
   schedule: ISchedule;
+  onClick?: () => void;
 };
 
-const TripCard: FC<TTripCardProps> = ({className, schedule}) => {
+const TripCard: FC<TTripCardProps> = ({className, schedule, onClick}) => {
   return (
-    <div className={cn('trip-card', 'gap-2 rounded-lg bg-zinc-50 p-3', className)} data-testid="TripCard">
+    <div
+      className={cn('trip-card', 'gap-2 rounded-lg bg-zinc-50 p-3', className)}
+      data-testid="TripCard"
+      onClick={onClick}
+    >
       <div className="relative aspect-[2/1] w-full rounded-lg pb-[50%]">
         <Image alt="" src={tripBGImage} fill className="absolute rounded-lg object-cover object-center" />
       </div>

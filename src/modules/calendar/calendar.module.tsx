@@ -1,10 +1,18 @@
 'use client';
+import {FC} from 'react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
-export default function CalendarModule() {
+import {IComponentBaseProps} from '@/common/interfaces';
+
+export type TCalendarModuleProps = IComponentBaseProps & {
+  calendars?: any;
+};
+
+const CalendarModule: FC<TCalendarModuleProps> = ({className, calendars}) => {
+  console.log('🚀 ~ calendars:::', calendars);
   const formatDayHeader = (info: any) => {
     if (info.view.type === 'timeGridWeek') {
       return info.date.getDate().toString();
@@ -13,12 +21,26 @@ export default function CalendarModule() {
       return days[info.date.getDay()];
     }
   };
+
+  const renderEventContent = (eventInfo: any) => {
+    if (eventInfo.view.type === 'dayGridMonth') {
+      return <i>{eventInfo.event.title}</i>;
+    } else {
+      return (
+        <>
+          <b>{eventInfo.timeText}</b>
+          <i>{eventInfo.event.title}</i>
+        </>
+      );
+    }
+  };
+
   const handleDateClick = (arg: any) => {
     alert(arg.dateStr);
   };
 
   return (
-    <div className="App">
+    <div className={className}>
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
@@ -39,10 +61,8 @@ export default function CalendarModule() {
         }}
         weekends={true}
         dateClick={e => handleDateClick(e)}
-        events={[
-          {title: 'event 1', start: '2024-04-21T12:00:00', end: '2024-04-25'},
-          {title: 'event 2', date: '2024-05-17'}
-        ]}
+        eventClick={e => console.log('🚀 ~ e:::', e)}
+        events={calendars || []}
         eventContent={renderEventContent}
         // editable={true}
         selectable={true}
@@ -52,13 +72,6 @@ export default function CalendarModule() {
       />
     </div>
   );
-}
+};
 
-function renderEventContent(eventInfo: any) {
-  return (
-    <>
-      <b>{eventInfo.timeText}</b>
-      <i>{eventInfo.event.title}</i>
-    </>
-  );
-}
+export default CalendarModule;

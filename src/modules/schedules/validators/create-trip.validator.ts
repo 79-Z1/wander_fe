@@ -5,6 +5,7 @@ export const CreateTripValidator = zod.object({
   description: zod.string().min(1, 'Không được để trống mô tả'),
   startDate: zod.date().optional().default(new Date()),
   endDate: zod.date().optional().default(new Date()),
+  cost: zod.string().optional(),
   plans: zod
     .array(
       zod.object({

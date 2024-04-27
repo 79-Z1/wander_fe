@@ -12,13 +12,14 @@ import {IComponentBaseProps} from '@/common/interfaces';
 
 export type TFriendsSuggestionProps = IComponentBaseProps & {
   friends: IUser[];
+  defaultSelectedList?: any[];
   onClick?: (friendsSelected: IUser[]) => void;
 };
 
-const FriendsSuggesstion: FC<TFriendsSuggestionProps> = ({friends, onClick}) => {
+const FriendsSuggesstion: FC<TFriendsSuggestionProps> = ({friends, defaultSelectedList, onClick}) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<IUser[]>([]);
+  const [selected, setSelected] = React.useState<IUser[]>(defaultSelectedList || []);
   const [inputValue, setInputValue] = React.useState('');
 
   const handleUnselect = React.useCallback((removed: IUser) => {
@@ -63,12 +64,12 @@ const FriendsSuggesstion: FC<TFriendsSuggestionProps> = ({friends, onClick}) => 
 
   return (
     <Command onKeyDown={handleKeyDown} className="overflow-visible bg-transparent">
-      <div className="group rounded-md border border-input px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+      <div className="group rounded-md border border-input px-2 py-3 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
         <div className="flex flex-wrap gap-1">
           {selected.map(user => {
             return (
               <Badge key={user._id} className="rounded-lg bg-[rgba(234,88,12,0.22)] p-1">
-                <Image width={32} height={32} src={user.avatar} alt={user.name} />
+                <Image width={32} height={32} className="rounded-lg" src={user.avatar} alt={user.name} />
                 <span className="ml-2 text-base text-orange-500">{user.name}</span>
                 <button
                   className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"

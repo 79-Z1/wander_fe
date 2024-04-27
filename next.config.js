@@ -14,6 +14,10 @@ const nextConfig = async () => {
       remotePatterns: [
         {
           protocol: 'https',
+          hostname: 'cdn.pixabay.com'
+        },
+        {
+          protocol: 'https',
           hostname: 's3.ap-southeast-1.amazonaws.com'
         },
         {

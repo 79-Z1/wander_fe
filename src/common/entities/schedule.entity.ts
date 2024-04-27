@@ -1,5 +1,7 @@
 import {ENUM_MEMBER_PERMISSION, ENUM_SCHEDULE_STATUS} from '../constants';
 
+import {IUser} from './user.entity';
+
 export interface ILocation {
   lat: number;
   lng: number;
@@ -23,14 +25,15 @@ export interface ICreateSchedule {
   topic: string;
   description: string;
   imageUrl: string;
-  members: IMember[];
+  members: IMember[] | IUser[];
   startDate?: Date;
   endDate?: Date;
 }
 
 export interface ISchedule {
-  id: string;
+  _id: string;
   topic: string;
+  imageUrl: string;
   description: string;
   plans: IPlan[];
   members: IMember[];
