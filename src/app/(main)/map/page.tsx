@@ -8,10 +8,10 @@ const Map = dynamic(() => import('@/common/components/map/map'), {
   ssr: false
 });
 
-export default async function Voucher() {
+export default async function MapPage() {
   return (
     <div className="h-screen w-full">
-      <Map />
+      <Map isWayPoints={true} />
     </div>
   );
 }

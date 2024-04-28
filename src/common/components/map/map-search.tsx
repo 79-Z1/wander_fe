@@ -1,5 +1,5 @@
 import {FC, useEffect} from 'react';
-import L from 'leaflet';
+import L, {LeafletEvent} from 'leaflet';
 import {GeoSearchControl, OpenStreetMapProvider} from 'leaflet-geosearch';
 import {useMapEvents} from 'react-leaflet';
 
@@ -9,14 +9,19 @@ import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
 import 'leaflet-routing-machine';
 
-export type TMapSearchProps = IComponentBaseProps;
+export type TMapSearchProps = IComponentBaseProps & {
+  onSearch?: (searchResult: LeafletEvent) => void;
+};
 
-const MapSearch: FC<TMapSearchProps> = () => {
+const MapSearch: FC<TMapSearchProps> = ({onSearch}) => {
   const map = useMapEvents({});
 
-  // function searchEventHandler(searchResult: any) {}
+  function searchEventHandler(searchResult: LeafletEvent) {
+    if (!map) return;
+    onSearch?.(searchResult);
+  }
 
-  // map.on('geosearch/showlocation', searchEventHandler);
+  map.on('geosearch/showlocation', searchEventHandler);
 
   useEffect(() => {
     if (!map) return;

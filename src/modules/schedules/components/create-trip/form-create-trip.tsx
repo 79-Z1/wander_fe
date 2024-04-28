@@ -3,7 +3,7 @@ import {useRouter} from 'next/navigation';
 import {DateRange} from 'react-day-picker';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import FriendApi from '@/common/api/friend.api';
-import {IMember, IPlan} from '@/common/entities';
+import {ILocation, IMember, IPlan} from '@/common/entities';
 import {IUser} from '@/common/entities/user.entity';
 import {zodResolver} from '@hookform/resolvers/zod';
 import type {PutBlobResult} from '@vercel/blob';
@@ -56,7 +56,11 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, defaultValues, ...
   const [friendList, setFriendList] = useState<IUser[]>([]);
   const [planList, setPlanList] = useState<IPlan[]>(defaultValues?.plans || []);
   const [mainImageUrl, setMainImageUrl] = useState<string>(defaultValues?.imageUrl || '');
-  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(
+    defaultValues?.startDate && defaultValues?.endDate
+      ? {from: defaultValues?.startDate, to: defaultValues?.endDate}
+      : undefined
+  );
 
   useEffect(() => {
     const getFriendList = async () => {
@@ -135,6 +139,23 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, defaultValues, ...
     newPlanList[index].imageUrl = newImage.url;
     setValue(`plans.${index}.imageUrl`, newImage.url);
     setPlanList(newPlanList);
+  }
+
+  async function handleChangePlanLocation(index: number, location: ILocation) {
+    const newPlanList = [...planList];
+    newPlanList[index].location = location;
+    setValue(`plans.${index}.location`, location);
+    setPlanList(newPlanList);
+  }
+
+  function handleSearchAddress(index: number, searchResult: any) {
+    if (searchResult) {
+      handleChangePlanAddress(index, searchResult.location.label);
+      handleChangePlanLocation(index, {
+        lat: searchResult.location.y,
+        lng: searchResult.location.x
+      });
+    }
   }
 
   const onSubmit: SubmitHandler<IFormData> = async formData => {
@@ -291,7 +312,11 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, defaultValues, ...
               <div className="grid grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
                   <Label text="Tìm kiếm địa điểm" color="dark" className="font-semibold" />
-                  <Map className="h-[211px] w-full rounded-lg" />
+                  <Map
+                    className="h-[211px] w-full rounded-lg"
+                    defaultLocation={{...plan.location, address: plan.address}}
+                    onSearch={e => handleSearchAddress(index, e)}
+                  />
                 </div>
                 <div className="flex flex-col gap-2">
                   <Label text="Tải ảnh lên" color="dark" className="font-semibold" />

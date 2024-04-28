@@ -16,6 +16,12 @@ export interface IPlan {
   location: ILocation;
 }
 
+export interface ILocationSearch {
+  address: string;
+  lat: number;
+  lng: number;
+}
+
 export interface IMember {
   memberId: string;
   permission?: ENUM_MEMBER_PERMISSION;
