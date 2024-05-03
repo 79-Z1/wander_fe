@@ -92,6 +92,12 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
     setPlanList([...planList, {} as IPlan]);
   }
 
+  function handleRemovePlan(index: number) {
+    const newPlanList = [...planList];
+    newPlanList.splice(index, 1);
+    setPlanList(newPlanList);
+  }
+
   function handleChangePlanName(index: number, name: string) {
     const newPlanList = [...planList];
     newPlanList[index].title = name;
@@ -110,6 +116,7 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
     const newPlanList = [...planList];
     newPlanList[index].address = address;
     setPlanList(newPlanList);
+    setValue(`plans.${index}.address`, address.toString());
     address !== ''.trim() && clearErrors(`plans.${index}.address`);
   }
 
@@ -233,7 +240,10 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
 
           {planList.map((plan, index) => (
             <div className="space-y-3" key={index}>
-              <p className="font-bold text-gray-950">Lịch trình - {index + 1}</p>
+              <div className="flex items-center justify-between">
+                <p className="font-bold text-gray-950">Lịch trình - {index + 1}</p>
+                <Icon name="ico-minus-circle text-orange-500" onClick={() => handleRemovePlan(index)} />
+              </div>
               <div className="grid grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
                   <Label text="Tên lịch trình" color="dark" className="font-semibold" />
@@ -296,11 +306,15 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
               <div className="grid grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
                   <Label text="Tìm kiếm địa điểm" color="dark" className="font-semibold" />
-                  <Map
-                    className="h-[211px] w-full rounded-lg"
-                    defaultLocation={{...plan.location, address: plan.address}}
-                    onSearch={e => handleSearchAddress(index, e)}
-                  />
+                  {plan.location ? (
+                    <Map
+                      className="h-[211px] w-full rounded-lg"
+                      defaultLocation={{...plan.location, address: plan.address}}
+                      onSearch={e => handleSearchAddress(index, e)}
+                    />
+                  ) : (
+                    <Map className="h-[211px] w-full rounded-lg" onSearch={e => handleSearchAddress(index, e)} />
+                  )}
                 </div>
                 <div className="flex flex-col gap-2">
                   <Label text="Tải ảnh lên" color="dark" className="font-semibold" />
