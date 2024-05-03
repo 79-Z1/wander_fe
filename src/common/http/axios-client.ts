@@ -40,6 +40,7 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
 const onResponseError = (error: AxiosError): Promise<AxiosError> => {
   if (Number(error.response?.status) === 401) {
     // signOut();
+    window.location.href = '/login';
   }
   return Promise.reject(error);
 };

@@ -42,6 +42,10 @@ const FriendModule: FC<TFriendModuleProps> = ({className}) => {
     router.replace(`/friend?tab=${tab}`);
   };
 
+  const handleFriendClick = (userId: string) => {
+    router.push(`/profile/${userId}`);
+  };
+
   if (!session.data?.user && session.status === 'unauthenticated') return <NotFoundModule />;
 
   return (
@@ -76,15 +80,22 @@ const FriendModule: FC<TFriendModuleProps> = ({className}) => {
           </div>
           {!friendState.isFetching ? (
             <>
-              <TabMyFriend value={ENUM_FRIEND_TAB.MY_FRIEND} myFriends={friendState.userFriend.friends} />
+              <TabMyFriend
+                value={ENUM_FRIEND_TAB.MY_FRIEND}
+                myFriends={friendState.userFriend.friends}
+                onClick={handleFriendClick}
+              />
               <TabFriendRequest
                 userId={session.data?.user.id || ''}
                 value={ENUM_FRIEND_TAB.FRIEND_REQUEST}
                 friendRecieves={friendState.userFriend.friendsRequestReceved}
+                onClick={handleFriendClick}
               />
               <TabFriendSent
+                userId={session.data?.user.id || ''}
                 value={ENUM_FRIEND_TAB.FRIEND_REQUEST_SENT}
                 friendSents={friendState.userFriend.friendsRequestSent}
+                onClick={handleFriendClick}
               />
             </>
           ) : (

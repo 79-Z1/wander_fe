@@ -1,5 +1,4 @@
 import React, {FC, useEffect, useState} from 'react';
-import {useRouter} from 'next/navigation';
 import {DateRange} from 'react-day-picker';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import FriendApi from '@/common/api/friend.api';
@@ -12,11 +11,7 @@ import {DateRangePicker, Icon, Label} from '@/core-ui';
 import Input from '@/core-ui/input';
 import Textarea from '@/core-ui/textarea';
 
-import {useToast} from '@/components/ui/use-toast';
 import {cn} from '@/components/utils';
-
-import useGlobalState from '@/common/hooks/use-global-state';
-import useScheduleState from '@/common/hooks/use-schedule-state';
 
 import DateTimePicker from '@/common/components/date-time-picker/date-time-picker';
 import Map from '@/common/components/map/map';
@@ -24,10 +19,11 @@ import UploadImageSection from '@/common/components/upload-image/upload-image-se
 
 import {IComponentBaseProps} from '@/common/interfaces';
 
-import FriendsSuggestion from '../../../../common/components/friends-suggestion';
-import {CreateTripValidator} from '../../validators/create-trip.validator';
+import FriendsSuggestion from '../../../common/components/friends-suggestion';
+import {CreateTripValidator} from '../validators/trip.validator';
 
 export interface IFormData {
+  _id?: string;
   topic: string;
   total: number;
   description: string;
@@ -38,19 +34,15 @@ export interface IFormData {
   plans?: IPlan[];
 }
 
-export type TFormCreateTripProps = IComponentBaseProps & {
+export type TFormTripProps = IComponentBaseProps & {
   defaultValues?: IFormData;
-  onCreate?: (formData: IFormData) => void;
+  onSubmit?: (formData: IFormData) => void;
 };
 
-const FormCreateTrip: FC<TFormCreateTripProps> = ({className, defaultValues, ...rest}) => {
+const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...rest}) => {
   const form = useForm<IFormData>({resolver: zodResolver(CreateTripValidator), defaultValues});
   const {register, handleSubmit, formState, setValue, clearErrors} = form;
   const {errors} = formState;
-  const {toast} = useToast();
-  const router = useRouter();
-  const scheduleState = useScheduleState();
-  const {setLoading} = useGlobalState();
 
   const [memberList, setMemberList] = useState<IUser[] | IMember[]>(defaultValues?.members || []);
   const [friendList, setFriendList] = useState<IUser[]>([]);
@@ -104,6 +96,7 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, defaultValues, ...
     const newPlanList = [...planList];
     newPlanList[index].title = name;
     setPlanList(newPlanList);
+    name !== ''.trim() && clearErrors(`plans.${index}.title`);
   }
 
   function handleChangePlanCost(index: number, cost: number) {
@@ -158,7 +151,7 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, defaultValues, ...
     }
   }
 
-  const onSubmit: SubmitHandler<IFormData> = async formData => {
+  const submitForm: SubmitHandler<IFormData> = async formData => {
     try {
       const formatMemberList: IMember[] = (memberList as IUser[]).map(member => {
         return {
@@ -168,19 +161,7 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, defaultValues, ...
       formData.members = formatMemberList;
       formData.plans = planList;
       formData.imageUrl = mainImageUrl || '';
-      scheduleState.create?.(formData);
-      if (Object.keys(errors).length === 0) {
-        toast({
-          variant: 'success',
-          description: 'Tạo lịch trình thành công!!!',
-          duration: 3000
-        });
-        setLoading(true);
-        router.push('/trip');
-        setTimeout(() => {
-          setLoading(false);
-        }, 500);
-      }
+      onSubmit?.(formData);
     } catch (error) {
       // console.log('🚀 ~ error:::', error);
     }
@@ -188,7 +169,7 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, defaultValues, ...
 
   return (
     <div className={cn('form-login', className)} data-testid="form-login" {...rest}>
-      <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit(onSubmit)} method="post">
+      <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit(submitForm)} method="post">
         <div className="grid grid-cols-2 gap-6">
           <div className="flex flex-col gap-3">
             <div className="space-y-2">
@@ -233,8 +214,9 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, defaultValues, ...
                   className={`text-gray-text-gray-400 w-full rounded-lg border-none bg-gray-100 px-2 py-3 text-xs md:text-sm`}
                   placeholder={'Nhập tổng chi phí...'}
                   type="number"
-                  min={0}
-                  {...register('total')}
+                  {...register('total', {
+                    setValueAs: v => (v === '' ? undefined : parseInt(v, 10))
+                  })}
                 />
                 {errors && errors.total && <span className="text-rose-500">{errors.total.message}</span>}
               </div>
@@ -272,7 +254,9 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, defaultValues, ...
                     placeholder={'Nhập chi phí...'}
                     type="number"
                     min={0}
-                    {...register(`plans.${index}.cost`)}
+                    {...register(`plans.${index}.cost`, {
+                      setValueAs: v => (v === '' ? undefined : parseInt(v, 10))
+                    })}
                     onChange={e => handleChangePlanCost(index, Number(e.target.value))}
                   />
                   {errors && errors.plans && errors.plans[index] && errors.plans[index].cost && (
@@ -346,6 +330,6 @@ const FormCreateTrip: FC<TFormCreateTripProps> = ({className, defaultValues, ...
   );
 };
 
-FormCreateTrip.displayName = 'FormCreateTrip';
+FormTrip.displayName = 'FormTrip';
 
-export default FormCreateTrip;
+export default FormTrip;

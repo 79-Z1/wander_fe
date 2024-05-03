@@ -27,7 +27,7 @@ export interface IMember {
   permission?: ENUM_MEMBER_PERMISSION;
 }
 
-export interface ICreateSchedule {
+export interface IFormDataSchedule {
   topic: string;
   description: string;
   imageUrl: string;
@@ -42,7 +42,7 @@ export interface ISchedule {
   imageUrl: string;
   description: string;
   plans: IPlan[];
-  members: IMember[];
+  members: IMember[] | IUser[];
   total: number;
   startDate: Date;
   endDate: Date;

@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import Image from 'next/image';
 import {ISchedule} from '@/common/entities';
+import {IUser} from '@/common/entities/user.entity';
 
 import {Button} from '@/core-ui';
 
@@ -26,32 +27,26 @@ const TripCard: FC<TTripCardProps> = ({className, schedule, onClick}) => {
       onClick={onClick}
     >
       <div className="relative aspect-[2/1] w-full rounded-lg pb-[50%]">
-        <Image alt="" src={tripBGImage} fill className="absolute rounded-lg object-cover object-center" />
+        <Image
+          alt={schedule?.topic || 'Trip'}
+          src={schedule?.imageUrl || tripBGImage}
+          fill
+          className="absolute rounded-lg object-cover object-center"
+        />
       </div>
       <TripCardInfo schedule={schedule} />
       <div className="flex items-center justify-between">
         <div className="flex">
-          <Image
-            src={avatarImage}
-            alt="Avatar"
-            className="-mr-4 rounded-full border-[1px] border-gray-300"
-            width={40}
-            height={40}
-          />
-          <Image
-            src={avatarImage}
-            alt="Avatar"
-            className="-mr-4 rounded-full border-[1px] border-gray-300"
-            width={40}
-            height={40}
-          />
-          <Image
-            src={avatarImage}
-            alt="Avatar"
-            className="-mr-4 rounded-full border-[1px] border-gray-300"
-            width={40}
-            height={40}
-          />
+          {(schedule?.members as IUser[])?.map((member, index) => (
+            <Image
+              key={index}
+              src={member?.avatar || avatarImage}
+              alt="Avatar"
+              className="-mr-4 rounded-full border-[1px] border-gray-300"
+              width={40}
+              height={40}
+            />
+          ))}
         </div>
         <Button variant="contained" className="rounded-lg" text="See more" />
       </div>

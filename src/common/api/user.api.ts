@@ -1,6 +1,7 @@
 import * as HttpRequest from '@/common/http/http-request';
 
-import {IUser} from '../entities/user.entity';
+import {IUser, IUserProfile} from '../entities/user.entity';
+import FetchRequest from '../http/fetch-request';
 import {generateQueryParams} from '../utils/generate-query-params.util';
 
 const searchByNameNoAuth = async (name?: string) => {
@@ -8,8 +9,25 @@ const searchByNameNoAuth = async (name?: string) => {
   return await HttpRequest.get<IUser[]>(`user/search?${queryParams}`);
 };
 
+const getUserProfileBySlugSeverSide = async (slug: string) => {
+  try {
+    const res = await FetchRequest(`user/${slug}`, {cache: 'no-cache', next: {revalidate: undefined}});
+    const json = await res.json();
+
+    return json.metadata as IUserProfile;
+  } catch (error) {
+    return null;
+  }
+};
+
+const getUserProfile = async (slug: string) => {
+  return await HttpRequest.get<IUserProfile>(`user/${slug}`);
+};
+
 export const UserApi = {
-  searchByNameNoAuth
+  getUserProfile,
+  searchByNameNoAuth,
+  getUserProfileBySlugSeverSide
 };
 
 export default UserApi;

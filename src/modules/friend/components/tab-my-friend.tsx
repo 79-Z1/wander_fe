@@ -22,9 +22,10 @@ import FriendPopOver from './friend-pop-over';
 export type TTabMyFriendProps = IComponentBaseProps & {
   value: ENUM_FRIEND_TAB;
   myFriends: IFriend[];
+  onClick: (userId: string) => void;
 };
 
-const TabMyFriend: FC<TTabMyFriendProps> = ({className, value, myFriends = []}) => {
+const TabMyFriend: FC<TTabMyFriendProps> = ({className, value, myFriends = [], onClick}) => {
   const friendState = useFriendState();
 
   function unFriend(friendId: string) {
@@ -38,7 +39,7 @@ const TabMyFriend: FC<TTabMyFriendProps> = ({className, value, myFriends = []}) 
             <div key={index}>
               {index !== 0 && <Line className="my-1 border-[#E5E7EB] md:my-3" />}
               <div className="flex items-center justify-between p-6">
-                <div className="flex w-fit items-center gap-1">
+                <div className="flex w-fit items-center gap-1" onClick={() => onClick(value?.user?._id)}>
                   <div className="relative mr-2 h-[60px] w-[60px]">
                     <Image
                       alt={value?.user?.name}

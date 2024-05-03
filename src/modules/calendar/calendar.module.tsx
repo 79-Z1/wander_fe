@@ -12,7 +12,6 @@ export type TCalendarModuleProps = IComponentBaseProps & {
 };
 
 const CalendarModule: FC<TCalendarModuleProps> = ({className, calendars}) => {
-  console.log('🚀 ~ calendars:::', calendars);
   const formatDayHeader = (info: any) => {
     if (info.view.type === 'timeGridWeek') {
       return info.date.getDate().toString();

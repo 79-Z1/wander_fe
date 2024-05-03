@@ -12,3 +12,10 @@ export interface IUser {
   authType: string;
   isActive: boolean;
 }
+
+export type TFriendStatus = 'none' | 'friend' | 'request-received' | 'request-sent';
+
+export interface IUserProfile {
+  status: TFriendStatus;
+  user: IUser;
+}

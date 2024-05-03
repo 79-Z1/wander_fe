@@ -1,26 +1,26 @@
 import React from 'react';
 import type {Metadata} from 'next';
-import ScheduleApi from '@/common/api/schedule.api';
+import UserApi from '@/common/api/user.api';
 import {ROUTES} from '@/common/configs/routes.config';
 
-import EditTripModule from '@/modules/schedules/components/edit-trip/edit-trip-module';
+import ProfileModule from '@/modules/users/profile.module';
 
 import {siteConfigs} from '@/common/constants';
 
-type CreateSchedulePageProps = {params: {slug: string}; searchParams: Record<string, string>};
+type CreateProfilePageProps = {params: {slug: string}; searchParams: Record<string, string>};
 
-export default async function CreateScheduleMainPage({params}: CreateSchedulePageProps) {
-  return <EditTripModule slug={params.slug} />;
+export default async function CreateProfileMainPage({params}: CreateProfilePageProps) {
+  return <ProfileModule slug={params.slug} />;
 }
 
-export async function generateMetadata({params: {slug}}: CreateSchedulePageProps): Promise<Metadata> {
+export async function generateMetadata({params: {slug}}: CreateProfilePageProps): Promise<Metadata> {
   try {
-    const data = await ScheduleApi.readScheduleBySlugSeverSide(slug);
+    const data = await UserApi.getUserProfileBySlugSeverSide(slug);
     if (!data) return {};
 
-    const url = `${siteConfigs.url}/${ROUTES.TRIP}/${slug}`;
-    const title = data.topic;
-    const description = data.description;
+    const url = `${siteConfigs.url}/${ROUTES.CHAT}/${slug}`;
+    const title = data.user.name;
+    const description = data.user.name;
     const imageUrl = `${siteConfigs.url}/og-img.jpg`;
     const imageAlt = siteConfigs.appName;
 

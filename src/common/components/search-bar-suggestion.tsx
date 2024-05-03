@@ -17,6 +17,7 @@ type SearchBarSuggestionProps = {
   placeholder?: string;
   onValueChange?: (value: string) => void;
   onSelectOption?: (userId: string) => void;
+  onEnter?: (value: string) => void;
 };
 
 const SearchBarSuggestion = ({
@@ -25,6 +26,7 @@ const SearchBarSuggestion = ({
   emptyMessage,
   disabled,
   isLoading = false,
+  onEnter,
   onValueChange,
   onSelectOption
 }: SearchBarSuggestionProps) => {
@@ -47,7 +49,7 @@ const SearchBarSuggestion = ({
 
       // This is not a default behaviour of the <input /> field
       if (event.key === 'Enter' && input.value !== '') {
-        onValueChange?.(inputValue);
+        onEnter?.(inputValue);
       }
 
       if (event.key === 'Escape') {

@@ -1,5 +1,6 @@
 'use client';
 import React, {FC, useEffect} from 'react';
+import {useRouter} from 'next/navigation';
 
 import {cn} from '@/components/utils';
 
@@ -8,7 +9,6 @@ import useScheduleState from '@/common/hooks/use-schedule-state';
 import {IComponentBaseProps} from '@/common/interfaces';
 
 import TripCard from './trip-card';
-import {useRouter} from 'next/navigation';
 
 export type TTripModuleProps = IComponentBaseProps;
 

@@ -24,9 +24,10 @@ export type TTabFriendRecievedProps = IComponentBaseProps & {
   value: ENUM_FRIEND_TAB;
   friendRecieves: IFriendRecieved[];
   userId: string;
+  onClick: (userId: string) => void;
 };
 
-const TabFriendRecieved: FC<TTabFriendRecievedProps> = ({className, value, userId, friendRecieves = []}) => {
+const TabFriendRecieved: FC<TTabFriendRecievedProps> = ({className, value, userId, friendRecieves = [], onClick}) => {
   const {acceptFriendRequest, rejectFriendRequest} = useFriendState();
 
   function handleAcceptFriendRequest(friendId: string) {
@@ -45,7 +46,7 @@ const TabFriendRecieved: FC<TTabFriendRecievedProps> = ({className, value, userI
             <div key={index}>
               {index !== 0 && <Line className="my-1 border-[#E5E7EB] md:my-3" />}
               <div className="flex items-center justify-between p-6">
-                <div className="flex w-fit items-center gap-1">
+                <div className="flex w-fit items-center gap-1" onClick={() => onClick(value.user._id)}>
                   <div className="relative mr-2 h-[60px] w-[60px]">
                     <Image
                       alt={value.user.name}

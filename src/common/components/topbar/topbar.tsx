@@ -1,13 +1,12 @@
 'use client';
 import React, {FC} from 'react';
 import Image from 'next/image';
+import {useRouter} from 'next/navigation';
 import {useSession} from 'next-auth/react';
 import {debounce} from 'lodash-es';
-import {GlobalConnectSocket} from '@/common/sockets/global-connect.socket';
 
 import {cn} from '@/components/utils';
 
-import useFriendState from '@/common/hooks/use-friend-state';
 import useUserState from '@/common/hooks/use-user-state';
 
 import {IComponentBaseProps} from '@/common/interfaces';
@@ -20,10 +19,9 @@ export type TTopbarProps = IComponentBaseProps;
 
 const Topbar: FC<TTopbarProps> = ({className}) => {
   const session = useSession();
-  // const router = useRouter();
+  const router = useRouter();
   // const pathname = usePathname();
   const {users, isFetching, searchByName, setUsers} = useUserState();
-  const friendState = useFriendState();
 
   // function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
   //   if (e.key === 'Enter') {
@@ -41,8 +39,9 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
     else setUsers([]);
   }
 
-  function handleSelectSearchResult(friendId: string) {
-    friendState.sendFriendRequest(session.data?.user.id || '', friendId, GlobalConnectSocket);
+  function handleSelectSearchResult(userId: string) {
+    // friendState.sendFriendRequest(session.data?.user.id || '', userId, GlobalConnectSocket);
+    router.push(`/profile/${userId}`);
   }
 
   return (
@@ -54,6 +53,7 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
         isLoading={isFetching}
         emptyMessage="Không có kết quả"
         users={users}
+        onEnter={handleSelectSearchResult}
         onValueChange={handleSearchChange}
         onSelectOption={handleSelectSearchResult}
       />
