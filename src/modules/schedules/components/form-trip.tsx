@@ -162,7 +162,7 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
     try {
       const formatMemberList: IMember[] = (memberList as IUser[]).map(member => {
         return {
-          memberId: member._id
+          memberId: member._id || ''
         };
       });
       formData.members = formatMemberList;

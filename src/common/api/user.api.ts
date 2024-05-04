@@ -24,10 +24,20 @@ const getUserProfile = async (slug: string) => {
   return await HttpRequest.get<IUserProfile>(`user/${slug}`);
 };
 
+const getUserSetting = async () => {
+  return await HttpRequest.get<IUser>('user/setting');
+};
+
+const updateUserSetting = async (data: IUser) => {
+  return await HttpRequest.patch<IUser>('user', data);
+};
+
 export const UserApi = {
   getUserProfile,
   searchByNameNoAuth,
-  getUserProfileBySlugSeverSide
+  getUserProfileBySlugSeverSide,
+  getUserSetting,
+  updateUserSetting
 };
 
 export default UserApi;

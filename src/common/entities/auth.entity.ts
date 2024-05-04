@@ -10,9 +10,10 @@ export interface IUserAttribute {
   _id: string;
   name: string;
   email: string;
-  career: string;
   gender: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
+  phoneNumber: string;
+  address: string;
   avatar: string;
   isActive: boolean;
   password: string;
@@ -21,11 +22,7 @@ export interface IUserAttribute {
   providerMetaData: IProviderAttribute;
   updatedAt: string;
   createdAt: string;
-  plan?: string;
-  planExpiredDate?: string;
   slug: string;
-  description?: string;
-  verified: boolean;
 }
 export interface IProviderAttribute {
   type?: 'credentials' | 'oauth';

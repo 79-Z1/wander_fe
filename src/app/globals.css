@@ -37,8 +37,19 @@
   body {
     @apply bg-background font-roboto text-foreground;
   }
-}
 
-.rdp-vhidden {
-  @apply hidden;
+  .rdp-vhidden {
+    @apply hidden;
+  }
+  .rdp [aria-hidden='true'] {
+    @apply hidden;
+  }
+
+  .rdp-vhidden {
+    @apply hidden;
+  }
+
+  select::-webkit-scrollbar {
+    display: none;
+  }
 }

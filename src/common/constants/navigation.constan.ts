@@ -26,7 +26,7 @@ export const sidebarMenuItems = [
   },
   {
     name: 'Cài đặt',
-    path: '/settings',
+    path: '/setting',
     icon: 'settings'
   }
 ];

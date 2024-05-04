@@ -61,10 +61,10 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
       <p className="text-sm font-bold">{session.data?.user?.name || ''}</p>
       <div className="relative h-[40px] w-[40px]">
         <Image
-          src={session.data?.user?.image || ''}
+          src={session.data?.user?.avatar || '/images/avatar.png'}
           fill
           alt="avatar"
-          className="absolute rounded-lg object-cover object-center"
+          className="absolute rounded-lg bg-black object-cover object-center"
         />
       </div>
     </div>
