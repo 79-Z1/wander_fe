@@ -1,4 +1,5 @@
 import {DefaultSession} from 'next-auth';
+import {UserRole} from '@/common/entities/user.entity';
 
 import {ENUM_O_AUTH_PROVIDER, ENUM_PLAN, ENUM_PLAN_DURATION} from '@/common/constants';
 
@@ -18,6 +19,7 @@ declare module 'next-auth' {
     refreshToken: string;
     isVerified?: boolean;
     provider?: ENUM_O_AUTH_PROVIDER;
+    role?: UserRole;
   }
 
   interface Account {
@@ -69,5 +71,6 @@ declare module 'next-auth/jwt' {
     description?: string;
     isVerified?: boolean;
     provider?: ENUM_O_AUTH_PROVIDER;
+    role?: UserRole;
   }
 }

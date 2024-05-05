@@ -60,7 +60,8 @@ export const authOptions: NextAuthOptions = {
               slug: signInRes.metadata.user.slug,
               description: signInRes.metadata.user.description,
               isVerified: signInRes.metadata.user.isVerified,
-              provider: signInRes.metadata.user.provider
+              provider: signInRes.metadata.user.provider,
+              role: signInRes.metadata.user.role
             };
           }
         } catch (error) {
@@ -91,6 +92,8 @@ export const authOptions: NextAuthOptions = {
           user.description = googleResponse.metadata.user.description;
           user.isVerified = googleResponse.metadata.user.isVerified;
           user.provider = ENUM_O_AUTH_PROVIDER.GOOGLE;
+          user.role = googleResponse.metadata.user.role;
+
           return true;
         }
       }
@@ -109,6 +112,7 @@ export const authOptions: NextAuthOptions = {
           user.description = facebookResponse.metadata.user.description;
           user.isVerified = facebookResponse.metadata.user.isVerified;
           user.provider = ENUM_O_AUTH_PROVIDER.FACEBOOK;
+          user.role = facebookResponse.metadata.user.role;
           return true;
         }
       }
@@ -128,6 +132,7 @@ export const authOptions: NextAuthOptions = {
         token.description = user.description;
         token.isVerified = user.isVerified;
         token.provider = user.provider;
+        token.role = user.role;
       }
       return token;
     },
@@ -148,6 +153,7 @@ export const authOptions: NextAuthOptions = {
         session.user.description = token.description;
         session.user.isVerified = token.isVerified;
         session.user.provider = token.provider;
+        session.user.role = token.role;
       }
 
       return session;

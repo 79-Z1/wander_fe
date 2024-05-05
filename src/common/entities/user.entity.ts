@@ -13,6 +13,12 @@ export interface IUser {
   provider?: string;
   authType?: string;
   isActive?: boolean;
+  role?: UserRole;
+}
+
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin'
 }
 
 export type TFriendStatus = 'none' | 'friend' | 'request-received' | 'request-sent';

@@ -11,7 +11,7 @@ type HtmlProps = IComponentBaseProps & {
 
 const Html: FC<HtmlProps> = ({children, locale = siteConfigs.language}) => {
   return (
-    <html className="scrollbar" lang={locale}>
+    <html className="scrollbar h-screen" lang={locale}>
       {children}
     </html>
   );

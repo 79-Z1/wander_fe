@@ -2,6 +2,8 @@ import {SignInOptions} from 'next-auth/react';
 
 import {ENUM_O_AUTH_PROVIDER} from '@/common/constants';
 
+import {UserRole} from './user.entity';
+
 export interface IOAuthParams {
   token?: string;
 }
@@ -49,6 +51,7 @@ export interface IAuthResponse {
     description?: string;
     isVerified?: boolean;
     provider?: ENUM_O_AUTH_PROVIDER;
+    role?: UserRole;
   };
   accessToken: string;
   refreshToken: string;

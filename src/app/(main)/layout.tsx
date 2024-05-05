@@ -1,33 +1,34 @@
 'use client';
 import {useEffect, useState} from 'react';
-import {usePathname} from 'next/navigation';
+import {usePathname, useRouter} from 'next/navigation';
+import {useSession} from 'next-auth/react';
 import classNames from 'classnames';
 import InitSocket from '@/common/layout/init-socket';
+
+import NotFoundModule from '@/modules/not-found/not-found';
 
 import useBackNavigationHistory from '@/common/hooks/use-back-navigation-history';
 import useGlobalState from '@/common/hooks/use-global-state';
 
 import GlobalLoading from '@/common/components/global-loading';
+import MenuHamburger from '@/common/components/layout-container/menu-hamburger';
+import TopBarMobile from '@/common/components/layout-container/topbar-mobile';
 import {Media, MediaContextProvider} from '@/common/components/media';
 import Sidebar from '@/common/components/sidebar/sidebar';
 import Topbar from '@/common/components/topbar/topbar';
-
-// export const metadata: Metadata = {
-//   title: 'Wander',
-//   description: 'Building the future of travel'
-// };
 
 export default function MainLayout({
   children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = useSession();
   const pathname = usePathname();
-  // const session = useSession();
+  const router = useRouter();
   const backNavigationHistory = useBackNavigationHistory();
   const {isLoading} = useGlobalState();
 
-  const [showMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   const [isOpenSidebar, setIsOpenSidebar] = useState(true);
 
@@ -35,13 +36,17 @@ export default function MainLayout({
     setIsOpenSidebar(!isOpenSidebar);
   };
 
-  // const onCloseMenu = () => {
-  //   setShowMenu(false);
-  // };
+  const onCloseMenu = () => {
+    setShowMenu(false);
+  };
 
   useEffect(() => {
     backNavigationHistory.addPage(pathname);
   }, [pathname]);
+
+  if (session.data && session.data.user.role === 'admin') router.push('/admin');
+  if (!session.data && session.status === 'unauthenticated') <NotFoundModule />;
+
   return (
     <>
       <InitSocket />
@@ -50,7 +55,7 @@ export default function MainLayout({
           <GlobalLoading />
         ) : (
           <>
-            <Media greaterThanOrEqual="md" className="relative h-screen w-full">
+            <Media greaterThanOrEqual="md" className="relative h-full w-full">
               <div className="flex h-full w-full" id="layout-container">
                 <Sidebar isExpand={isOpenSidebar} onCollapseClick={handleCollapseSidebar} />
                 <div
@@ -66,9 +71,9 @@ export default function MainLayout({
                 </div>
               </div>
             </Media>
-            <Media lessThan="md">
-              {/* <TopBarMobile showMenu={showMenu} onShowMenu={() => setShowMenu(!showMenu)} onCloseMenu={onCloseMenu} /> */}
-              {/* <MenuHamburger  showMenu={showMenu} onClick={() => setShowMenu(!showMenu)} /> */}
+            <Media lessThan="md" className="h-full w-full">
+              <TopBarMobile showMenu={showMenu} onShowMenu={() => setShowMenu(!showMenu)} onCloseMenu={onCloseMenu} />
+              <MenuHamburger showMenu={showMenu} onClick={() => setShowMenu(!showMenu)} />
               <div className={classNames('h-full grow bg-zinc-50 p-6', showMenu && 'hidden')}>{children}</div>
             </Media>
           </>

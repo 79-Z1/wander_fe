@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import {Icon} from '@/core-ui';
 
-import CreateTrip from '@/components/create-trip-button';
+import CreateTrip from '@/common/components/create-trip-button';
 
 import {IComponentBaseProps} from '@/common/interfaces';
 

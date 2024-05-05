@@ -15,6 +15,8 @@ import bellNotificationSVG from '@/assets/icons/bell-notification.svg';
 
 import SearchBarSuggestion from '../search-bar-suggestion';
 
+import UserPopOver from './user-popover';
+
 export type TTopbarProps = IComponentBaseProps;
 
 const Topbar: FC<TTopbarProps> = ({className}) => {
@@ -22,14 +24,6 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
   const router = useRouter();
   // const pathname = usePathname();
   const {users, isFetching, searchByName, setUsers} = useUserState();
-
-  // function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
-  //   if (e.key === 'Enter') {
-  //     // friendState.sendFriendRequest(session.data?.user.id || '', text, GlobalConnectSocket);
-  //     router.replace(`${pathname}/?name=${text}`);
-  //     searchByName(text);
-  //   }
-  // }
 
   function handleSearchChange(text: string) {
     if (text)
@@ -40,7 +34,6 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
   }
 
   function handleSelectSearchResult(userId: string) {
-    // friendState.sendFriendRequest(session.data?.user.id || '', userId, GlobalConnectSocket);
     router.push(`/profile/${userId}`);
   }
 
@@ -59,14 +52,7 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
       />
       <Image src={bellNotificationSVG} alt="avatar" width={28} height={28} />
       <p className="text-sm font-bold">{session.data?.user?.name || ''}</p>
-      <div className="relative h-[40px] w-[40px]">
-        <Image
-          src={session.data?.user?.avatar || '/images/avatar.png'}
-          fill
-          alt="avatar"
-          className="absolute rounded-lg bg-black object-cover object-center"
-        />
-      </div>
+      <UserPopOver avatar={session.data?.user?.avatar} />
     </div>
   );
 };
