@@ -2,11 +2,13 @@ import React from 'react';
 import type {Metadata} from 'next';
 import ChatApi from '@/common/api/chat.api';
 import {ROUTES} from '@/common/configs/routes.config';
+import {GlobalConnectSocket} from '@/common/sockets/global-connect.socket';
 
 import ChatModule from '@/modules/chat/chat-module';
 import NotFoundModule from '@/modules/not-found/not-found';
 
 import {siteConfigs} from '@/common/constants';
+import {ENUM_SOCKET_EMIT} from '@/common/constants/socket.enum';
 
 type CreateChatPageProps = {params: {slug: string}; searchParams: Record<string, string>};
 
@@ -14,6 +16,9 @@ export default async function CreateChatMainPage({params}: CreateChatPageProps) 
   const data = await ChatApi.readConversationBySlugSeverSide(params.slug);
 
   if (!data) return <NotFoundModule />;
+  GlobalConnectSocket.emit(ENUM_SOCKET_EMIT.JOIN_CONVERSATION, {
+    conversationId: data._id ?? ''
+  });
 
   return <ChatModule conversation={data} />;
 }

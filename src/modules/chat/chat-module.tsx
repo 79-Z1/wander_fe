@@ -75,7 +75,7 @@ const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
   if (!session.data?.user && session.status === 'unauthenticated') return <NotFoundModule />;
 
   return (
-    <div className={cn('ChatModule', 'flex h-full max-h-full flex-col', className)} data-testid="ChatModule">
+    <div className={cn('ChatModule', 'flex h-full flex-col', className)} data-testid="ChatModule">
       <div className="flex w-full items-center justify-between">
         <p className="text-2xl font-bold">Cuộc trò chuyện với bạn bè</p>
         <Button className="gap-x-2 text-xl font-bold">
@@ -85,7 +85,7 @@ const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
       </div>
 
       <div className="mt-6 flex h-full gap-x-4">
-        <div className="flex h-full basis-1/2 flex-col gap-y-6 rounded-lg bg-zinc-50 p-6">
+        <div className="flex grow basis-1/3 flex-col gap-y-6 rounded-lg bg-zinc-50 p-6">
           <div className="flex items-center justify-between">
             <p>Liên hệ</p>
             <p>34</p>
@@ -100,6 +100,7 @@ const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
             />
           </div>
           <div>
+            <p className="mb-3 text-xl font-bold">Tin nhắn riêng tư</p>
             <div>
               {contactList?.privateConversations.length > 0 ? (
                 contactList?.privateConversations.map((contact, index) => (
@@ -110,9 +111,21 @@ const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
               )}
             </div>
           </div>
+          <div>
+            <p className="mb-3 text-xl font-bold">Tin nhắn nhóm</p>
+            <div>
+              {contactList?.groupConversations.length > 0 ? (
+                contactList?.groupConversations.map((contact, index) => (
+                  <FriendAvatarSection key={index} contact={contact} onClick={handleClickFriendAvatar} />
+                ))
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className="flex h-full max-h-full basis-1/2 flex-col gap-y-6 rounded-lg bg-zinc-50 py-6">
+        <div className="flex grow basis-2/3 flex-col gap-y-6 rounded-lg bg-zinc-50 py-6">
           {conversation ? <MessageSection userId={session.data?.user?.id} conversation={conversation} /> : <></>}
         </div>
       </div>

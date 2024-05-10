@@ -1,4 +1,4 @@
-import {ENUM_MEMBER_PERMISSION, ENUM_SCHEDULE_STATUS} from '../constants';
+import {ENUM_MEMBER_PERMISSION, ENUM_PLAN_STATUS, ENUM_SCHEDULE_STATUS} from '../constants';
 
 import {IUser} from './user.entity';
 
@@ -11,9 +11,11 @@ export interface IPlan {
   title: string;
   cost: number;
   imageUrl?: string;
-  startAt: string;
+  startAt: Date | string;
+  endAt: Date;
   address: string;
   location: ILocation;
+  status?: ENUM_PLAN_STATUS;
 }
 
 export interface ILocationSearch {
@@ -47,4 +49,22 @@ export interface ISchedule {
   startDate: Date;
   endDate: Date;
   status: ENUM_SCHEDULE_STATUS;
+  progress?: number;
+}
+
+export interface IScheduleDetail {
+  _id: string;
+  topic: string;
+  imageUrl: string;
+  description: string;
+  plans: IPlan[];
+  members: IUser[];
+  total: number;
+  startDate: Date;
+  endDate: Date;
+  status: ENUM_SCHEDULE_STATUS;
+  progress?: {
+    percent?: number;
+    part?: string;
+  };
 }

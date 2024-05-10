@@ -49,7 +49,7 @@ const MessageSection: FC<TMessageSectionProps> = ({userId, conversation}) => {
           <Image src={''} fill alt="avatar" className="absolute rounded-lg object-cover object-center" />
         </div>
         <div className="flex flex-col gap-y-3">
-          <p className="flex items-center justify-between text-sm font-bold">My name</p>
+          <p className="flex items-center justify-between text-sm font-bold">{conversation?.name}</p>
           <div className="flex items-center justify-between text-xs text-[#8B8D97]">
             <div className="flex items-center gap-x-1">
               <p className="flex items-center gap-x-1">
@@ -61,8 +61,8 @@ const MessageSection: FC<TMessageSectionProps> = ({userId, conversation}) => {
           </div>
         </div>
       </div>
-      <div className="flex h-full grow flex-col px-6">
-        <div className="scrollbar flex max-h-[80vh] grow flex-col">
+      <div className="scrollbar flex max-h-[80vh] flex-col overflow-auto px-6">
+        <div className="scrollbar flex flex-col overflow-auto">
           {messages.map((message, index) => (
             <Message key={index} userId={userId || ''} message={message} />
           ))}

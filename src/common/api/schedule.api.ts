@@ -26,8 +26,8 @@ const readScheduleBySlugSeverSide = async (slug: string) => {
   }
 };
 
-const getTrip = async (slug: string) => {
-  return HttpRequest.get<ISchedule>(`schedule/${slug}`);
+const getEditTrip = async (slug: string) => {
+  return HttpRequest.get<ISchedule>(`schedule/edit/${slug}`);
 };
 
 const readUserCalendarsSeverSide = async () => {
@@ -45,7 +45,7 @@ export const ScheduleApi = {
   create,
   update,
   getAll,
-  getTrip,
+  getEditTrip,
   readScheduleBySlugSeverSide,
   readUserCalendarsSeverSide
 };

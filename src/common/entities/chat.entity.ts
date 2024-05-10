@@ -6,7 +6,7 @@ export interface IClassifiedUserConversation {
 export interface IPrivateConversation {
   _id: string;
   name?: string;
-  image?: string;
+  imageUrl?: string;
 }
 
 export interface IGroupConversation {

@@ -19,9 +19,14 @@ const getUserConservations = async () => {
   return HttpRequest.get<IClassifiedUserConversation>(`chat/user-conversations`);
 };
 
+const createGroupChat = async (name: string, scheduleId: string) => {
+  return await HttpRequest.post<{name: string}>(`chat/group`, {name, scheduleId});
+};
+
 export const ChatApi = {
   readConversationBySlugSeverSide,
-  getUserConservations
+  getUserConservations,
+  createGroupChat
 };
 
 export default ChatApi;

@@ -3,7 +3,7 @@ import type {Metadata} from 'next';
 
 import TripModule from '@/modules/schedules/components/trip/trip-module';
 
-export default async function Voucher() {
+export default async function TripPage() {
   return <TripModule />;
 }
 

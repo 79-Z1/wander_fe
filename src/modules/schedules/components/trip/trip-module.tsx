@@ -21,7 +21,7 @@ const TripModule: FC<TTripModuleProps> = ({className}) => {
   }, [getAll]);
 
   function handleClick(id: string) {
-    router.push(`/trip/edit/${id}`);
+    router.push(`/trip/${id}`);
   }
 
   return (

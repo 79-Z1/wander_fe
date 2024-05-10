@@ -30,9 +30,9 @@ const EditTripModule: FC<TEditTripModuleProps> = ({className, slug}) => {
   const [defaultValues, setDefaultValues] = React.useState<IFormData & {_id: string}>();
 
   useEffect(() => {
-    const getTrip = async () => {
+    const getEditTrip = async () => {
       try {
-        const response = await ScheduleApi.getTrip(slug || '');
+        const response = await ScheduleApi.getEditTrip(slug || '');
         if (!response?.metadata) return <NotFoundModule />;
 
         const tripData = {
@@ -45,7 +45,7 @@ const EditTripModule: FC<TEditTripModuleProps> = ({className, slug}) => {
         error;
       }
     };
-    getTrip();
+    getEditTrip();
   }, [slug]);
 
   function submitEdit(formData: IFormData) {

@@ -15,7 +15,7 @@ const Root: FC<RootProps> = ({className, children}) => {
   if (session.status === 'loading') {
     return null;
   }
-  return <div className={classNames('root-app h-full', className)}>{children}</div>;
+  return <div className={classNames('root-app h-full min-h-screen', className)}>{children}</div>;
 };
 
 export default Root;

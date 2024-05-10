@@ -37,7 +37,7 @@ const MenuHamburger: FC<IMenuHamburgerProps> = ({showMenu, ...rest}) => {
     <>
       {showMenu && (
         <div
-          className="comp-menu-hamburger flex h-screen w-full flex-col overflow-hidden bg-zinc-50 py-3 transition-all duration-200 lg:hidden"
+          className="comp-menu-hamburger flex min-h-screen w-full flex-col overflow-hidden bg-zinc-50 py-3 transition-all duration-200 lg:hidden"
           data-testid="menu-hamburger"
           {...rest}
         >

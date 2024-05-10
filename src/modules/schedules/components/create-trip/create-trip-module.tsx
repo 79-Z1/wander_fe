@@ -17,8 +17,8 @@ export type TCreateTripModuleProps = IComponentBaseProps;
 const defaultValues: IFormData = {
   topic: '',
   total: 0,
-  startDate: new Date(),
-  endDate: new Date(),
+  startDate: new Date(new Date().setHours(0, 0, 0)),
+  endDate: new Date(new Date().setHours(0, 1, 0)),
   description: '',
   imageUrl: '',
   members: [],

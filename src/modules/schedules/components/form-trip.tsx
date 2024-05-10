@@ -1,5 +1,4 @@
 import React, {FC, useEffect, useState} from 'react';
-import {DateRange} from 'react-day-picker';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import FriendApi from '@/common/api/friend.api';
 import {ILocation, IMember, IPlan} from '@/common/entities';
@@ -7,7 +6,7 @@ import {IUser} from '@/common/entities/user.entity';
 import {zodResolver} from '@hookform/resolvers/zod';
 import type {PutBlobResult} from '@vercel/blob';
 
-import {DateRangePicker, Icon, Label} from '@/core-ui';
+import {Icon, Label} from '@/core-ui';
 import Input from '@/core-ui/input';
 import Textarea from '@/core-ui/textarea';
 
@@ -39,6 +38,11 @@ export type TFormTripProps = IComponentBaseProps & {
   onSubmit?: (formData: IFormData) => void;
 };
 
+type DateRange = {
+  from?: Date | undefined;
+  to?: Date | undefined;
+};
+
 const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...rest}) => {
   const form = useForm<IFormData>({resolver: zodResolver(CreateTripValidator), defaultValues});
   const {register, handleSubmit, formState, setValue, clearErrors} = form;
@@ -48,11 +52,10 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
   const [friendList, setFriendList] = useState<IUser[]>([]);
   const [planList, setPlanList] = useState<IPlan[]>(defaultValues?.plans || []);
   const [mainImageUrl, setMainImageUrl] = useState<string>(defaultValues?.imageUrl || '');
-  const [dateRange, setDateRange] = useState<DateRange | undefined>(
-    defaultValues?.startDate && defaultValues?.endDate
-      ? {from: defaultValues?.startDate, to: defaultValues?.endDate}
-      : undefined
-  );
+  const [dateRange, setDateRange] = useState<DateRange>({
+    from: defaultValues?.startDate,
+    to: defaultValues?.endDate
+  });
 
   useEffect(() => {
     const getFriendList = async () => {
@@ -76,11 +79,17 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
 
     setMainImageUrl(newImage.url);
   };
-  const handleDateRangeChange = (newDateRange: DateRange) => {
-    if (newDateRange) {
-      form.setValue('startDate', newDateRange.from!);
-      form.setValue('endDate', newDateRange.to!);
-      setDateRange(newDateRange);
+
+  const handleDateStart = (date: Date) => {
+    if (date) {
+      form.setValue('startDate', date!);
+      setDateRange(prev => ({...prev, from: date}));
+    }
+  };
+  const handleDateEnd = (date: Date) => {
+    if (date) {
+      form.setValue('endDate', date!);
+      setDateRange(prev => ({...prev, to: date}));
     }
   };
 
@@ -194,12 +203,32 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-2">
-              <Label text="Bắt đầu - Kết thúc" color="dark" className="font-semibold" />
-              <DateRangePicker
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label text="Bắt đầu" color="dark" className="font-semibold" />
+                <DateTimePicker
+                  className={cn('w-full')}
+                  defaultDate={dateRange?.from}
+                  onChange={date => {
+                    handleDateStart(date);
+                  }}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label text="Kết thúc" color="dark" className="font-semibold" />
+                <DateTimePicker
+                  className={cn('w-full')}
+                  defaultDate={dateRange.to! < dateRange.from! ? dateRange?.from : dateRange?.to}
+                  fromDate={dateRange?.from}
+                  onChange={date => {
+                    handleDateEnd(date);
+                  }}
+                />
+              </div>
+              {/* <DateRangePicker
                 date={{from: form.getValues('startDate'), to: form.getValues('endDate')}}
                 onChange={handleDateRangeChange}
-              />
+              /> */}
               <Input className={`hidden`} type="date" {...register('startDate')} />
               <Input className={`hidden`} type="date" {...register('endDate')} />
               {errors.startDate && <span className="text-rose-500">{errors.startDate?.message?.toString()}</span>}

@@ -15,7 +15,7 @@ type BodyProps = IComponentBaseProps & {
 
 const Body: FC<BodyProps> = ({className, children}) => {
   return (
-    <body suppressHydrationWarning={true} className={classNames('flex h-full flex-col', className)}>
+    <body suppressHydrationWarning={true} className={classNames('flex h-full min-h-screen flex-col', className)}>
       <Providers>
         {children}
         <BodyInjector />

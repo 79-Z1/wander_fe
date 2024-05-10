@@ -5,6 +5,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
+import {formatToAMPM} from '@/common/utils';
+
 import {IComponentBaseProps} from '@/common/interfaces';
 
 export type TCalendarModuleProps = IComponentBaseProps & {
@@ -22,16 +24,11 @@ const CalendarModule: FC<TCalendarModuleProps> = ({className, calendars}) => {
   };
 
   const renderEventContent = (eventInfo: any) => {
-    if (eventInfo.view.type === 'dayGridMonth') {
-      return <i>{eventInfo.event.title}</i>;
-    } else {
-      return (
-        <>
-          <b>{eventInfo.timeText}</b>
-          <i>{eventInfo.event.title}</i>
-        </>
-      );
-    }
+    return (
+      <p className="flex w-full cursor-pointer gap-1 truncate text-ellipsis rounded-full px-1">
+        <b>{formatToAMPM(eventInfo.timeText)}:</b> <span>{eventInfo.event.title}</span>
+      </p>
+    );
   };
 
   const handleDateClick = (arg: any) => {
@@ -43,6 +40,7 @@ const CalendarModule: FC<TCalendarModuleProps> = ({className, calendars}) => {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
+        eventColor="green"
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',

@@ -25,7 +25,7 @@ const FriendAvatarSection: FC<TFriendAvatarSectionProps> = ({className, contact,
     >
       <div className="relative h-[44px] w-[44px]">
         <Image
-          src={contact?.image || ''}
+          src={contact?.imageUrl || ''}
           fill
           alt="avatar"
           className="absolute rounded-lg object-cover object-center"

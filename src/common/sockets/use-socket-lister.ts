@@ -31,8 +31,11 @@ export default function useCommonListener(params: {socket: TSocket; session?: Se
       }, 1000);
     });
 
-    // socket.io.on('reconnect_attempt', () => {
-    // });
+    socket.io.on('reconnect_attempt', () => {
+      setTimeout(() => {
+        socket.connect();
+      }, 1000);
+    });
   }, []);
 
   useEffect(() => {

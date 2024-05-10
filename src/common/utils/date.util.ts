@@ -20,6 +20,14 @@ export const formatVNDate = (date?: Date) => {
   return dayjs(date).format('DD/MM/YYYY');
 };
 
+export const format24Hour = (date?: Date) => {
+  return dayjs(date).format('HH:mm:ss');
+};
+
+export const format12Hour = (date?: Date) => {
+  return dayjs(date).format('hh:mm A');
+};
+
 export const getRemainingDays = (from?: string, to?: string): number => {
   if (!from || !to) return 0;
 
@@ -44,6 +52,25 @@ export function getDayName(date: string, weekday: 'long' | 'short' = 'short') {
   const day = dateParse(date).getDay();
 
   return weekday === 'long' ? WEEKDAYS_LONG[day] : WEEKDAYS_SHORT[day];
+}
+
+export function formatToAMPM(timeString?: string) {
+  if (!timeString) return '';
+
+  // Parse the input time string
+  const [hour, minute] = timeString.split(':').map(part => parseInt(part, 10));
+
+  // If hour is invalid, return empty string
+  if (isNaN(hour) || hour < 0 || hour > 23) return '';
+
+  // If minute is invalid, default to 0
+  const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+  const formattedMinute = isNaN(minute) || minute < 0 || minute > 59 ? '00' : minute.toString().padStart(2, '0');
+
+  // Determine AM or PM
+  const period = hour < 12 ? 'AM' : 'PM';
+
+  return `${formattedHour}:${formattedMinute} ${period}`;
 }
 
 export function getDaysBetweenTwoDates(from?: string, to?: string): number {
