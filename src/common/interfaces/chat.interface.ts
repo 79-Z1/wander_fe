@@ -5,14 +5,14 @@ export type TJoinConversation = {conversationId: string};
 export type TUpdateMessages = {messages: IMessage[]};
 
 export interface IMessage {
-  _id: string;
-  sender: string;
+  _id?: string;
+  sender: IUser;
   text: string;
-  pinned: boolean;
-  reactions: IReaction[];
-  isActive: boolean;
-  messageAt: Date;
-  user: IUser;
+  pinned?: boolean;
+  reactions?: IReaction[];
+  isActive?: boolean;
+  messageAt?: Date;
+  seen?: boolean;
 }
 
 export interface IReaction {
@@ -27,7 +27,9 @@ export interface IParticipant {
 
 export interface IConversation {
   _id: string;
+  type: 'private' | 'group' | 'ai';
   creatorId: string;
+  imageUrl?: string;
   name: string;
   participants: IParticipant[];
   isActive: boolean;

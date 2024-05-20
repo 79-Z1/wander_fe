@@ -19,7 +19,7 @@ const TripDetailModule: FC<TTripDetailModuleProps> = ({className, schedule}) => 
   return (
     <div className={cn('TripDetailModule flex h-full flex-col gap-6', className)} data-testid="TripDetailModule">
       <TripInfoCard schedule={schedule} />
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid gap-6 lg:grid-cols-2">
         <OwnerCardInfo schedule={schedule} />
         <div className="rounded-lg bg-zinc-50 p-3 shadow">
           <p className="mb-3 text-[18px] font-bold">Thành viên</p>

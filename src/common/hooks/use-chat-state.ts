@@ -8,11 +8,13 @@ import {IInitState, IMessage} from '@/common/interfaces';
 import {ENUM_SOCKET_EMIT} from '../constants/socket.enum';
 
 interface IState extends IInitState {
+  chatRoomId: string;
   messages: IMessage[];
 }
 
 interface IActions {
-  sendMessage: (roomId: string, message: string, socket: Socket) => void;
+  setChatRoomId: (chatRoomId: string) => void;
+  sendMessage: (userId: string, roomId: string, message: string, socket: Socket) => void;
   updateMessages: (payload: IMessage[]) => void;
   setMessages: (payload: IMessage[]) => void;
   setLoading: (status: boolean) => void;
@@ -21,6 +23,7 @@ interface IActions {
 const useChatState = create<IState & IActions>()(
   devtools(
     immer(set => ({
+      chatRoomId: '',
       isFetching: true,
       messages: [],
       updateMessages: payload => {
@@ -33,9 +36,10 @@ const useChatState = create<IState & IActions>()(
           set({isFetching: false}, false);
         }
       },
-      sendMessage: async (roomId, message, socket) => {
+      sendMessage: async (userId, roomId, message, socket) => {
         try {
           socket.emit(ENUM_SOCKET_EMIT.SEND_MESSAGE, {
+            userId,
             conversationId: roomId,
             message: message
           });
@@ -55,6 +59,9 @@ const useChatState = create<IState & IActions>()(
         } catch (error) {
           set({isFetching: false}, false);
         }
+      },
+      setChatRoomId: chatRoomId => {
+        set({chatRoomId}, false);
       },
       setLoading: status => {
         set({isFetching: status}, false);

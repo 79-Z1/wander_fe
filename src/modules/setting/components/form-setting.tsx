@@ -21,13 +21,13 @@ export type TFomSettingProps = IComponentBaseProps & {
 };
 
 export interface IFormData {
-  name: string;
-  email: string;
-  phoneNumber: string;
+  name?: string;
+  email?: string;
+  phoneNumber?: string;
   dateOfBirth?: Date;
-  gender: string;
-  address: string;
-  avatar: string;
+  gender?: string;
+  address?: string;
+  avatar?: string;
 }
 
 const FomSetting: FC<TFomSettingProps> = ({className, defaultValues, onSave}) => {
@@ -40,7 +40,7 @@ const FomSetting: FC<TFomSettingProps> = ({className, defaultValues, onSave}) =>
   const [avatar, setAvatar] = useState<string>(defaultValues?.avatar || '/images/avatar.png');
 
   const onSubmit: SubmitHandler<IFormData> = async formData => {
-    formData.email = formData.email.toLowerCase();
+    formData.email = formData?.email?.toLowerCase();
     formData.gender = gender;
     formData.dateOfBirth = dateOfBirth;
     formData.avatar = avatar;
@@ -64,10 +64,10 @@ const FomSetting: FC<TFomSettingProps> = ({className, defaultValues, onSave}) =>
 
   return (
     <div className={cn('FomSetting', className)} data-testid="FomSetting">
-      <form className="flex w-full flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+      <form className="flex w-full flex-col gap-3 lg:gap-6" onSubmit={handleSubmit(onSubmit)}>
         <p className="text-center text-xl font-extrabold">Cài đặt</p>
         <div className="flex flex-col items-center justify-center gap-3">
-          <div className="relative h-[150px] w-[150px]">
+          <div className="relative h-[118px] w-[118px] lg:h-[150px] lg:w-[150px]">
             <Image
               fill
               src={avatar}
@@ -83,12 +83,12 @@ const FomSetting: FC<TFomSettingProps> = ({className, defaultValues, onSave}) =>
               accept="image/*"
               onChange={e => handleUpFile(e.target.files?.[0] as File)}
             />
-            <label htmlFor="fileInput" className="cursor-pointer text-orange-500 hover:text-orange-600">
+            <label htmlFor="fileInput" className="cursor-pointer font-bold text-orange-500 hover:text-orange-600">
               Tải ảnh lên
             </label>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid gap-3 lg:lg:grid-cols-2 lg:gap-6">
           <div className="flex flex-col gap-1">
             <Label text="Họ và tên" color="dark" className="font-semibold" />
             <Input
@@ -112,7 +112,7 @@ const FomSetting: FC<TFomSettingProps> = ({className, defaultValues, onSave}) =>
             {errors.email && <span className="text-rose-500">{errors.email?.message?.toString()}</span>}
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid gap-3 lg:grid-cols-2 lg:gap-6">
           <div className="flex flex-col gap-1">
             <Label text="Số điện thoại" color="dark" className="font-semibold" />
             <Input
@@ -136,7 +136,7 @@ const FomSetting: FC<TFomSettingProps> = ({className, defaultValues, onSave}) =>
             {errors.address && <span className="text-rose-500">{errors.address?.message?.toString()}</span>}
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid gap-3 lg:grid-cols-2 lg:gap-6">
           <div className="flex flex-col gap-1">
             <Label text="Ngày sinh" color="dark" className="font-semibold" />
             <DatePicker

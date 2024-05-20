@@ -28,10 +28,6 @@ const Register: FC<TRegisterProps> = ({className}) => {
     signIn('google', {callbackUrl: '/'});
   };
 
-  const handleSignInFacebook = async () => {
-    await signIn(ENUM_O_AUTH_PROVIDER.FACEBOOK, {callbackUrl: '/'});
-  };
-
   const handleRegisterForm = async (formData: IFormData) => {
     try {
       formData.email = formData.email.toLowerCase();
@@ -50,14 +46,14 @@ const Register: FC<TRegisterProps> = ({className}) => {
     <div className={cn('flex h-full w-full', className)} data-testid="Register">
       <DecorImage className="hidden basis-2/3 xl:block" />
       <div className="my-auto flex h-full grow flex-col justify-center gap-6 p-9">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <Image src={logo} alt="Wander" width={48} height={48} />
-          <p className="text-xl font-bold">Wander</p>
+          <p className="text-xl font-bold text-[#EF7A6F]">Wander</p>
         </div>
         <div className="flex flex-col gap-8">
           <FormRegister className="flex w-full flex-col items-center gap-6" onSignUp={handleRegisterForm} />
           <Line className="border-[#E5E5E5]" />
-          <LoginProviders onSignGoogle={handleSignInGoogle} onSignFacebook={handleSignInFacebook} />
+          <LoginProviders onSignGoogle={handleSignInGoogle} />
         </div>
         <div className="flex justify-center space-x-2 text-slate-400">
           <p>{'Bạn đã có tài khoản'}</p>

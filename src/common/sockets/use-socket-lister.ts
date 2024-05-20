@@ -1,18 +1,18 @@
 import {useEffect} from 'react';
 import {Session} from 'next-auth';
 
-import {ENUM_SOCKET_EMIT, ENUM_SOCKET_LISTENER} from '../constants/socket.enum';
-import useChatState from '../hooks/use-chat-state';
+import {ENUM_SOCKET_LISTENER} from '../constants/socket.enum';
 import useFriendState from '../hooks/use-friend-state';
+import useNotificationState from '../hooks/use-notification-state';
 import {TSocket} from '../interfaces';
 
 export default function useCommonListener(params: {socket: TSocket; session?: Session}) {
   const {socket, session} = params;
   const friendState = useFriendState();
-  const chatState = useChatState();
+  const notificationState = useNotificationState();
 
   useEffect(() => {
-    socket.auth = {accessToken: session?.user.accessToken};
+    socket.auth = {userId: session?.user.id};
     socket.connect();
     return () => {
       socket.disconnect();
@@ -21,17 +21,9 @@ export default function useCommonListener(params: {socket: TSocket; session?: Se
   }, []);
 
   useEffect(() => {
-    socket.on('connect', () => {
-      setTimeout(() => socket.emit(ENUM_SOCKET_EMIT.SET_USER_SOCKET_ID, {userId: session?.user.id}), 300);
-    });
+    socket.on('connect', () => {});
 
     socket.on('connect_error', () => {
-      setTimeout(() => {
-        socket.connect();
-      }, 1000);
-    });
-
-    socket.io.on('reconnect_attempt', () => {
       setTimeout(() => {
         socket.connect();
       }, 1000);
@@ -45,16 +37,10 @@ export default function useCommonListener(params: {socket: TSocket; session?: Se
   }, []);
 
   useEffect(() => {
-    socket.on(ENUM_SOCKET_LISTENER.UPDATE_MESSSAGES, params => {
-      chatState.updateMessages(params.messages);
+    socket.on(ENUM_SOCKET_LISTENER.UPDATE_NOTIFICATION, params => {
+      console.log('🚀 ~ useEffect ~ params:::', params);
+      notificationState.updateNotifications(params.notifications);
     });
-
-    return () => {
-      socket.off(ENUM_SOCKET_LISTENER.UPDATE_MESSSAGES);
-    };
-  }, []);
-
-  useEffect(() => {
     socket.on(ENUM_SOCKET_LISTENER.UPDATE_FRIEND, param => {
       if (param.type === 'send') {
         const friendRecieved = [...friendState.userFriend.friends, param.friend];
@@ -98,5 +84,5 @@ export default function useCommonListener(params: {socket: TSocket; session?: Se
     };
   }, []);
 
-  return {friendState, chatState};
+  return {friendState};
 }

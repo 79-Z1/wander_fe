@@ -3,7 +3,7 @@ import type {Metadata} from 'next';
 import UserApi from '@/common/api/user.api';
 import {ROUTES} from '@/common/configs/routes.config';
 
-import ProfileModule from '@/modules/users/profile.module';
+import ProfileModule from '@/modules/users/user-profile.module';
 
 import {siteConfigs} from '@/common/constants';
 

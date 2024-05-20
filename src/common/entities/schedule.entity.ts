@@ -19,9 +19,9 @@ export interface IPlan {
 }
 
 export interface ILocationSearch {
-  address: string;
-  lat: number;
-  lng: number;
+  address?: string;
+  lat?: number;
+  lng?: number;
 }
 
 export interface IMember {

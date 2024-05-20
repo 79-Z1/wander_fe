@@ -27,13 +27,17 @@ const TripModule: FC<TTripModuleProps> = ({className}) => {
   return (
     <div className={cn('Trip-module', 'flex h-full w-full flex-col gap-4', className)} data-testid="TripModule">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">My trip</h1>
+        <h1 className="text-xl font-bold">Lịch trình của tôi</h1>
       </div>
-      <div className="grid grid-cols-2 gap-6">
-        {schedules.map((schedule, index) => (
-          <TripCard key={index} schedule={schedule} onClick={() => handleClick(schedule._id)} />
-        ))}
-      </div>
+      {schedules && schedules.length > 0 ? (
+        <div className="grid gap-6 lg:grid-cols-3">
+          {schedules.map((schedule, index) => (
+            <TripCard key={index} schedule={schedule} onClick={() => handleClick(schedule._id)} />
+          ))}
+        </div>
+      ) : (
+        <div className="flex h-full w-full items-center justify-center">Bạn chưa có lịch trình nào</div>
+      )}
     </div>
   );
 };

@@ -2,7 +2,7 @@ import FetchRequest from '@/common/http/fetch-request';
 
 import {IClassifiedUserConversation} from '../entities/chat.entity';
 import HttpRequest from '../http/http-request';
-import {IConversation} from '../interfaces';
+import {IConversation, IMessage} from '../interfaces';
 
 const readConversationBySlugSeverSide = async (slug: string) => {
   try {
@@ -23,10 +23,15 @@ const createGroupChat = async (name: string, scheduleId: string) => {
   return await HttpRequest.post<{name: string}>(`chat/group`, {name, scheduleId});
 };
 
+const askAI = async (conversationId: string, prompt: string) => {
+  return await HttpRequest.post<IMessage[]>(`gemini`, {prompt, conversationId});
+};
+
 export const ChatApi = {
   readConversationBySlugSeverSide,
   getUserConservations,
-  createGroupChat
+  createGroupChat,
+  askAI
 };
 
 export default ChatApi;

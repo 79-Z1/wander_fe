@@ -51,7 +51,7 @@ export const useAuthState = create<IState & IActions>()(
           set({isCreating: false, message: getErrorMessage(error), error: error}, false, 'auth/signupFailure');
         }
       },
-      logout: (callbackUrl = '/') => {
+      logout: (callbackUrl = '/explore') => {
         signOut({redirect: true, callbackUrl});
       },
       resetSignUp: () => {

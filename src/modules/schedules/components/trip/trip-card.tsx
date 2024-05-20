@@ -55,7 +55,9 @@ const TripCard: FC<TTripCardProps> = ({className, schedule, onClick}) => {
               key={index}
               src={member?.avatar || avatarImage}
               alt="Avatar"
-              className="-mr-4 rounded-full border-[1px] border-gray-300"
+              className={cn('rounded-full border-[1px] border-gray-300', {
+                '-mr-4': schedule?.members.length > 1
+              })}
               width={40}
               height={40}
             />

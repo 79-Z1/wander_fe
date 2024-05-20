@@ -5,11 +5,8 @@ import {useSession} from 'next-auth/react';
 import {debounce} from 'lodash-es';
 import ChatApi from '@/common/api/chat.api';
 import {IClassifiedUserConversation} from '@/common/entities';
-import {GlobalConnectSocket} from '@/common/sockets/global-connect.socket';
+import {ChatConnectSocket} from '@/common/sockets/chat-connect.socket';
 
-import {Icon} from '@/core-ui';
-
-import {Button} from '@/components/ui/button';
 import {cn} from '@/components/utils';
 
 import useFriendState from '@/common/hooks/use-friend-state';
@@ -21,9 +18,10 @@ import {ENUM_SOCKET_EMIT} from '@/common/constants/socket.enum';
 
 import {IComponentBaseProps, IConversation} from '@/common/interfaces';
 
+import AIMessageSection from '../AI/ai-chat-section';
 import NotFoundModule from '../not-found/not-found';
 
-import FriendAvatarSection from './components/friend-avatar-section';
+import ChatCollapsible from './components/chat-collasible';
 import MessageSection from './components/message-section';
 
 export type TChatModuleProps = IComponentBaseProps & {
@@ -38,7 +36,8 @@ const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
 
   const [contactList, setContactList] = useState<IClassifiedUserConversation>({
     privateConversations: [],
-    groupConversations: []
+    groupConversations: [],
+    aiConversations: []
   });
 
   useEffect(() => {
@@ -55,7 +54,7 @@ const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
 
   function handleClickFriendAvatar(conversationId?: string) {
     router.push(`/chat/${conversationId}`);
-    GlobalConnectSocket.emit(ENUM_SOCKET_EMIT.JOIN_CONVERSATION, {
+    ChatConnectSocket.emit(ENUM_SOCKET_EMIT.JOIN_CONVERSATION, {
       conversationId: conversationId ?? ''
     });
   }
@@ -69,7 +68,7 @@ const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
   }
 
   function handleSelectSearchResult(friendId: string) {
-    friendState.sendFriendRequest(session.data?.user.id || '', friendId, GlobalConnectSocket);
+    friendState.sendFriendRequest(session.data?.user.id || '', friendId, ChatConnectSocket);
   }
 
   if (!session.data?.user && session.status === 'unauthenticated') return <NotFoundModule />;
@@ -78,17 +77,13 @@ const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
     <div className={cn('ChatModule', 'flex h-full flex-col', className)} data-testid="ChatModule">
       <div className="flex w-full items-center justify-between">
         <p className="text-2xl font-bold">Cuộc trò chuyện với bạn bè</p>
-        <Button className="gap-x-2 text-xl font-bold">
-          <Icon name="ico-plus" />
-          Thêm bạn bè
-        </Button>
       </div>
 
       <div className="mt-6 flex h-full gap-x-4">
-        <div className="flex grow basis-1/3 flex-col gap-y-6 rounded-lg bg-zinc-50 p-6">
+        <div className="hidden gap-y-6 rounded-lg bg-zinc-50 p-6 lg:flex lg:grow lg:basis-1/3 lg:flex-col">
           <div className="flex items-center justify-between">
             <p>Liên hệ</p>
-            <p>34</p>
+            <p>{contactList?.privateConversations.length + contactList?.groupConversations.length}</p>
           </div>
           <div className="mb-6 mt-3">
             <SearchBarSuggestion
@@ -99,34 +94,34 @@ const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
               onSelectOption={handleSelectSearchResult}
             />
           </div>
-          <div>
-            <p className="mb-3 text-xl font-bold">Tin nhắn riêng tư</p>
-            <div>
-              {contactList?.privateConversations.length > 0 ? (
-                contactList?.privateConversations.map((contact, index) => (
-                  <FriendAvatarSection key={index} contact={contact} onClick={handleClickFriendAvatar} />
-                ))
-              ) : (
-                <></>
-              )}
-            </div>
-          </div>
-          <div>
-            <p className="mb-3 text-xl font-bold">Tin nhắn nhóm</p>
-            <div>
-              {contactList?.groupConversations.length > 0 ? (
-                contactList?.groupConversations.map((contact, index) => (
-                  <FriendAvatarSection key={index} contact={contact} onClick={handleClickFriendAvatar} />
-                ))
-              ) : (
-                <></>
-              )}
-            </div>
-          </div>
+          <ChatCollapsible
+            coversations={contactList?.aiConversations}
+            triggerText="Wander AI"
+            onClick={handleClickFriendAvatar}
+          />
+          <ChatCollapsible
+            coversations={contactList?.privateConversations}
+            triggerText="Tin nhắn riêng tư"
+            onClick={handleClickFriendAvatar}
+          />
+          <ChatCollapsible
+            coversations={contactList?.groupConversations}
+            triggerText="Tin nhắn nhóm"
+            onClick={handleClickFriendAvatar}
+          />
         </div>
 
         <div className="flex grow basis-2/3 flex-col gap-y-6 rounded-lg bg-zinc-50 py-6">
-          {conversation ? <MessageSection userId={session.data?.user?.id} conversation={conversation} /> : <></>}
+          {conversation && conversation.type !== 'ai' ? (
+            <MessageSection userId={session.data?.user?.id} conversation={conversation} />
+          ) : (
+            <></>
+          )}
+          {conversation && conversation.type === 'ai' ? (
+            <AIMessageSection userId={session.data?.user?.id} conversation={conversation} />
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>

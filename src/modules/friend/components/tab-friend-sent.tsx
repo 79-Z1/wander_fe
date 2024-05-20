@@ -40,9 +40,9 @@ const TabFriendSent: FC<TTabFriendSentProps> = ({className, userId, value, frien
           friendSents.map((value, index) => (
             <div key={index}>
               {index !== 0 && <Line className="my-1 border-[#E5E7EB] md:my-3" />}
-              <div className="flex items-center justify-between p-6">
+              <div className="flex items-center justify-between p-3 lg:p-6">
                 <div className="flex w-fit items-center gap-1" onClick={() => onClick(value?.user?._id)}>
-                  <div className="relative mr-2 h-[60px] w-[60px]">
+                  <div className="relative mr-2 h-[40px] w-[40px] lg:h-[60px] lg:w-[60px]">
                     <Image
                       alt=""
                       src={value?.user?.avatar}
@@ -52,11 +52,11 @@ const TabFriendSent: FC<TTabFriendSentProps> = ({className, userId, value, frien
                   </div>
                   <p className="flex flex-col gap-1">
                     <span className="font-bold text-gray-800">{value?.user?.name}</span>
-                    <span className="text-gray-600">{`${formatVNDate(value?.updatedAt)}`}</span>
+                    <span className="text-sm text-gray-600 lg:text-base">{`${formatVNDate(value?.updatedAt)}`}</span>
                   </p>
                 </div>
                 <Button
-                  className="flex gap-2 rounded-lg bg-orange-500 p-2 text-[#FCFCFC]"
+                  className="flex gap-2 rounded-lg bg-orange-500 p-2 text-sm text-[#FCFCFC] lg:text-base"
                   onClick={() => handleCancelFriendRequest(value?.user?._id)}
                 >
                   <Icon name="ico-x" />

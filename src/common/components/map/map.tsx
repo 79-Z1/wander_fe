@@ -1,5 +1,6 @@
 'use client';
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
+import {useSearchParams} from 'next/navigation';
 import Leaflet, {LeafletEvent} from 'leaflet';
 import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
 import {FullscreenControl} from 'react-leaflet-fullscreen';
@@ -31,13 +32,20 @@ export type TMapProps = IComponentBaseProps & {
 };
 
 const Map: FC<TMapProps> = ({className, defaultLocation, isWayPoints = false, onSearch}) => {
+  const searchParams = useSearchParams();
   const {data, isLoading} = useGeolocation();
+  const [defaultValue, setDefaultValue] = useState<ILocationSearch | undefined>();
   const [isSearched, setIsSearched] = React.useState(false);
-  if (isLoading) return <Loading />;
 
-  // function handleLocationMarkerClick(location: [number, number]) {
-  //   // console.log(location);
-  // }
+  useEffect(() => {
+    const lat = Number(searchParams?.get('lat'));
+    const lng = Number(searchParams?.get('lng'));
+    const address = searchParams?.get('address') || '';
+    if (lat && lng) setDefaultValue({lat, lng, address});
+    else if (defaultLocation) setDefaultValue(defaultLocation);
+  }, []);
+
+  if (isLoading) return <Loading />;
 
   function handleSearch(e: any) {
     if (e) setIsSearched(true);
@@ -49,9 +57,9 @@ const Map: FC<TMapProps> = ({className, defaultLocation, isWayPoints = false, on
       <MapContainer
         className="!z-1 h-full w-full rounded-lg"
         center={
-          defaultLocation
-            ? [defaultLocation.lat || 0, defaultLocation.lng || 0]
-            : [data?.latitude || 0, data.longitude || 0]
+          defaultValue?.lat !== undefined && defaultValue?.lng !== undefined
+            ? [defaultValue.lat as number, defaultValue.lng as number]
+            : [data?.latitude as number, data.longitude as number]
         }
         zoom={13}
         zoomControl={true}
@@ -65,9 +73,9 @@ const Map: FC<TMapProps> = ({className, defaultLocation, isWayPoints = false, on
           <RoutingMachine currentUserLatLng={Leaflet.latLng(data?.latitude || 0, data?.longitude || 0)} />
         )}
         {/* <LocationMarker onClick={handleLocationMarkerClick} /> */}
-        {!isSearched && defaultLocation && (
+        {!isSearched && defaultValue && (
           <Marker
-            position={[defaultLocation.lat || 0, defaultLocation.lng || 0]}
+            position={[defaultValue.lat as number, defaultValue.lng as number]}
             icon={
               new Leaflet.Icon({
                 iconUrl: MarkerIcon.src,
@@ -80,11 +88,11 @@ const Map: FC<TMapProps> = ({className, defaultLocation, isWayPoints = false, on
               })
             }
           >
-            <Popup>{defaultLocation.address}</Popup>
+            <Popup>{defaultValue.address}</Popup>
           </Marker>
         )}
         <Marker
-          position={[data?.latitude || 0, data.longitude || 0]}
+          position={[data?.latitude as number, data.longitude as number]}
           icon={
             new Leaflet.Icon({
               iconUrl: MarkerIcon.src,

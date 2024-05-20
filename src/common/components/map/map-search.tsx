@@ -42,7 +42,7 @@ const MapSearch: FC<TMapSearchProps> = ({onSearch}) => {
       },
       popupFormat: ({result}: any) => result.label,
       resultFormat: ({result}: any) => result.label,
-      searchLabel: 'Enter address'
+      searchLabel: 'Nhập địa chỉ...'
     });
 
     map.addControl(searchControl);

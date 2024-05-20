@@ -7,7 +7,11 @@ const socket: Socket<TListenEvents, TEmitEvents> = io(`${process.env.NEXT_PUBLIC
   secure: true,
   withCredentials: true,
   transports: ['websocket'],
-  path: '/socket.io'
+  path: '/socket.io',
+  reconnection: true,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax: 5000,
+  reconnectionAttempts: 5
 });
 
 export const GlobalConnectSocket = socket;

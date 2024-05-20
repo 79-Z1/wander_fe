@@ -30,7 +30,7 @@ export default function MainLayout({
 
   const [showMenu, setShowMenu] = useState(false);
 
-  const [isOpenSidebar, setIsOpenSidebar] = useState(true);
+  const [isOpenSidebar, setIsOpenSidebar] = useState(false);
 
   const handleCollapseSidebar = () => {
     setIsOpenSidebar(!isOpenSidebar);
@@ -74,7 +74,7 @@ export default function MainLayout({
             <Media lessThan="md" className="h-full w-full">
               <TopBarMobile showMenu={showMenu} onShowMenu={() => setShowMenu(!showMenu)} onCloseMenu={onCloseMenu} />
               <MenuHamburger showMenu={showMenu} onClick={() => setShowMenu(!showMenu)} />
-              <div className={classNames('min-h-screen grow bg-zinc-50 p-6', showMenu && 'hidden')}>{children}</div>
+              <div className={classNames('min-h-screen grow bg-gray-100 p-6', showMenu && 'hidden')}>{children}</div>
             </Media>
           </>
         )}

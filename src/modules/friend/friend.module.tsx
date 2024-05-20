@@ -3,8 +3,6 @@ import React, {FC, useEffect} from 'react';
 import {useRouter, useSearchParams} from 'next/navigation';
 import {useSession} from 'next-auth/react';
 
-import {Button, Icon} from '@/core-ui';
-
 import {Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs';
 import {cn} from '@/components/utils';
 
@@ -49,34 +47,30 @@ const FriendModule: FC<TFriendModuleProps> = ({className}) => {
   if (!session.data?.user && session.status === 'unauthenticated') return <NotFoundModule />;
 
   return (
-    <div className={cn('FriendModule', 'flex h-full flex-col gap-5 p-6', className)} data-testid="FriendModule">
+    <div className={cn('FriendModule', 'flex h-full flex-col gap-5', className)} data-testid="FriendModule">
       <Tabs defaultValue={tab} className="flex h-full flex-col" onValueChange={handleChangeOption}>
         <div className="flex flex-col rounded-lg bg-zinc-50 p-6">
           <div className="flex flex-wrap justify-between">
-            <TabsList className="flex justify-center gap-5 bg-zinc-50 md:gap-6 lg:justify-start">
+            <TabsList className="flex justify-center gap-2 bg-zinc-50 md:gap-6 lg:justify-start lg:gap-5">
               <TabsTrigger
-                className="bg-zinc-50 text-xs font-bold text-gray-400 data-[state=active]:rounded-none data-[state='active']:border-b-[1px] data-[state=active]:border-gray-800 data-[state=active]:bg-zinc-50 data-[state=active]:font-bold md:text-base"
+                className="bg-zinc-50 px-1 text-xs font-bold text-gray-400 data-[state=active]:rounded-none data-[state='active']:border-b-[1px] data-[state=active]:border-gray-800 data-[state=active]:bg-zinc-50 data-[state=active]:font-bold md:text-base lg:px-2"
                 value={ENUM_FRIEND_TAB.MY_FRIEND}
               >
                 Bạn bè của tôi
               </TabsTrigger>
               <TabsTrigger
-                className="bg-zinc-50 text-xs font-bold text-gray-400 data-[state=active]:rounded-none data-[state=active]:border-b-[1px] data-[state=active]:border-gray-800 data-[state=active]:bg-zinc-50 data-[state=active]:font-bold md:text-base"
+                className="bg-zinc-50 px-1 text-xs font-bold text-gray-400 data-[state=active]:rounded-none data-[state=active]:border-b-[1px] data-[state=active]:border-gray-800 data-[state=active]:bg-zinc-50 data-[state=active]:font-bold md:text-base lg:px-2"
                 value={ENUM_FRIEND_TAB.FRIEND_REQUEST}
               >
                 Lời mời kết bạn
               </TabsTrigger>
               <TabsTrigger
-                className="bg-zinc-50 text-xs font-bold text-gray-400 data-[state=active]:rounded-none data-[state=active]:border-b-[1px] data-[state=active]:border-gray-800 data-[state=active]:bg-zinc-50 data-[state=active]:font-bold md:text-base"
+                className="bg-zinc-50 px-1 text-xs font-bold text-gray-400 data-[state=active]:rounded-none data-[state=active]:border-b-[1px] data-[state=active]:border-gray-800 data-[state=active]:bg-zinc-50 data-[state=active]:font-bold md:text-base lg:px-2"
                 value={ENUM_FRIEND_TAB.FRIEND_REQUEST_SENT}
               >
                 Lời mời đã gửi
               </TabsTrigger>
             </TabsList>
-            <Button className="rounded-lg border border-orange-500 p-2 text-orange-500">
-              <Icon name="ico-plus" />
-              <p>Thêm bạn bè</p>
-            </Button>
           </div>
           {!friendState.isFetching ? (
             <>

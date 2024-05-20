@@ -96,7 +96,7 @@ const MenuHamburger: FC<IMenuHamburgerProps> = ({showMenu, ...rest}) => {
             {session?.data?.user && (
               <Button
                 className="flex items-center gap-x-2 rounded-lg border border-white px-4 py-3 text-gray-50"
-                onClick={() => signOut({redirect: true, callbackUrl: '/'})}
+                onClick={() => signOut({redirect: true, callbackUrl: '/explore'})}
               >
                 <Icon name="ico-custom-log-out" size={24} />
                 Đăng xuất

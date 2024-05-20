@@ -14,6 +14,7 @@
 
 @tailwind components;
 @layer components {
+  @import './components/fullcalendar.scss';
   @import './components/backdrop';
   @import './components/button-group';
   @import './components/button';

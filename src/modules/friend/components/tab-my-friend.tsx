@@ -38,9 +38,9 @@ const TabMyFriend: FC<TTabMyFriendProps> = ({className, value, myFriends = [], o
           myFriends.map((value, index) => (
             <div key={index}>
               {index !== 0 && <Line className="my-1 border-[#E5E7EB] md:my-3" />}
-              <div className="flex items-center justify-between p-6">
+              <div className="flex items-center justify-between p-3 lg:p-6">
                 <div className="flex w-fit items-center gap-1" onClick={() => onClick(value?.user?._id)}>
-                  <div className="relative mr-2 h-[60px] w-[60px]">
+                  <div className="relative mr-2 h-[40px] w-[40px] lg:h-[60px] lg:w-[60px]">
                     <Image
                       alt={value?.user?.name}
                       src={value?.user?.avatar}
@@ -50,7 +50,7 @@ const TabMyFriend: FC<TTabMyFriendProps> = ({className, value, myFriends = [], o
                   </div>
                   <p className="flex flex-col gap-1">
                     <span className="font-bold text-gray-800">{value?.user?.name}</span>
-                    <span className="text-gray-600">{`${formatVNDate(value?.updatedAt)}`}</span>
+                    <span className="text-sm text-gray-600 lg:text-base">{`${formatVNDate(value?.updatedAt)}`}</span>
                   </p>
                 </div>
                 <FriendPopOver onClick={() => unFriend(value?.user?._id)} />

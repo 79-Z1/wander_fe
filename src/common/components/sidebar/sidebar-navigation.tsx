@@ -4,6 +4,8 @@ import classNames from 'classnames';
 
 import {Button, Icon} from '@/core-ui';
 
+import useGlobalState from '@/common/hooks/use-global-state';
+
 import {sidebarMenuItems} from '@/common/constants';
 
 import {IComponentBaseProps} from '@/common/interfaces';
@@ -15,9 +17,19 @@ interface ISideBarNavigation extends IComponentBaseProps {
 const SideBarNavigation: FC<ISideBarNavigation> = ({isExpand = true, className, ...rest}) => {
   const router = useRouter();
   const path = usePathname();
+  const {setLoading} = useGlobalState();
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [activePath, setActivePath] = useState<string | null>(null);
+
+  function handleSidebarItemClick(item: any) {
+    if (item.path) {
+      router.push(item.path);
+      setActivePath(item.path);
+      setLoading(true);
+      const timeout = setTimeout(() => setLoading(false), 500);
+      return () => clearTimeout(timeout);
+    }
+  }
 
   useEffect(() => {
     setActivePath(path);
@@ -43,17 +55,7 @@ const SideBarNavigation: FC<ISideBarNavigation> = ({isExpand = true, className, 
                   isExpand ? 'justify-between' : 'justify-center'
                 )}
                 variant="default"
-                onClick={() => {
-                  if (item.path) {
-                    router.push(item.path);
-                    setActivePath(item.path);
-                    setIsOpen(false);
-                  }
-                  if (item.path) {
-                    setIsOpen(!isOpen);
-                    router.push(item.path);
-                  }
-                }}
+                onClick={() => handleSidebarItemClick(item)}
               >
                 <div className="flex items-center justify-between gap-4">
                   <Icon name={`ico-${item.icon}`} />

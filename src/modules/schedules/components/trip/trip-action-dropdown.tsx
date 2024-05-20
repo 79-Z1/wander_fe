@@ -41,7 +41,7 @@ const TripActionDopdown: FC<TTripActionDopdownProps> = ({className, onEdit, onDe
             Tạo nhóm chat
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer">Xóa</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer text-red-500">Xóa</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <PopupCreateGroupChat

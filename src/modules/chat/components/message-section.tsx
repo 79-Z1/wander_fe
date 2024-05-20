@@ -1,12 +1,17 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import Image from 'next/image';
-import {GlobalConnectSocket} from '@/common/sockets/global-connect.socket';
+import {useSession} from 'next-auth/react';
+import {ChatConnectSocket} from '@/common/sockets/chat-connect.socket';
 
 import {Button, Icon, Input} from '@/core-ui';
+
+import NotFoundModule from '@/modules/not-found/not-found';
 
 import useChatState from '@/common/hooks/use-chat-state';
 
 import Ellipse from '@/common/components/ellipse';
+
+import {ENUM_SOCKET_EMIT} from '@/common/constants/socket.enum';
 
 import {IComponentBaseProps, IConversation} from '@/common/interfaces';
 
@@ -18,14 +23,18 @@ export type TMessageSectionProps = IComponentBaseProps & {
 };
 
 const MessageSection: FC<TMessageSectionProps> = ({userId, conversation}) => {
-  const {messages, setMessages, sendMessage} = useChatState();
+  const session = useSession();
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatState = useChatState();
 
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    setMessages(conversation.messages);
+    chatState.setMessages(conversation.messages);
+    ChatConnectSocket.emit(ENUM_SOCKET_EMIT.JOIN_CONVERSATION, {
+      conversationId: conversation._id
+    });
   }, []);
 
   const scrollToBottom = () => {
@@ -34,19 +43,26 @@ const MessageSection: FC<TMessageSectionProps> = ({userId, conversation}) => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [chatState.messages]);
 
   function handleSendMessage() {
-    sendMessage(conversation._id, message, GlobalConnectSocket);
+    chatState.sendMessage(session.data!.user.id!, conversation._id, message, ChatConnectSocket);
     setMessage('');
     inputRef.current?.focus();
   }
+
+  if (!session.data?.user) return <NotFoundModule />;
 
   return (
     <>
       <div className="flex items-center gap-x-2 border-b border-slate-300 p-3">
         <div className="relative h-[44px] w-[44px]">
-          <Image src={''} fill alt="avatar" className="absolute rounded-lg object-cover object-center" />
+          <Image
+            src={conversation?.imageUrl || '/images/avatar.png'}
+            fill
+            alt="avatar"
+            className="absolute rounded-lg object-cover object-center"
+          />
         </div>
         <div className="flex flex-col gap-y-3">
           <p className="flex items-center justify-between text-sm font-bold">{conversation?.name}</p>
@@ -61,14 +77,14 @@ const MessageSection: FC<TMessageSectionProps> = ({userId, conversation}) => {
           </div>
         </div>
       </div>
-      <div className="scrollbar flex max-h-[80vh] flex-col overflow-auto px-6">
-        <div className="scrollbar flex flex-col overflow-auto">
-          {messages.map((message, index) => (
+      <div className="scrollbar flex h-[75vh] max-h-[75vh] flex-col overflow-auto px-6">
+        <div className="scrollbar flex grow flex-col gap-1 overflow-auto">
+          {(chatState.messages || []).map((message, index) => (
             <Message key={index} userId={userId || ''} message={message} />
           ))}
           <div ref={messagesEndRef} />
         </div>
-        <div className="mt-3 flex items-center gap-x-1">
+        <div className="mb-1 mt-3 flex items-center gap-x-1">
           <Input
             ref={inputRef}
             className="w-full rounded-lg bg-gray-100 px-2 py-3 text-gray-500"

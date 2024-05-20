@@ -1,5 +1,5 @@
 'use client';
-import {FC} from 'react';
+import {FC, useEffect, useState} from 'react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
@@ -14,6 +14,24 @@ export type TCalendarModuleProps = IComponentBaseProps & {
 };
 
 const CalendarModule: FC<TCalendarModuleProps> = ({className, calendars}) => {
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 1024px)');
+    const handleMediaQueryChange = (event: MediaQueryListEvent) => {
+      setIsLargeScreen(event.matches);
+    };
+
+    // Set initial state
+    setIsLargeScreen(mediaQuery.matches);
+
+    // Listen for changes
+    mediaQuery.addEventListener('change', handleMediaQueryChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaQueryChange);
+    };
+  }, []);
   const formatDayHeader = (info: any) => {
     if (info.view.type === 'timeGridWeek') {
       return info.date.getDate().toString();
@@ -39,12 +57,12 @@ const CalendarModule: FC<TCalendarModuleProps> = ({className, calendars}) => {
     <div className={className}>
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        eventColor="green"
+        initialView={isLargeScreen ? 'dayGridMonth' : 'timeGridWeek'}
+        eventColor="#EFF6FF"
         headerToolbar={{
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          left: isLargeScreen ? 'prev,next today' : 'prev,next',
+          center: isLargeScreen ? 'title' : '',
+          right: isLargeScreen ? 'dayGridMonth,timeGridWeek,timeGridDay' : 'timeGridDay,timeGridWeek'
         }}
         dayHeaderContent={formatDayHeader}
         firstDay={1}
@@ -66,6 +84,9 @@ const CalendarModule: FC<TCalendarModuleProps> = ({className, calendars}) => {
         selectMirror={true}
         dayMaxEvents={true}
         allDaySlot={false}
+        validRange={{
+          start: new Date()
+        }}
       />
     </div>
   );

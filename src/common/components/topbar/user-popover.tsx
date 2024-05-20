@@ -37,7 +37,7 @@ const UserPopOver: FC<TUserPopOverProps> = ({className, avatar}) => {
             <DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer" onClick={() => signOut({redirect: true, callbackUrl: '/'})}>
+          <DropdownMenuItem className="cursor-pointer" onClick={() => signOut({redirect: true, callbackUrl: '/explore'})}>
             Log out
           </DropdownMenuItem>
         </DropdownMenuContent>

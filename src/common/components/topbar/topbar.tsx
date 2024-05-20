@@ -1,6 +1,5 @@
 'use client';
 import React, {FC} from 'react';
-import Image from 'next/image';
 import {useRouter} from 'next/navigation';
 import {useSession} from 'next-auth/react';
 import {debounce} from 'lodash-es';
@@ -11,10 +10,9 @@ import useUserState from '@/common/hooks/use-user-state';
 
 import {IComponentBaseProps} from '@/common/interfaces';
 
-import bellNotificationSVG from '@/assets/icons/bell-notification.svg';
-
 import SearchBarSuggestion from '../search-bar-suggestion';
 
+import NotificationPopover from './notification-popover';
 import UserPopOver from './user-popover';
 
 export type TTopbarProps = IComponentBaseProps;
@@ -50,7 +48,7 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
         onValueChange={handleSearchChange}
         onSelectOption={handleSelectSearchResult}
       />
-      <Image src={bellNotificationSVG} alt="avatar" width={28} height={28} />
+      <NotificationPopover />
       <p className="text-sm font-bold">{session.data?.user?.name || ''}</p>
       <UserPopOver avatar={session.data?.user?.avatar} />
     </div>

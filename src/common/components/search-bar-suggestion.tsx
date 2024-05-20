@@ -1,4 +1,5 @@
 import {type KeyboardEvent, useCallback, useRef, useState} from 'react';
+import Image from 'next/image';
 import {Command as CommandPrimitive} from 'cmdk';
 
 import {CommandGroup, CommandInput, CommandItem, CommandList} from '@/components/ui/command';
@@ -56,23 +57,21 @@ const SearchBarSuggestion = ({
         input.blur();
       }
     },
-    [isOpen, users, onValueChange]
+    [isOpen, inputValue, onEnter]
   );
 
   const handleSelectOption = useCallback(
     (selectedOption: IUser) => {
-      setInputValue(selectedOption.name);
+      setInputValue(selectedOption.name || '');
 
       onValueChange?.(inputValue);
-      onSelectOption?.(selectedOption._id);
+      onSelectOption?.(selectedOption._id || '');
 
-      // This is a hack to prevent the input from being focused after the user selects an option
-      // We can call this hack: "The next tick"
       setTimeout(() => {
         inputRef?.current?.blur();
       }, 0);
     },
-    [onValueChange]
+    [onValueChange, onSelectOption]
   );
 
   const handleInputChange = (text: string) => {
@@ -106,7 +105,7 @@ const SearchBarSuggestion = ({
                 </CommandPrimitive.Loading>
               ) : null}
               {users?.length > 0 && !isLoading ? (
-                <CommandGroup className="max-h-[300px] overflow-auto">
+                <CommandGroup className="max-h-[300px] overflow-scroll">
                   {users.map(option => {
                     return (
                       <CommandItem
@@ -119,7 +118,14 @@ const SearchBarSuggestion = ({
                         onSelect={() => handleSelectOption(option)}
                         className={cn('flex w-full cursor-pointer items-center gap-2 hover:bg-opacity-50')}
                       >
-                        {option.name}
+                        <Image
+                          src={option.avatar || '/images/avatar.png'}
+                          width={40}
+                          height={40}
+                          alt={option.name || ''}
+                          className="rounded-full"
+                        />
+                        <span>{option.name}</span>
                       </CommandItem>
                     );
                   })}

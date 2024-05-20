@@ -1,16 +1,11 @@
 export interface IClassifiedUserConversation {
-  privateConversations: IPrivateConversation[];
-  groupConversations: IGroupConversation[];
+  privateConversations: IConversationDisplay[];
+  groupConversations: IConversationDisplay[];
+  aiConversations: IConversationDisplay[];
 }
 
-export interface IPrivateConversation {
+export interface IConversationDisplay {
   _id: string;
   name?: string;
   imageUrl?: string;
-}
-
-export interface IGroupConversation {
-  _id: string;
-  name?: string;
-  image?: string;
 }

@@ -23,7 +23,7 @@ const FriendPopOver: FC<FriendPopOverProps> = ({className, onClick}) => {
       <Popover.Root open={open}>
         <Popover.Trigger asChild>
           <div
-            className="hidden cursor-pointer items-center space-x-1 md:flex"
+            className="flex cursor-pointer items-center space-x-1"
             aria-label="Update dimensions"
             onClick={() => setOpen(prev => !prev)}
           >
@@ -32,8 +32,9 @@ const FriendPopOver: FC<FriendPopOverProps> = ({className, onClick}) => {
         </Popover.Trigger>
         <Popover.Portal>
           <Popover.Content className="z-10 border-none outline-none" sideOffset={5}>
-            <div className="mr-6 min-w-[150px] rounded-lg border border-gray-700 bg-gray-100 px-2 py-4">
-              <span className="flex justify-center px-2 hover:cursor-pointer" onClick={handleClick}>
+            <div className="mr-6 flex items-center justify-center gap-1 rounded-lg border border-gray-700 bg-gray-100 px-2 py-4">
+              <Icon name="ico-x" />
+              <span className="flex justify-center text-sm hover:cursor-pointer lg:text-base" onClick={handleClick}>
                 Hủy kết bạn
               </span>
             </div>

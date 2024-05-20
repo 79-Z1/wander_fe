@@ -20,7 +20,7 @@ type SidebarProps = IComponentBaseProps & {
   onCollapseClick?: () => void;
 };
 
-const Sidebar: FC<SidebarProps> = ({className, isExpand = true, onCollapseClick, ...rest}) => {
+const Sidebar: FC<SidebarProps> = ({className, isExpand = false, onCollapseClick, ...rest}) => {
   const router = useRouter();
   return (
     <>
@@ -61,7 +61,6 @@ const Sidebar: FC<SidebarProps> = ({className, isExpand = true, onCollapseClick,
               className="mx-auto transition-all duration-500"
               onClick={() => {
                 router.push('/trip/create');
-                onCollapseClick?.();
               }}
             />
             <SideBarNavigation isExpand={isExpand} />
