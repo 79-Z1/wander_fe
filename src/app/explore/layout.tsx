@@ -2,7 +2,6 @@
 import {useState} from 'react';
 import {useSession} from 'next-auth/react';
 import classNames from 'classnames';
-import InitSocket from '@/common/layout/init-socket';
 
 import NotFoundModule from '@/modules/not-found/not-found';
 
@@ -27,7 +26,6 @@ export default function MainLayout({
 
   return (
     <>
-      <InitSocket />
       <MediaContextProvider>
         <>
           <Media greaterThanOrEqual="md" className="relative h-full min-h-screen w-full ">

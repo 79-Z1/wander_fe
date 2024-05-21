@@ -7,7 +7,6 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {Button, Label} from '@/core-ui';
 import Input from '@/core-ui/input';
 
-import {Switch} from '@/components/ui/switch';
 import {cn} from '@/components/utils';
 
 import InputPassword from '@/common/components/input-password';
@@ -58,9 +57,7 @@ const FormLogin: FC<TFormLoginProps> = ({className, onSignIn, ...rest}) => {
           {errors.password && <span className="text-rose-500">{errors.password?.message}</span>}
         </div>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Switch /> <span>Remember me</span>
-          </div>
+          <div className="flex items-center gap-2">{/* <Switch /> <span>Remember me</span> */}</div>
           <Link href={ROUTES.FORGOT_PASSWORD} className="text-sm text-orange-500 hover:no-underline">
             {'Quên mật khẩu'}?
           </Link>{' '}
