@@ -213,7 +213,7 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
                 placeholder={'Nhập tiêu đề lịch trình...'}
                 {...register('topic')}
               />
-              {errors.topic && <span className="text-rose-500">{errors.topic?.message?.toString()}</span>}
+              {errors?.topic && <span className="text-rose-500">{errors?.topic?.message?.toString()}</span>}
             </div>
             <div className="flex grow flex-col space-y-2">
               <Label text="Tải ảnh lên" color="dark" className="font-semibold" />
@@ -250,8 +250,8 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
               /> */}
               <Input className={`hidden`} type="date" {...register('startDate')} />
               <Input className={`hidden`} type="date" {...register('endDate')} />
-              {errors.startDate && <span className="text-rose-500">{errors.startDate?.message?.toString()}</span>}
-              {errors.endDate && <span className="text-rose-500">{errors.endDate.message?.toString()}</span>}
+              {errors?.startDate && <span className="text-rose-500">{errors?.startDate?.message?.toString()}</span>}
+              {errors?.endDate && <span className="text-rose-500">{errors?.endDate.message?.toString()}</span>}
             </div>
             <div className="flex h-max flex-col gap-2">
               <Label text="Mô tả" color="dark" className="font-semibold" />
@@ -262,7 +262,7 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
                 {...register('description')}
               />
               <span>{form.getValues('description').length}/140</span>
-              {errors.description && <span className="text-rose-500">{errors.description?.message?.toString()}</span>}
+              {errors?.description && <span className="text-rose-500">{errors?.description?.message?.toString()}</span>}
             </div>
           </div>
         </div>
@@ -282,7 +282,7 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
                   })}
                   onWheel={e => e.currentTarget.blur()}
                 />
-                {errors && errors.total && <span className="text-rose-500">{errors.total.message}</span>}
+                {errors && errors?.total && <span className="text-rose-500">{errors?.total.message}</span>}
               </div>
             </div>
             <div className="flex h-full w-full flex-col gap-2">
@@ -310,9 +310,7 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
                     {...register(`plans.${index}.title`)}
                     onChange={e => handleChangePlanName(index, e.target.value)}
                   />
-                  {errors && errors.plans && errors.plans[index] && errors.plans[index].title && (
-                    <span className="text-rose-500">{errors.plans[index].title.message}</span>
-                  )}
+                  {errors && <span className="text-rose-500">{errors?.plans?.[index]?.title?.message || ''}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
                   <Label text="Chi phí" color="dark" className="font-semibold" />
@@ -328,9 +326,7 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
                     onChange={e => handleChangePlanCost(index, Number(e.target.value))}
                     onWheel={e => e.currentTarget.blur()}
                   />
-                  {errors && errors.plans && errors.plans[index] && errors.plans[index].cost && (
-                    <span className="text-rose-500">{errors.plans[index].cost.message}</span>
-                  )}
+                  {errors && <span className="text-rose-500">{errors?.plans?.[index]?.cost?.message || ''}</span>}
                 </div>
               </div>
               <div className="flex flex-col gap-2">
@@ -345,9 +341,7 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
                   }}
                 />
                 <Input className={`hidden`} {...register(`plans.${index}.startAt`)} />
-                {errors && errors.plans && errors.plans[index] && errors.plans[index].startAt && (
-                  <span className="text-rose-500">{errors.plans[index].startAt.message}</span>
-                )}
+                {errors && <span className="text-rose-500">{errors?.plans?.[index]?.startAt?.message || ''}</span>}
               </div>
               <div className="flex flex-col gap-2">
                 <Label text="Điểm đến" color="dark" className="font-semibold" />
@@ -358,9 +352,7 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
                   {...register(`plans.${index}.address`)}
                   onChange={e => handleChangePlanAddress(index, e.target.value)}
                 />
-                {errors && errors.plans && errors.plans[index] && errors.plans[index].address && (
-                  <span className="text-rose-500">{errors.plans[index].address.message}</span>
-                )}
+                {errors && <span className="text-rose-500">{errors?.plans?.[index]?.address?.message || ''}</span>}
               </div>
               <div className="grid gap-6 lg:grid-cols-2">
                 <div className="flex flex-col gap-2">

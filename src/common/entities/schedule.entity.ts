@@ -40,6 +40,7 @@ export interface IFormDataSchedule {
 
 export interface ISchedule {
   _id: string;
+  ownerId?: string;
   topic: string;
   imageUrl: string;
   description: string;

@@ -1,25 +1,12 @@
-'use client';
-import React, {FC, useEffect} from 'react';
-import {useRouter} from 'next/navigation';
-import {useSession} from 'next-auth/react';
+import React from 'react';
+import type {Metadata} from 'next';
 
-import ExploreModule from '@/modules/explore/explore.module';
+import HomeModule from '@/modules/home/home.module';
 
-import {IComponentBaseProps} from '@/common/interfaces';
+export default async function TripPage() {
+  return <HomeModule />;
+}
 
-type HomeModuleProps = IComponentBaseProps;
-
-const HomeModule: FC<HomeModuleProps> = () => {
-  const router = useRouter();
-  const session = useSession();
-
-  useEffect(() => {
-    if (session.status === 'authenticated') router.push('/calendar');
-  }, [session.status]);
-
-  if (session.status === 'loading') return null;
-
-  if (session.status !== 'authenticated') return <ExploreModule className="-m-6" />;
-};
-
-export default HomeModule;
+export async function generateMetadata(): Promise<Metadata> {
+  return {title: 'Home', description: 'Home Description'};
+}

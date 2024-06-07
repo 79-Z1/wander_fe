@@ -3,7 +3,7 @@ import type {Metadata} from 'next';
 
 import ExploreModule from '@/modules/explore/explore.module';
 
-export default async function Calendar() {
+export default async function Explore() {
   return <ExploreModule />;
 }
 

@@ -1,7 +1,7 @@
 import * as HttpRequest from '@/common/http/http-request';
 
 import {ENUM_MEMBER_PERMISSION, ENUM_SCHEDULE_TAB} from '../constants';
-import {IFormDataSchedule, ISchedule} from '../entities';
+import {IFormDataSchedule, ISchedule, IScheduleDetail} from '../entities';
 import FetchRequest from '../http/fetch-request';
 import {generateQueryParams} from '../utils/generate-query-params.util';
 
@@ -23,7 +23,7 @@ const readScheduleBySlugSeverSide = async (slug: string) => {
     const res = await FetchRequest(`schedule/${slug}`, {cache: 'no-cache', next: {revalidate: undefined}});
     const json = await res.json();
 
-    return json.metadata as ISchedule;
+    return json.metadata as IScheduleDetail;
   } catch (error) {
     return null;
   }
