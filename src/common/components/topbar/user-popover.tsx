@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import Image from 'next/image';
+import {useRouter} from 'next/navigation';
 import {signOut} from 'next-auth/react';
 
 import {
@@ -16,9 +17,11 @@ import {IComponentBaseProps} from '@/common/interfaces';
 
 export type TUserPopOverProps = IComponentBaseProps & {
   avatar?: string;
+  id?: string;
 };
 
-const UserPopOver: FC<TUserPopOverProps> = ({className, avatar}) => {
+const UserPopOver: FC<TUserPopOverProps> = ({className, avatar, id}) => {
+  const router = useRouter();
   return (
     <div className={cn('UserPopOver', className)} data-testid="UserPopOver">
       <DropdownMenu>
@@ -34,11 +37,16 @@ const UserPopOver: FC<TUserPopOverProps> = ({className, avatar}) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuGroup>
-            <DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" onClick={() => router.push(`/profile/${id}`)}>
+              Trang cá nhân
+            </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer" onClick={() => signOut({redirect: true, callbackUrl: '/explore'})}>
-            Log out
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => signOut({redirect: true, callbackUrl: '/explore'})}
+          >
+            Đăng xuất
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

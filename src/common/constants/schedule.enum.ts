@@ -14,3 +14,9 @@ export enum ENUM_MEMBER_PERMISSION {
   EDIT = 'edit',
   VIEW = 'view'
 }
+
+export enum ENUM_SCHEDULE_TAB {
+  UPCOMING = 'upcoming',
+  COMPLETED = 'completed',
+  IN_PROGRESS = 'in_progress'
+}

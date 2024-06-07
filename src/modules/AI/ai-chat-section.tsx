@@ -68,9 +68,8 @@ const AIMessageSection: FC<TAIMessageSectionProps> = ({userId, conversation}) =>
             <div className="flex items-center gap-x-1">
               <p className="flex items-center gap-x-1">
                 <Ellipse className="bg-red-500" />
-                <span>Online</span>
+                <span>Trực tuyến</span>
               </p>{' '}
-              <span className="text-[#8B8D97]">10 phút trước</span>
             </div>
           </div>
         </div>

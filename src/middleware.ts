@@ -1,20 +1,24 @@
-import {NextRequest, NextResponse} from 'next/server';
+import type {NextRequest, NextResponse} from 'next/server';
+import {withAuth} from 'next-auth/middleware';
 
-export default function middleware(
-  request: NextRequest
-  // event: NextFetchEvent
-) {
-  // return your new response;
-  const wildcard = request.headers.get('host')?.split('.')[0];
-
-  if (wildcard === 'stage' || wildcard?.includes('localhost')) {
-    return NextResponse.next({
-      headers: {
-        ...request.headers,
-        'X-Robots-Tag': 'noindex'
-      }
-    });
+const authMiddleware = withAuth({
+  callbacks: {
+    authorized: ({token}) => {
+      return token != null;
+    }
+  },
+  pages: {
+    signIn: '/login'
   }
+});
 
-  return NextResponse.next();
+export default async function middleware(request: NextRequest) {
+  const response: NextResponse = (authMiddleware as any)(request);
+
+  return response;
 }
+
+export const config = {
+  // Skip all paths that should not be internationalized
+  matcher: ['/((?!api|_next|_vercel|sitemap.xml|sitemap-[\\d].xml|robots.txt|.*\\..*).*)']
+};

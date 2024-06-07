@@ -1,6 +1,7 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import Image from 'next/image';
 import {useRouter} from 'next/navigation';
+import {BellIcon} from 'lucide-react';
 import {GlobalConnectSocket} from '@/common/sockets/global-connect.socket';
 
 import {
@@ -16,9 +17,9 @@ import useNotificationState from '@/common/hooks/use-notification-state';
 
 import {ENUM_SOCKET_EMIT} from '@/common/constants/socket.enum';
 
-import {IComponentBaseProps} from '@/common/interfaces';
+import {forMatMessageTime} from '@/common/utils';
 
-import bellNotificationSVG from '@/assets/icons/bell-notification.svg';
+import {IComponentBaseProps} from '@/common/interfaces';
 
 export type TNotificationPopoverProps = IComponentBaseProps;
 
@@ -28,13 +29,13 @@ const NotificationPopover: FC<TNotificationPopoverProps> = ({className}) => {
 
   useEffect(() => {
     getNotifications();
-  }, []);
+  }, [getNotifications]);
 
-  function markAllAsRead() {
+  const markAllAsRead = useCallback(() => {
     if (countNewNotification > 0) {
       GlobalConnectSocket.emit(ENUM_SOCKET_EMIT.MARK_AS_READ);
     }
-  }
+  }, [countNewNotification]);
 
   return (
     <div className={cn('NotificationPopover', className)} data-testid="NotificationPopover">
@@ -44,13 +45,15 @@ const NotificationPopover: FC<TNotificationPopoverProps> = ({className}) => {
             type="button"
             className="relative inline-flex items-center justify-center rounded-lg border-none text-center text-sm font-medium text-white outline-none"
           >
-            <Image src={bellNotificationSVG} alt="avatar" width={28} height={28} />
-            <div className="absolute -end-2 -top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-red-500 text-xs font-bold text-white">
-              {countNewNotification}
-            </div>
+            <BellIcon className="h-7 w-7 text-gray-600" />
+            {countNewNotification > 0 && (
+              <div className="absolute -end-2 -top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-red-500 text-xs font-bold text-white">
+                {countNewNotification}
+              </div>
+            )}
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-80" forceMount>
+        <DropdownMenuContent className="scrollbar max-h-[60vh] w-80 overflow-y-auto" forceMount>
           <DropdownMenuGroup>
             {notifications.length > 0 ? (
               notifications.map(notification => (
@@ -59,8 +62,19 @@ const NotificationPopover: FC<TNotificationPopoverProps> = ({className}) => {
                   className="flex cursor-pointer gap-2"
                   onClick={() => router.push(notification.url)}
                 >
-                  <Image src={notification.emitter.avatar} alt="avatar" width={28} height={28} />
-                  <p>{notification.content}</p>
+                  <Image
+                    src={notification?.emitter?.avatar || '/images/avatar.png'}
+                    alt="avatar"
+                    width={30}
+                    height={30}
+                    className="rounded-lg bg-black"
+                  />
+                  <p className="flex flex-col gap-1">
+                    <span>{notification.content}</span>
+                    <span className="text-xs text-gray-600">
+                      {forMatMessageTime(notification.createdAt?.toString())}
+                    </span>
+                  </p>
                 </DropdownMenuItem>
               ))
             ) : (

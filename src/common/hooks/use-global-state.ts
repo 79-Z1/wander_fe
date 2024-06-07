@@ -2,9 +2,7 @@ import {create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {immer} from 'zustand/middleware/immer';
 
-import {IInitState} from '@/common/interfaces';
-
-interface IState extends IInitState {
+interface IState {
   isLoading: boolean;
   isOnline: boolean;
 }
@@ -22,12 +20,12 @@ const useGlobalState = create<IState & IActions>()(
       setLoading: isLoading => {
         set(state => {
           state.isLoading = isLoading;
-        }, false);
+        });
       },
       setOnline: isOnline => {
         set(state => {
           state.isOnline = isOnline;
-        }, false);
+        });
       }
     }))
   )

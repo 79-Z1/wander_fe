@@ -5,15 +5,30 @@ import {IScheduleDetail} from '@/common/entities';
 import {Progress} from '@/components/ui/progress';
 import {cn} from '@/components/utils';
 
+import {ENUM_MEMBER_PERMISSION} from '@/common/constants';
+
 import {formatVNDate} from '@/common/utils';
 
 import {IComponentBaseProps} from '@/common/interfaces';
 
+import TripActionDopdown from '../trip-action-dropdown';
+
 export type TTripInfoCardProps = IComponentBaseProps & {
   schedule: IScheduleDetail;
+  handleDeleteSchedule?: (isYes: boolean) => void;
+  handleCreateGroupChat?: (name: string) => void;
+  handleEditClick?: () => void;
+  handleWatchDetail?: () => void;
 };
 
-const TripInfoCard: FC<TTripInfoCardProps> = ({className, schedule}) => {
+const TripInfoCard: FC<TTripInfoCardProps> = ({
+  className,
+  schedule,
+  handleDeleteSchedule,
+  handleCreateGroupChat,
+  handleEditClick,
+  handleWatchDetail
+}) => {
   return (
     <div
       className={cn('TripInfoCard flex flex-col gap-6 rounded-lg bg-zinc-50 p-3 shadow', className)}
@@ -27,11 +42,23 @@ const TripInfoCard: FC<TTripInfoCardProps> = ({className, schedule}) => {
           className="absolute rounded-lg bg-black object-contain object-center"
         />
       </div>
-      <div className="space-y-3">
-        <p className="text-[18px] font-bold">{schedule?.topic}</p>
-        <p className="text-xs text-gray-400">{schedule?.description}</p>
+      <div className="flex justify-between gap-2">
+        <p className="flex flex-col space-y-3">
+          <span className="text-[18px] font-bold">{schedule?.topic}</span>
+          <span className="text-xs text-gray-400">{schedule?.description}</span>
+        </p>
+        <TripActionDopdown
+          isOwner={schedule?.isOwner}
+          canCreateGroupChat={schedule?.canCreateGroupChat}
+          isEditable={schedule?.permission === ENUM_MEMBER_PERMISSION.EDIT}
+          scheduleId={schedule?._id}
+          onEdit={handleEditClick}
+          onCreateChatGroup={handleCreateGroupChat}
+          onDelete={handleDeleteSchedule}
+          onWatchDetail={handleWatchDetail}
+        />
       </div>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <section className="space-y-1">
           <p className="flex justify-between">
             <span>Tiến trình</span>
@@ -39,17 +66,17 @@ const TripInfoCard: FC<TTripInfoCardProps> = ({className, schedule}) => {
           </p>
           <Progress value={schedule?.progress?.percent || 0} max={100} className="w-full" />
         </section>
-        <section className="space-y-1 text-center">
+        <section className="space-y-1 md:text-center">
+          <p>Số thành viên</p>
+          <p className="font-bold">{schedule?.members?.length}</p>
+        </section>
+        <section className="space-y-1 md:text-center">
           <p>Ngày bắt đầu</p>
           <p className="font-bold">{formatVNDate(schedule?.startDate)}</p>
         </section>
-        <section className="space-y-1 text-center">
+        <section className="space-y-1 md:text-center">
           <p>Ngày kết thúc</p>
           <p className="font-bold">{formatVNDate(schedule?.endDate)}</p>
-        </section>
-        <section className="space-y-1 text-center">
-          <p>Số thành viên</p>
-          <p className="font-bold">{schedule?.members?.length + 1}</p>
         </section>
       </div>
     </div>

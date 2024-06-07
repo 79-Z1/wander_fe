@@ -27,7 +27,7 @@ const Login: FC<TLoginProps> = ({className}) => {
   const router = useRouter();
 
   const handleSignInGoogle = async () => {
-    signIn('google', {callbackUrl: '/'});
+    signIn('google', {callbackUrl: '/calendar'});
   };
 
   const handleSignForm = async (formData: IFormData) => {

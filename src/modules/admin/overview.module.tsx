@@ -2,7 +2,7 @@
 import React, {FC, useEffect} from 'react';
 import AdminApi from '@/common/api/admin.api';
 
-import {Loading} from '@/core-ui';
+import LoadingSection from '@/core-ui/loading/loading-section';
 
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {cn} from '@/components/utils';
@@ -46,7 +46,7 @@ const AdminOverviewModule: FC<TAdminOverviewModuleProps> = ({className}) => {
     <div className={cn('AdminOverviewModule', className)} data-testid="AdminOverviewModule">
       <div className="grid grid-cols-2 gap-4">
         {!scheduleCount ? (
-          <Loading />
+          <LoadingSection />
         ) : (
           <AdminCard
             title="Số người dùng mới"
@@ -56,7 +56,7 @@ const AdminOverviewModule: FC<TAdminOverviewModuleProps> = ({className}) => {
           />
         )}
         {!scheduleCount ? (
-          <Loading />
+          <LoadingSection />
         ) : (
           <AdminCard
             title="Số lịch trình mới"
@@ -66,14 +66,16 @@ const AdminOverviewModule: FC<TAdminOverviewModuleProps> = ({className}) => {
           />
         )}
       </div>
-      <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4 shadow">
-          <CardHeader></CardHeader>
+      <div className="mt-5 grid gap-4">
+        <Card className="shadow">
+          <CardHeader className="px-6 font-bold">
+            <CardTitle>Số lịch trình theo từng tháng</CardTitle>
+          </CardHeader>
           <CardContent>
             <Overview data={scheduleStatistic} />
           </CardContent>
         </Card>
-        <Card className="col-span-3 p-6 shadow">
+        <Card className="p-6 shadow">
           <CardHeader className="p-0 pb-3">
             <CardTitle>Bảng xếp hạng</CardTitle>
           </CardHeader>

@@ -108,6 +108,7 @@ const FomSetting: FC<TFomSettingProps> = ({className, defaultValues, onSave}) =>
               } text-gray-text-gray-400 border border-default-border p-3 text-xs md:text-sm`}
               placeholder={'Nhập email của bạn...'}
               {...register('email')}
+              disabled
             />
             {errors.email && <span className="text-rose-500">{errors.email?.message?.toString()}</span>}
           </div>

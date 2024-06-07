@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState, useTransition} from 'react';
 import {usePathname, useRouter} from 'next/navigation';
 import {signOut, useSession} from 'next-auth/react';
 import classNames from 'classnames';
@@ -23,13 +23,26 @@ const MenuHamburger: FC<IMenuHamburgerProps> = ({showMenu, ...rest}) => {
   const session = useSession();
   const path = usePathname();
   const router = useRouter();
-
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [activePath, setActivePath] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  const handleMenuItemClick = useCallback(
+    (item: any) => {
+      if (item.path) {
+        startTransition(() => {
+          router.push(item.path);
+          setActivePath(item.path);
+        });
+        setIsOpen(!isOpen);
+      }
+    },
+    [router]
+  );
 
   useEffect(() => {
     setActivePath(path);
-  }, [path]);
+  }, [path, isPending]);
 
   if (!session) return null;
 
@@ -47,7 +60,7 @@ const MenuHamburger: FC<IMenuHamburgerProps> = ({showMenu, ...rest}) => {
               <>
                 <div className="flex items-center justify-between gap-x-2">
                   <div className="flex">
-                    <UserPopOver avatar={session.data.user.avatar} />
+                    <UserPopOver avatar={session.data.user.avatar} id={session.data.user.id} />
                     <div className="px-2">
                       <p className="text-base font-bold text-black">{session.data?.user?.name}</p>
                       <p className="break-words text-xs text-gray-500">{session.data?.user?.email}</p>
@@ -62,27 +75,15 @@ const MenuHamburger: FC<IMenuHamburgerProps> = ({showMenu, ...rest}) => {
               return (
                 <div
                   key={idx}
-                  className={`flex w-full flex-col items-center justify-center gap-4
-              transition-all duration-500`}
+                  className={`flex w-full flex-col items-center justify-center gap-4 transition-all duration-500`}
                 >
-                  {/* ${item.isLogin && !session?.data?.user.email && 'hidden'} */}
                   <Button
                     className={classNames(
                       'flex w-full cursor-pointer items-center justify-between rounded-lg p-2 font-medium text-gray-400',
                       activeMenuBackground
                     )}
                     variant="default"
-                    onClick={() => {
-                      if (item.path) {
-                        router.push(item.path);
-                        setActivePath(item.path);
-                        setIsOpen(false);
-                      }
-                      if (item.path) {
-                        setIsOpen(!isOpen);
-                        router.push(item.path);
-                      }
-                    }}
+                    onClick={() => handleMenuItemClick(item)}
                   >
                     <div className="flex items-center justify-between gap-4">
                       <Icon name={`ico-${item.icon}`} />
@@ -92,7 +93,6 @@ const MenuHamburger: FC<IMenuHamburgerProps> = ({showMenu, ...rest}) => {
                 </div>
               );
             })}
-
             {session?.data?.user && (
               <Button
                 className="flex items-center gap-x-2 rounded-lg border border-white px-4 py-3 text-gray-50"

@@ -122,3 +122,10 @@ export function forMatMessageTime(date?: string) {
   }
   return getFormatRelative(dateParse.toDate(), 'vi-vn');
 }
+
+export const getInitialEndDate = () => {
+  const now = new Date();
+  const endDate = new Date(now.getTime() + 3600000);
+  endDate.setMinutes(0, 0);
+  return endDate;
+};

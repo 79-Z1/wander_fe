@@ -69,10 +69,18 @@ const MessageSection: FC<TMessageSectionProps> = ({userId, conversation}) => {
           <div className="flex items-center justify-between text-xs text-[#8B8D97]">
             <div className="flex items-center gap-x-1">
               <p className="flex items-center gap-x-1">
-                <Ellipse className="bg-red-500" />
-                <span>Online</span>
-              </p>{' '}
-              <span className="text-[#8B8D97]">10 phút trước</span>
+                {conversation?.isOnline ? (
+                  <>
+                    <Ellipse className="bg-green-500" />
+                    <span>Trực tuyến</span>
+                  </>
+                ) : (
+                  <>
+                    <Ellipse className="bg-red-500" />
+                    <span>Ngoại tuyến</span>
+                  </>
+                )}
+              </p>
             </div>
           </div>
         </div>

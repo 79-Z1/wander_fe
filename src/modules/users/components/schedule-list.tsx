@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {useRouter} from 'next/navigation';
 import {ISchedule} from '@/common/entities';
 
-import TripCard from '@/modules/schedules/components/trip/trip-card';
+import TripCard from '@/modules/schedules/components/trip-card';
 
 import {cn} from '@/components/utils';
 
@@ -26,7 +26,7 @@ const ScheduleList: FC<TScheduleListProps> = ({className, schedules}) => {
       {schedules && schedules.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {schedules.map((schedule, index) => (
-            <TripCard key={index} schedule={schedule} onClick={() => handleClick(schedule._id)} />
+            <TripCard key={index} schedule={schedule} onClick={() => handleClick(schedule._id)} showAction={false} />
           ))}
         </div>
       ) : (

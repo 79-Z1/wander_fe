@@ -18,7 +18,7 @@ export type TMessageProps = IComponentBaseProps & {
 const Message: FC<TMessageProps> = ({className, userId, message, isAI}) => {
   return (
     <div className={cn('Message', className)} data-testid="Message">
-      {userId !== message?.sender._id ? (
+      {userId !== message?.sender?._id ? (
         <div className="flex flex-col items-start gap-1">
           <div className="flex w-fit max-w-1/2 gap-1">
             {isAI ? (
@@ -51,7 +51,7 @@ const Message: FC<TMessageProps> = ({className, userId, message, isAI}) => {
               {message?.text}
             </p>
           </div>
-          <span>{forMatMessageTime(`${message?.messageAt}`)}</span>
+          <span>{forMatMessageTime(`${message?.messageAt?.toString()}`)}</span>
         </div>
       )}
     </div>

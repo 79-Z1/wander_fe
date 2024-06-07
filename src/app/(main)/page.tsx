@@ -1,15 +1,25 @@
-import React from 'react';
-import type {Metadata} from 'next';
-import ScheduleApi from '@/common/api/schedule.api';
+'use client';
+import React, {FC, useEffect} from 'react';
+import {useRouter} from 'next/navigation';
+import {useSession} from 'next-auth/react';
 
-import CalendarModule from '@/modules/calendar/calendar.module';
+import ExploreModule from '@/modules/explore/explore.module';
 
-export default async function Calendar() {
-  const data = await ScheduleApi.readUserCalendarsSeverSide();
+import {IComponentBaseProps} from '@/common/interfaces';
 
-  return <CalendarModule calendars={data} />;
-}
+type HomeModuleProps = IComponentBaseProps;
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {title: 'Calendar', description: 'Calendar Description'};
-}
+const HomeModule: FC<HomeModuleProps> = () => {
+  const router = useRouter();
+  const session = useSession();
+
+  useEffect(() => {
+    if (session.status === 'authenticated') router.push('/calendar');
+  }, [session.status]);
+
+  if (session.status === 'loading') return null;
+
+  if (session.status !== 'authenticated') return <ExploreModule className="-m-6" />;
+};
+
+export default HomeModule;

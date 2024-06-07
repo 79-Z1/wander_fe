@@ -50,7 +50,7 @@ const Topbar: FC<TTopbarProps> = ({className}) => {
       />
       <NotificationPopover />
       <p className="text-sm font-bold">{session.data?.user?.name || ''}</p>
-      <UserPopOver avatar={session.data?.user?.avatar} />
+      <UserPopOver avatar={session.data?.user?.avatar} id={session.data?.user?.id} />
     </div>
   );
 };

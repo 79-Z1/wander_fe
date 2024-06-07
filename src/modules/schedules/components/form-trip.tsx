@@ -19,7 +19,7 @@ import UploadImageSection from '@/common/components/upload-image/upload-image-se
 import {IComponentBaseProps} from '@/common/interfaces';
 
 import FriendsSuggestion from '../../../common/components/friends-suggestion';
-import {CreateTripValidator} from '../validators/trip.validator';
+import {TripValidator} from '../validators/trip.validator';
 
 export interface IFormData {
   _id?: string;
@@ -27,24 +27,24 @@ export interface IFormData {
   total: number;
   description: string;
   imageUrl: string;
-  startDate?: Date;
-  endDate?: Date;
+  startDate: Date;
+  endDate: Date;
   members: IUser[] | IMember[];
   plans?: IPlan[];
 }
 
 export type TFormTripProps = IComponentBaseProps & {
-  defaultValues?: IFormData;
+  defaultValues: IFormData;
   onSubmit?: (formData: IFormData) => void;
 };
 
 type DateRange = {
-  from?: Date | undefined;
-  to?: Date | undefined;
+  from: Date;
+  to: Date;
 };
 
 const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...rest}) => {
-  const form = useForm<IFormData>({resolver: zodResolver(CreateTripValidator), defaultValues});
+  const form = useForm<IFormData>({resolver: zodResolver(TripValidator), defaultValues});
   const {register, handleSubmit, formState, setValue, clearErrors} = form;
   const {errors} = formState;
 
@@ -53,20 +53,28 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
   const [planList, setPlanList] = useState<IPlan[]>(defaultValues?.plans || []);
   const [mainImageUrl, setMainImageUrl] = useState<string>(defaultValues?.imageUrl || '');
   const [dateRange, setDateRange] = useState<DateRange>({
-    from: defaultValues?.startDate,
-    to: defaultValues?.endDate
+    from: defaultValues.startDate,
+    to: defaultValues.endDate
   });
 
   useEffect(() => {
-    const getFriendList = async () => {
+    const fetchFriendList = async () => {
       try {
-        const response = await FriendApi.getFriendList();
-        setFriendList(response.metadata || []);
+        const cachedFriends = sessionStorage.getItem('friendList');
+        if (cachedFriends) {
+          setFriendList(JSON.parse(cachedFriends));
+        } else {
+          const response = await FriendApi.getFriendList();
+          const friends = response.metadata || [];
+          setFriendList(friends);
+          sessionStorage.setItem('friendList', JSON.stringify(friends)); // Cache the friend list
+        }
       } catch (error) {
-        error;
+        // eslint-disable-next-line no-console
+        console.error('Failed to fetch friend list', error);
       }
     };
-    getFriendList();
+    fetchFriendList();
   }, []);
 
   const handleUpFile = async (file: File) => {
@@ -82,13 +90,14 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
 
   const handleDateStart = (date: Date) => {
     if (date) {
-      form.setValue('startDate', date!);
+      form.setValue('startDate', date);
+      form.setValue(`plans.${0}.startAt`, date);
       setDateRange(prev => ({...prev, from: date}));
     }
   };
   const handleDateEnd = (date: Date) => {
     if (date) {
-      form.setValue('endDate', date!);
+      form.setValue('endDate', date);
       setDateRange(prev => ({...prev, to: date}));
     }
   };
@@ -98,13 +107,22 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
   }
 
   function handleAddPlan() {
-    setPlanList([...planList, {} as IPlan]);
+    setPlanList([
+      ...planList,
+      {
+        address: '',
+        cost: 0,
+        title: ''
+      } as IPlan
+    ]);
+    setValue(`plans`, [...planList, {address: '', cost: 0, title: '', startAt: dateRange.from} as IPlan]);
   }
 
   function handleRemovePlan(index: number) {
     const newPlanList = [...planList];
     newPlanList.splice(index, 1);
     setPlanList(newPlanList);
+    setValue(`plans`, newPlanList);
   }
 
   function handleChangePlanName(index: number, name: string) {
@@ -186,7 +204,7 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
   return (
     <div className={cn('form-login', className)} data-testid="form-login" {...rest}>
       <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit(submitForm)} method="post">
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid gap-6 lg:grid-cols-2">
           <div className="flex flex-col gap-3">
             <div className="space-y-2">
               <Label text="Tiêu đề" color="dark" className="font-semibold" />
@@ -203,12 +221,13 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid gap-3 md:grid-cols-2">
               <div className="space-y-2">
                 <Label text="Bắt đầu" color="dark" className="font-semibold" />
                 <DateTimePicker
-                  className={cn('w-full')}
-                  defaultDate={dateRange?.from}
+                  className={'w-full'}
+                  defaultDate={dateRange.from}
+                  fromDate={new Date()}
                   onChange={date => {
                     handleDateStart(date);
                   }}
@@ -217,9 +236,9 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
               <div className="space-y-2">
                 <Label text="Kết thúc" color="dark" className="font-semibold" />
                 <DateTimePicker
-                  className={cn('w-full')}
-                  defaultDate={dateRange.to! < dateRange.from! ? dateRange?.from : dateRange?.to}
-                  fromDate={dateRange?.from}
+                  className={'w-full'}
+                  defaultDate={dateRange.to < dateRange.from ? dateRange?.from : dateRange?.to}
+                  fromDate={dateRange.from}
                   onChange={date => {
                     handleDateEnd(date);
                   }}
@@ -236,13 +255,19 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
             </div>
             <div className="flex h-max flex-col gap-2">
               <Label text="Mô tả" color="dark" className="font-semibold" />
-              <Textarea className="grow rounded-lg pl-4 pt-3" rows={5} {...register('description')} />
+              <Textarea
+                className="grow rounded-lg px-2 pt-1 md:px-4 md:pt-3"
+                rows={5}
+                maxLength={140}
+                {...register('description')}
+              />
+              <span>{form.getValues('description').length}/140</span>
               {errors.description && <span className="text-rose-500">{errors.description?.message?.toString()}</span>}
             </div>
           </div>
         </div>
         <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid gap-6 md:grid-cols-2">
             <div className="flex flex-col gap-3">
               <div className="space-y-2">
                 <Label text="Tổng Chi phí" color="dark" className="font-semibold" />
@@ -251,8 +276,11 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
                   placeholder={'Nhập tổng chi phí...'}
                   type="number"
                   {...register('total', {
-                    setValueAs: v => (v === '' ? undefined : parseInt(v, 10))
+                    min: 0,
+                    valueAsNumber: true,
+                    validate: value => value >= 0
                   })}
+                  onWheel={e => e.currentTarget.blur()}
                 />
                 {errors && errors.total && <span className="text-rose-500">{errors.total.message}</span>}
               </div>
@@ -270,15 +298,15 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
           {planList.map((plan, index) => (
             <div className="space-y-3" key={index}>
               <div className="flex items-center justify-between">
-                <p className="font-bold text-gray-950">Lịch trình - {index + 1}</p>
+                <p className="font-bold text-gray-950">Kế hoạch - {index + 1}</p>
                 <Icon name="ico-minus-circle text-orange-500" onClick={() => handleRemovePlan(index)} />
               </div>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid gap-6 md:grid-cols-2">
                 <div className="flex flex-col gap-2">
-                  <Label text="Tên lịch trình" color="dark" className="font-semibold" />
+                  <Label text="Tên kế hoạch" color="dark" className="font-semibold" />
                   <Input
                     className={`text-gray-text-gray-400 w-full rounded-lg border-none bg-gray-100 px-2 py-3 text-xs md:text-sm`}
-                    placeholder={'Nhập tên lịch trình...'}
+                    placeholder={'Nhập tên kế hoạch...'}
                     {...register(`plans.${index}.title`)}
                     onChange={e => handleChangePlanName(index, e.target.value)}
                   />
@@ -294,9 +322,11 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
                     type="number"
                     min={0}
                     {...register(`plans.${index}.cost`, {
-                      setValueAs: v => (v === '' ? undefined : parseInt(v, 10))
+                      valueAsNumber: true,
+                      value: plan.cost
                     })}
                     onChange={e => handleChangePlanCost(index, Number(e.target.value))}
+                    onWheel={e => e.currentTarget.blur()}
                   />
                   {errors && errors.plans && errors.plans[index] && errors.plans[index].cost && (
                     <span className="text-rose-500">{errors.plans[index].cost.message}</span>
@@ -306,10 +336,10 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
               <div className="flex flex-col gap-2">
                 <Label text="Thời gian" color="dark" className="font-semibold" />
                 <DateTimePicker
-                  className={cn('w-full')}
-                  fromDate={dateRange?.from ? dateRange?.from : new Date()}
-                  toDate={dateRange?.to ? dateRange?.to : new Date()}
-                  defaultDate={plan.startAt ? new Date(plan.startAt) : undefined}
+                  className={'w-full'}
+                  fromDate={dateRange.from}
+                  toDate={dateRange.to}
+                  defaultDate={plan.startAt ? new Date(plan.startAt) : dateRange.from}
                   onChange={date => {
                     handleChangePlanStartAt(index, date);
                   }}
@@ -332,7 +362,7 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
                   <span className="text-rose-500">{errors.plans[index].address.message}</span>
                 )}
               </div>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid gap-6 lg:grid-cols-2">
                 <div className="flex flex-col gap-2">
                   <Label text="Tìm kiếm địa điểm" color="dark" className="font-semibold" />
                   {plan.location ? (
@@ -357,14 +387,17 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
             </div>
           ))}
           <button
-            className="flex w-fit items-center gap-1 rounded-lg bg-orange-500 p-2 font-bold text-[#FCFCFC]"
+            className="flex w-fit items-center gap-1 rounded-lg bg-orange-500 p-2 text-sm font-bold text-[#FCFCFC] lg:text-base"
             type="button"
             onClick={handleAddPlan}
           >
             <Icon name="ico-plus" />
             Thêm lịch trình
           </button>
-          <button type="submit" className="w-full rounded-lg bg-orange-500 p-2 font-bold text-[#FCFCFC]">
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-orange-500 p-2 text-sm font-bold text-[#FCFCFC] lg:text-base"
+          >
             Tiếp tục
           </button>
         </div>

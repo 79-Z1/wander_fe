@@ -1,6 +1,8 @@
 import {useEffect} from 'react';
 import {Session} from 'next-auth';
 
+import {useToast} from '@/components/ui/use-toast';
+
 import {ENUM_SOCKET_LISTENER} from '../constants/socket.enum';
 import useFriendState from '../hooks/use-friend-state';
 import useNotificationState from '../hooks/use-notification-state';
@@ -10,6 +12,7 @@ export default function useCommonListener(params: {socket: TSocket; session?: Se
   const {socket, session} = params;
   const friendState = useFriendState();
   const notificationState = useNotificationState();
+  const {toast} = useToast();
 
   useEffect(() => {
     socket.auth = {userId: session?.user.id};
@@ -38,8 +41,12 @@ export default function useCommonListener(params: {socket: TSocket; session?: Se
 
   useEffect(() => {
     socket.on(ENUM_SOCKET_LISTENER.UPDATE_NOTIFICATION, params => {
-      console.log('🚀 ~ useEffect ~ params:::', params);
       notificationState.updateNotifications(params.notifications);
+      toast({
+        description: 'Bạn có thông báo mới',
+        variant: 'success',
+        duration: 3000
+      });
     });
     socket.on(ENUM_SOCKET_LISTENER.UPDATE_FRIEND, param => {
       if (param.type === 'send') {

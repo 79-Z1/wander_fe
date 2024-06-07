@@ -5,7 +5,7 @@ import {useSession} from 'next-auth/react';
 import classNames from 'classnames';
 import UserApi from '@/common/api/user.api';
 
-import {Loading} from '@/core-ui';
+import LoadingSection from '@/core-ui/loading/loading-section';
 
 import {useToast} from '@/components/ui/use-toast';
 
@@ -39,7 +39,7 @@ const SettingModule: FC<TSettingModuleProps> = ({className}) => {
   }, []);
 
   if (!defaultValues) {
-    return <Loading className="grid w-full place-items-center" />;
+    return <LoadingSection />;
   }
 
   if (session.status === 'unauthenticated' || !session.data) {

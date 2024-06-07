@@ -1,6 +1,7 @@
 'use client';
-import React, {FC} from 'react';
+import React, {FC, useMemo} from 'react';
 import {useRouter} from 'next/navigation';
+import dayjs from 'dayjs';
 
 import {useToast} from '@/components/ui/use-toast';
 import {cn} from '@/components/utils';
@@ -14,11 +15,12 @@ import FormTrip, {IFormData} from '../form-trip';
 
 export type TCreateTripModuleProps = IComponentBaseProps;
 
-const defaultValues: IFormData = {
+const formatEndDate = dayjs().startOf('day').add(1).toDate();
+const initialDefaultValues: IFormData = {
   topic: '',
   total: 0,
-  startDate: new Date(new Date().setHours(0, 0, 0)),
-  endDate: new Date(new Date().setHours(0, 1, 0)),
+  startDate: new Date(Date.now()),
+  endDate: formatEndDate,
   description: '',
   imageUrl: '',
   members: [],
@@ -30,6 +32,15 @@ const CreateTripModule: FC<TCreateTripModuleProps> = ({className}) => {
   const {toast} = useToast();
   const scheduleState = useScheduleState();
   const {setLoading} = useGlobalState();
+
+  const defaultValues = useMemo(
+    () => ({
+      ...initialDefaultValues,
+      startDate: new Date(new Date().setHours(0, 0, 0, 0)),
+      endDate: dayjs().startOf('day').add(1, 'day').toDate()
+    }),
+    []
+  );
 
   function submitCreate(formData: IFormData) {
     scheduleState.create?.(formData);
@@ -50,7 +61,7 @@ const CreateTripModule: FC<TCreateTripModuleProps> = ({className}) => {
       className={cn('create-trip-module h-full w-full rounded-lg bg-zinc-50 p-6', className)}
       data-testid="CreateTripModule"
     >
-      <h1 className="px-4 pb-3 text-center text-2xl font-bold">Tạo hành trình mới</h1>
+      <h1 className="px-4 pb-3 text-center text-2xl font-bold">Tạo lịch trình mới</h1>
       <FormTrip defaultValues={defaultValues} onSubmit={submitCreate} />
     </div>
   );

@@ -50,6 +50,9 @@ export interface ISchedule {
   endDate: Date;
   status: ENUM_SCHEDULE_STATUS;
   progress?: number;
+  isOwner?: boolean;
+  canCreateGroupChat?: boolean;
+  permission?: ENUM_MEMBER_PERMISSION;
 }
 
 export interface IScheduleDetail {
@@ -58,7 +61,9 @@ export interface IScheduleDetail {
   imageUrl: string;
   description: string;
   plans: IPlan[];
-  members: IUser[];
+  members: (IUser & {
+    permission?: ENUM_MEMBER_PERMISSION;
+  })[];
   total: number;
   startDate: Date;
   endDate: Date;
@@ -67,4 +72,8 @@ export interface IScheduleDetail {
     percent?: number;
     part?: string;
   };
+  isOwner?: boolean;
+  ownerId: string;
+  permission?: ENUM_MEMBER_PERMISSION;
+  canCreateGroupChat?: boolean;
 }

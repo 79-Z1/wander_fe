@@ -15,6 +15,7 @@ export interface IUser {
   provider?: string;
   authType?: string;
   isActive?: boolean;
+  isOnline?: boolean;
   role?: UserRole;
 }
 

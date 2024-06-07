@@ -8,4 +8,5 @@ export interface IConversationDisplay {
   _id: string;
   name?: string;
   imageUrl?: string;
+  isOnline?: boolean;
 }

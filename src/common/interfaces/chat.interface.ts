@@ -34,4 +34,5 @@ export interface IConversation {
   participants: IParticipant[];
   isActive: boolean;
   messages: IMessage[];
+  isOnline: boolean;
 }

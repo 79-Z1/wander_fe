@@ -1,13 +1,13 @@
 export const sidebarMenuItems = [
   {
-    name: 'Lịch trình',
-    path: '/',
-    icon: 'calendar-heart'
+    name: 'Trang chủ',
+    path: '/calendar' || '/',
+    icon: 'home-dash'
   },
   {
-    name: 'Chuyến đi',
+    name: 'Lịch trình',
     path: '/trip',
-    icon: 'flag-triangle'
+    icon: 'calendar-heart'
   },
   {
     name: 'Bạn bè',

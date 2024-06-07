@@ -1,7 +1,6 @@
 'use client';
 import React, {FC} from 'react';
 import Image from 'next/image';
-import {useSession} from 'next-auth/react';
 
 import {cn} from '@/components/utils';
 

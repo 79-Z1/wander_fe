@@ -3,7 +3,7 @@ import React, {FC, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 import ScheduleApi from '@/common/api/schedule.api';
 
-import {Loading} from '@/core-ui';
+import LoadingSection from '@/core-ui/loading/loading-section';
 
 import NotFoundModule from '@/modules/not-found/not-found';
 
@@ -64,15 +64,15 @@ const EditTripModule: FC<TEditTripModuleProps> = ({className, slug}) => {
   }
 
   if (!defaultValues) {
-    return <Loading className="grid w-full place-items-center" />;
+    return <LoadingSection />;
   }
 
   return (
     <div
-      className={cn('create-trip-module h-full w-full rounded-lg bg-zinc-50 p-6', className)}
+      className={cn('edit-trip-module h-full w-full rounded-lg bg-zinc-50 p-6', className)}
       data-testid="EditTripModule"
     >
-      <h1 className="px-4 pb-3 text-center text-2xl font-bold">Chỉnh sửa hành trình</h1>
+      <h1 className="px-4 pb-3 text-center text-2xl font-bold">Chỉnh sửa lịch trình</h1>
       <FormTrip defaultValues={defaultValues} onSubmit={submitEdit} />
     </div>
   );

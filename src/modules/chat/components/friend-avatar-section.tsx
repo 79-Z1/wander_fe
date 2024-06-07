@@ -10,15 +10,32 @@ import {IComponentBaseProps} from '@/common/interfaces';
 
 import AIImage from '@/assets/images/ai-avatar.png';
 
+import ChatActionDopdown from './chat-action-dropdown';
+
 export type TFriendAvatarSectionProps = IComponentBaseProps & {
   isAI?: boolean;
   contact?: IConversationDisplay;
   onClick?: (conversationId?: string) => void;
+  onEditName?: (name: string) => void;
+  onDelete?: (isYes: boolean, conversationId: string) => void;
 };
 
-const FriendAvatarSection: FC<TFriendAvatarSectionProps> = ({className, contact, isAI, onClick}) => {
+const FriendAvatarSection: FC<TFriendAvatarSectionProps> = ({
+  className,
+  contact,
+  isAI,
+  onClick,
+  onEditName,
+  onDelete
+}) => {
   function handleClick(id?: string) {
     onClick?.(id);
+  }
+  function handleEditName(name: string) {
+    onEditName?.(name);
+  }
+  function handleDelete(isYes: boolean) {
+    onDelete?.(isYes, contact?._id || '');
   }
   return (
     <div
@@ -34,7 +51,7 @@ const FriendAvatarSection: FC<TFriendAvatarSectionProps> = ({className, contact,
             src={contact?.imageUrl || '/images/avatar.png'}
             fill
             alt="avatar"
-            className="absolute rounded-lg object-cover object-center"
+            className="absolute rounded-lg bg-black object-cover object-center"
           />
         )}
       </div>
@@ -45,15 +62,24 @@ const FriendAvatarSection: FC<TFriendAvatarSectionProps> = ({className, contact,
           ) : (
             <>
               <span>{contact?.name}</span>
-              <span className="ml-2 rounded-full bg-orange-500 px-2 py-1 text-xs font-bold text-white">2</span>
             </>
           )}
         </p>
         <div className="flex items-center justify-between text-xs text-[#8B8D97]">
           <div className="flex items-center gap-x-1">
-            <Ellipse className="bg-red-500" /> <span>10 phút trước</span>
+            {contact?.isOnline ? (
+              <>
+                <Ellipse className="bg-green-500" />
+                <span>Trực tuyến</span>
+              </>
+            ) : (
+              <>
+                <Ellipse className="bg-red-500" />
+                <span>Ngoại tuyến</span>
+              </>
+            )}
           </div>
-          <p>12:55 am</p>
+          <ChatActionDopdown contact={contact} onEdit={handleEditName} onDelete={handleDelete} />
         </div>
       </div>
     </div>

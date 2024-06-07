@@ -7,6 +7,7 @@ import ChatApi from '@/common/api/chat.api';
 import {IClassifiedUserConversation} from '@/common/entities';
 import {ChatConnectSocket} from '@/common/sockets/chat-connect.socket';
 
+import {useToast} from '@/components/ui/use-toast';
 import {cn} from '@/components/utils';
 
 import useFriendState from '@/common/hooks/use-friend-state';
@@ -31,6 +32,7 @@ export type TChatModuleProps = IComponentBaseProps & {
 const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
   const session = useSession();
   const router = useRouter();
+  const {toast} = useToast();
   const {users, isFetching, searchByName, setUsers} = useUserState();
   const friendState = useFriendState();
 
@@ -57,6 +59,58 @@ const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
     ChatConnectSocket.emit(ENUM_SOCKET_EMIT.JOIN_CONVERSATION, {
       conversationId: conversationId ?? ''
     });
+  }
+
+  async function handleUpdateContactName(name: string) {
+    if (!name.trim()) return;
+    try {
+      const res = await ChatApi.updateConversationName(conversation?._id || '', name);
+      if (res.metadata) {
+        setContactList(() => {
+          const newGroupConversations = contactList.groupConversations.map(groupConversation => {
+            if (groupConversation._id === conversation?._id) {
+              return {...groupConversation, name: name};
+            }
+            return groupConversation;
+          });
+          return {...contactList, groupConversations: newGroupConversations};
+        });
+        toast({title: 'Cập nhật tên thành công!', variant: 'success'});
+      }
+    } catch (error) {
+      error;
+    }
+  }
+
+  async function deleteConversationOnUserSide(
+    isYes: boolean,
+    conversationId: string,
+    type: 'group' | 'private' | 'ai'
+  ) {
+    if (!isYes) return;
+    const res = await ChatApi.deleteConversationOnUserSide(conversationId);
+    if (res.metadata) {
+      switch (type) {
+        case 'group':
+          setContactList(() => {
+            const newGroupConversations = contactList.groupConversations.filter(
+              groupConversation => groupConversation._id !== conversationId
+            );
+            return {...contactList, groupConversations: newGroupConversations};
+          });
+          break;
+        case 'private':
+          setContactList(() => {
+            const newPrivateConversations = contactList.privateConversations.filter(
+              privateConversation => privateConversation._id !== conversationId
+            );
+            return {...contactList, privateConversations: newPrivateConversations};
+          });
+          break;
+        case 'ai':
+          break;
+      }
+    }
   }
 
   function handleSearchChange(text: string) {
@@ -95,19 +149,26 @@ const ChatModule: FC<TChatModuleProps> = ({className, conversation}) => {
             />
           </div>
           <ChatCollapsible
+            type="ai"
             coversations={contactList?.aiConversations}
             triggerText="Wander AI"
             onClick={handleClickFriendAvatar}
+            onDelete={deleteConversationOnUserSide}
           />
           <ChatCollapsible
+            type="private"
             coversations={contactList?.privateConversations}
             triggerText="Tin nhắn riêng tư"
             onClick={handleClickFriendAvatar}
+            onDelete={deleteConversationOnUserSide}
           />
           <ChatCollapsible
+            type="group"
             coversations={contactList?.groupConversations}
             triggerText="Tin nhắn nhóm"
             onClick={handleClickFriendAvatar}
+            onEditName={handleUpdateContactName}
+            onDelete={deleteConversationOnUserSide}
           />
         </div>
 

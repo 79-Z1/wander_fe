@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 
-import {Loading} from '@/core-ui';
+import LoadingSection from '@/core-ui/loading/loading-section';
 
 import {cn} from '@/components/utils';
 
@@ -14,7 +14,7 @@ const FriendLoading: FC<TFriendLoadingProps> = ({className}) => {
       className={cn('friend-loading', 'flex h-full w-full items-center justify-center', className)}
       data-testid="FriendLoading"
     >
-      <Loading />
+      <LoadingSection />
     </div>
   );
 };

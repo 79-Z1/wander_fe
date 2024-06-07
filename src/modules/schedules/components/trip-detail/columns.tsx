@@ -16,7 +16,7 @@ import {formatPlanStatus} from '../../utils';
 
 export const columns: ColumnDef<IPlan>[] = [
   {
-    id: 'actions',
+    id: 'index',
     header: ({column}) => <DataTableColumnHeader column={column} title="STT" />,
     cell: ({row}) => <div className="w-[20px]">{row.index + 1}</div>,
     enableSorting: false
@@ -32,7 +32,7 @@ export const columns: ColumnDef<IPlan>[] = [
           src={row.getValue('imageUrl') || EmptySchedule}
           width={60}
           height={60}
-          alt={row.getValue('title')}
+          alt={row.getValue('imageUrl')}
         />
       </div>
     ),
@@ -52,7 +52,7 @@ export const columns: ColumnDef<IPlan>[] = [
     }
   },
   {
-    id: 'date',
+    id: 'startAt',
     accessorKey: 'startAt',
     header: ({column}) => <DataTableColumnHeader column={column} title="Ngày" />,
     cell: ({row}) => {
@@ -64,7 +64,7 @@ export const columns: ColumnDef<IPlan>[] = [
     }
   },
   {
-    id: 'time',
+    id: 'startAt2',
     accessorKey: 'startAt',
     header: ({column}) => <DataTableColumnHeader column={column} title="Thời gian" />,
     cell: ({row}) => {
@@ -76,14 +76,36 @@ export const columns: ColumnDef<IPlan>[] = [
     }
   },
   {
+    id: 'status',
     accessorKey: 'status',
     header: ({column}) => <DataTableColumnHeader column={column} title="Tình trạng" />,
     cell: ({row}) => {
-      return (
-        <div className="flex w-fit items-center rounded-lg bg-blue-400 px-3 py-[6px]">
-          <span>{formatPlanStatus(row.getValue('status'))}</span>
-        </div>
-      );
+      switch (row.getValue('status')) {
+        case 'in_progress':
+          return (
+            <div className="flex w-fit items-center rounded-lg bg-[rgba(234,179,8,0.20)] px-3 py-[6px]">
+              <span className="text-yellow-500">{formatPlanStatus(row.getValue('status'))}</span>
+            </div>
+          );
+        case 'in_coming':
+          return (
+            <div className="flex w-fit items-center rounded-lg bg-[rgba(59,130,246,0.20)] px-3 py-[6px]">
+              <span className="text-blue-500">{formatPlanStatus(row.getValue('status'))}</span>
+            </div>
+          );
+        case 'done':
+          return (
+            <div className="flex w-fit items-center rounded-lg bg-[rgba(34,197,94,0.20)] px-3 py-[6px]">
+              <span className="text-green-500">{formatPlanStatus(row.getValue('status'))}</span>
+            </div>
+          );
+        default:
+          return (
+            <div className="flex w-fit items-center rounded-lg bg-[rgba(34,197,94,0.20)] px-3 py-[6px]">
+              <span className="text-green-500">{formatPlanStatus(row.getValue('status'))}</span>
+            </div>
+          );
+      }
     },
     enableSorting: false
   },

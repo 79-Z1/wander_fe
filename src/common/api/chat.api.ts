@@ -27,11 +27,21 @@ const askAI = async (conversationId: string, prompt: string) => {
   return await HttpRequest.post<IMessage[]>(`gemini`, {prompt, conversationId});
 };
 
+const updateConversationName = async (conversationId: string, name: string) => {
+  return await HttpRequest.patch<boolean>(`chat/name`, {name, conversationId});
+};
+
+const deleteConversationOnUserSide = async (conversationId: string) => {
+  return await HttpRequest.post<boolean>(`chat/delete-on-user-side`, {conversationId});
+};
+
 export const ChatApi = {
   readConversationBySlugSeverSide,
   getUserConservations,
   createGroupChat,
-  askAI
+  askAI,
+  updateConversationName,
+  deleteConversationOnUserSide
 };
 
 export default ChatApi;

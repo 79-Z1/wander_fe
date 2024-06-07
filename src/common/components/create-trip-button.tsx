@@ -23,7 +23,7 @@ const CreateTrip: FC<ICreateTripProps> = ({className, isExpand = true, onClick})
       onClick={onClick}
     >
       <Icon name="ico-plus-circle text-orange-500" />
-      {isExpand && <span className="inline-block text-orange-500">Tạo chuyến đi</span>}
+      {isExpand && <span className="inline-block text-orange-500">Tạo lịch trình</span>}
     </Button>
   );
 };

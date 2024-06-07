@@ -18,13 +18,12 @@ interface ITopBarMobileProps extends IComponentBaseProps {
 const TopBarMobile = ({showMenu, onShowMenu, onCloseMenu, bgColorClassname = '', ...rest}: ITopBarMobileProps) => {
   return (
     <div
-      className={`bg-zinc-50 px-6 pt-4 text-black transition-all ${bgColorClassname} duration-300 md:py-6 md:pb-6
-      `}
+      className={`bg-zinc-50 px-6 pb-2 pt-4 text-black transition-all ${bgColorClassname} duration-300 md:py-6 md:pb-6`}
       {...rest}
     >
       <div className="flex items-center justify-between">
-        <div className="flex gap-x-4" onClick={onCloseMenu}>
-          <Image src={logo} alt="Wander" width={48} height={48} />
+        <div className="flex items-center gap-x-4" onClick={onCloseMenu}>
+          <Image src={logo} alt="Wander" width={38} height={38} />
         </div>
         <div className="flex items-center gap-x-4">
           <Icon

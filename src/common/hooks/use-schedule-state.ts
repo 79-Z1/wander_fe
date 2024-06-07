@@ -5,6 +5,7 @@ import {immer} from 'zustand/middleware/immer';
 import {IInitState} from '@/common/interfaces';
 
 import ScheduleApi from '../api/schedule.api';
+import {ENUM_SCHEDULE_TAB} from '../constants';
 import {IFormDataSchedule, ISchedule} from '../entities';
 
 interface IState extends IInitState {
@@ -14,12 +15,14 @@ interface IState extends IInitState {
 interface IActions {
   create: (data: IFormDataSchedule) => void;
   update: (data: IFormDataSchedule) => void;
-  getAll: () => void;
+  getAll: (tab: ENUM_SCHEDULE_TAB) => void;
+  deleteSchedule: (scheduleId: string) => void;
+  setLoading: (status: boolean) => void;
 }
 //TODO remove
 const useScheduleState = create<IState & IActions>()(
   devtools(
-    immer(set => ({
+    immer((set, get) => ({
       isFetching: true,
       schedules: [],
       create: async data => {
@@ -48,9 +51,9 @@ const useScheduleState = create<IState & IActions>()(
           set({isFetching: false}, false);
         }
       },
-      getAll: async () => {
+      getAll: async tab => {
         try {
-          const res = await ScheduleApi.getAll();
+          const res = await ScheduleApi.getAll(tab);
           set(state => {
             state.schedules = res.metadata;
             state.statusCode = res.statusCode;
@@ -61,6 +64,24 @@ const useScheduleState = create<IState & IActions>()(
         } catch (error) {
           set({isFetching: false}, false);
         }
+      },
+      deleteSchedule: async scheduleId => {
+        try {
+          const res = await ScheduleApi.deleteSchedule(scheduleId);
+          const newSchedules = get().schedules.filter(schedule => schedule._id !== scheduleId);
+          set(state => {
+            state.schedules = newSchedules;
+            state.statusCode = res.statusCode;
+            state.error = res.error;
+            state.message = res.message;
+            state.isFetching = false;
+          }, false);
+        } catch (error) {
+          set({isFetching: false}, false);
+        }
+      },
+      setLoading: (status: boolean) => {
+        set({isFetching: status}, false);
       }
     }))
   )

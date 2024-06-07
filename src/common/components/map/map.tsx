@@ -6,7 +6,7 @@ import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
 import {FullscreenControl} from 'react-leaflet-fullscreen';
 import {ILocationSearch} from '@/common/entities';
 
-import {Loading} from '@/core-ui';
+import LoadingSection from '@/core-ui/loading/loading-section';
 
 import {cn} from '@/components/utils';
 
@@ -34,32 +34,37 @@ export type TMapProps = IComponentBaseProps & {
 const Map: FC<TMapProps> = ({className, defaultLocation, isWayPoints = false, onSearch}) => {
   const searchParams = useSearchParams();
   const {data, isLoading} = useGeolocation();
-  const [defaultValue, setDefaultValue] = useState<ILocationSearch | undefined>();
-  const [isSearched, setIsSearched] = React.useState(false);
+  const [location, setLocation] = useState<ILocationSearch | undefined>(defaultLocation);
+  const [isSearched, setIsSearched] = useState(false);
 
   useEffect(() => {
     const lat = Number(searchParams?.get('lat'));
     const lng = Number(searchParams?.get('lng'));
     const address = searchParams?.get('address') || '';
-    if (lat && lng) setDefaultValue({lat, lng, address});
-    else if (defaultLocation) setDefaultValue(defaultLocation);
-  }, []);
+    if (lat && lng) {
+      setLocation({lat, lng, address});
+    } else if (defaultLocation) {
+      setLocation(defaultLocation);
+    }
+  }, [defaultLocation, searchParams]);
 
-  if (isLoading) return <Loading />;
-
-  function handleSearch(e: any) {
+  const handleSearch = (e: LeafletEvent) => {
     if (e) setIsSearched(true);
     onSearch?.(e);
-  }
+  };
+
+  if (isLoading) return <LoadingSection />;
 
   return (
     <div className={cn('map h-full w-full', className)} data-testid="Map">
       <MapContainer
         className="!z-1 h-full w-full rounded-lg"
         center={
-          defaultValue?.lat !== undefined && defaultValue?.lng !== undefined
-            ? [defaultValue.lat as number, defaultValue.lng as number]
-            : [data?.latitude as number, data.longitude as number]
+          location && location?.lat && location?.lng
+            ? [location?.lat as number, location?.lng as number]
+            : data?.latitude && data?.longitude
+              ? [data?.latitude as number, data?.longitude as number]
+              : [15.9266657, 107.9650855]
         }
         zoom={13}
         zoomControl={true}
@@ -72,10 +77,9 @@ const Map: FC<TMapProps> = ({className, defaultLocation, isWayPoints = false, on
         {isWayPoints && (
           <RoutingMachine currentUserLatLng={Leaflet.latLng(data?.latitude || 0, data?.longitude || 0)} />
         )}
-        {/* <LocationMarker onClick={handleLocationMarkerClick} /> */}
-        {!isSearched && defaultValue && (
+        {!isSearched && location && (
           <Marker
-            position={[defaultValue.lat as number, defaultValue.lng as number]}
+            position={[location?.lat as number, location?.lng as number]}
             icon={
               new Leaflet.Icon({
                 iconUrl: MarkerIcon.src,
@@ -88,25 +92,27 @@ const Map: FC<TMapProps> = ({className, defaultLocation, isWayPoints = false, on
               })
             }
           >
-            <Popup>{defaultValue.address}</Popup>
+            <Popup>{location.address}</Popup>
           </Marker>
         )}
-        <Marker
-          position={[data?.latitude as number, data.longitude as number]}
-          icon={
-            new Leaflet.Icon({
-              iconUrl: MarkerIcon.src,
-              iconRetinaUrl: MarkerIcon.src,
-              shadowUrl: MarkerShadow.src,
-              iconSize: [25, 41],
-              iconAnchor: [12.5, 41],
-              popupAnchor: [0, -41],
-              shadowSize: [41, 41]
-            })
-          }
-        >
-          <Popup>Vị trí của bạn</Popup>
-        </Marker>
+        {data.latitude && data.longitude && (
+          <Marker
+            position={[data.latitude, data.longitude]}
+            icon={
+              new Leaflet.Icon({
+                iconUrl: MarkerIcon.src,
+                iconRetinaUrl: MarkerIcon.src,
+                shadowUrl: MarkerShadow.src,
+                iconSize: [25, 41],
+                iconAnchor: [12.5, 41],
+                popupAnchor: [0, -41],
+                shadowSize: [41, 41]
+              })
+            }
+          >
+            <Popup>Vị trí của bạn</Popup>
+          </Marker>
+        )}
         <FullscreenControl forceSeparateButton={true} position="topright" />
       </MapContainer>
     </div>

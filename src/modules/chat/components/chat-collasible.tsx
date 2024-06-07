@@ -15,14 +15,33 @@ import FriendAvatarSection from './friend-avatar-section';
 export type TChatCollapsibleProps = IComponentBaseProps & {
   triggerText?: string;
   coversations: IConversationDisplay[];
+  type: 'group' | 'private' | 'ai';
   onClick?: (conversationId?: string) => void;
+  onEditName?: (name: string) => void;
+  onDelete?: (isYes: boolean, conversationId: string, type: 'group' | 'private' | 'ai') => void;
 };
 
-const ChatCollapsible: React.FC<TChatCollapsibleProps> = ({className, coversations, triggerText, onClick}) => {
+const ChatCollapsible: React.FC<TChatCollapsibleProps> = ({
+  className,
+  coversations,
+  triggerText,
+  type,
+  onClick,
+  onEditName,
+  onDelete
+}) => {
   const [isOpen, setIsOpen] = React.useState(true);
 
   function handleClick(conversationId?: string) {
     onClick?.(conversationId);
+  }
+
+  function handleEditName(name: string) {
+    onEditName?.(name);
+  }
+
+  function handleDelete(isYes: boolean, conversationId: string) {
+    onDelete?.(isYes, conversationId, type);
   }
 
   return (
@@ -38,7 +57,13 @@ const ChatCollapsible: React.FC<TChatCollapsibleProps> = ({className, coversatio
       <CollapsibleContent className="space-y-2">
         {coversations.length > 0 ? (
           coversations.map((contact, index) => (
-            <FriendAvatarSection key={index} contact={contact} onClick={handleClick} />
+            <FriendAvatarSection
+              key={index}
+              contact={contact}
+              onClick={handleClick}
+              onEditName={handleEditName}
+              onDelete={handleDelete}
+            />
           ))
         ) : (
           <></>

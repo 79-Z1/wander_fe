@@ -1,5 +1,6 @@
 import * as HttpRequest from '@/common/http/http-request';
 
+import {ILocation} from '../entities';
 import {IUser, IUserProfile} from '../entities/user.entity';
 import FetchRequest from '../http/fetch-request';
 import {generateQueryParams} from '../utils/generate-query-params.util';
@@ -32,12 +33,22 @@ const updateUserSetting = async (data: IUser) => {
   return await HttpRequest.patch<IUser>('user', data);
 };
 
+const updateUserLocation = async (location: ILocation) => {
+  return await HttpRequest.patch<boolean>('user/location', {location});
+};
+
+const getFriendSuggestions = async () => {
+  return await HttpRequest.get<(IUser & {distance?: number})[]>('user/friend-suggestions');
+};
+
 export const UserApi = {
   getUserProfile,
   searchByNameNoAuth,
   getUserProfileBySlugSeverSide,
   getUserSetting,
-  updateUserSetting
+  updateUserSetting,
+  updateUserLocation,
+  getFriendSuggestions
 };
 
 export default UserApi;

@@ -27,7 +27,7 @@ const Textarea: FC<ITextareaProps & ICoreUIBaseProps> = forwardRef(
         {...rest}
         ref={ref}
         className={classNames(
-          'scrollbar h-full w-full resize-none border-0 border-transparent text-center focus:border-none focus:outline-none focus:ring-0',
+          'scrollbar h-full w-full resize-none border-0 border-transparent focus:border-none focus:outline-none focus:ring-0',
           className
         )}
         placeholder={placeholder}

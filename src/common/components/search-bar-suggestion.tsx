@@ -105,7 +105,7 @@ const SearchBarSuggestion = ({
                 </CommandPrimitive.Loading>
               ) : null}
               {users?.length > 0 && !isLoading ? (
-                <CommandGroup className="max-h-[300px] overflow-scroll">
+                <CommandGroup className="scrollbar max-h-[300px] overflow-y-auto">
                   {users.map(option => {
                     return (
                       <CommandItem

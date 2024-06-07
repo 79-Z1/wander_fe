@@ -26,11 +26,11 @@ const Sidebar: FC<SidebarProps> = ({className, isExpand = false, onCollapseClick
     <>
       <div
         className={classNames(
-          'abc-sidebar fixed z-2 flex h-full flex-col overflow-hidden bg-zinc-50 p-4 transition-all duration-500',
+          'Sidebar fixed z-2 flex h-full flex-col overflow-hidden bg-zinc-50 p-4 transition-all duration-500',
           className,
           isExpand ? 'w-[236px]' : 'w-24'
         )}
-        data-testid="sidebar"
+        data-testid="Sidebar"
         {...rest}
       >
         <div className="flex h-full grow flex-col pr-2">
@@ -40,7 +40,7 @@ const Sidebar: FC<SidebarProps> = ({className, isExpand = false, onCollapseClick
                 !isExpand ? 'opacity-0 duration-200' : 'opacity-100 duration-500'
               }`}
             >
-              <div className="flex items-center gap-4">
+              <div className="flex cursor-pointer items-center gap-4" onClick={() => router.push('/')}>
                 <Image src={logo} alt="Wander" width={48} height={48} />
                 <p className="text-xl font-bold text-[#EF7A6F]">Wander</p>
               </div>
@@ -48,7 +48,7 @@ const Sidebar: FC<SidebarProps> = ({className, isExpand = false, onCollapseClick
             <div className={`${isExpand ? 'right-0' : ' right-1/3'} absolute top-4 rounded bg-gray-100 p-1`}>
               <Icon
                 name={isExpand ? 'ico-chevron-left' : 'ico-chevron-right'}
-                className="wander-hidden text-gray-400 md:!block"
+                className="hidden text-gray-400 md:!block"
                 size={16}
                 onClick={() => onCollapseClick?.()}
               />
