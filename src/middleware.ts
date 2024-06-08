@@ -19,6 +19,6 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Skip all paths that should not be internationalized
-  matcher: ['/((?!api|_next|_vercel|sitemap.xml|sitemap-[\\d].xml|robots.txt|.*\\..*).*)']
+  // Skip all paths that should not be internationalized or need no authentication
+  matcher: ['/((?!api|_next|_vercel|sitemap.xml|sitemap-[\\d].xml|robots.txt|.*\\..*|explore|login|register).*)']
 };

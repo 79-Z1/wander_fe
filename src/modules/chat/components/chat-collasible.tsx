@@ -59,6 +59,7 @@ const ChatCollapsible: React.FC<TChatCollapsibleProps> = ({
           coversations.map((contact, index) => (
             <FriendAvatarSection
               key={index}
+              isAI={type === 'ai'}
               contact={contact}
               onClick={handleClick}
               onEditName={handleEditName}

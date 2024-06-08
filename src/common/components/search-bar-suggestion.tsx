@@ -6,6 +6,7 @@ import {CommandGroup, CommandInput, CommandItem, CommandList} from '@/components
 import {Skeleton} from '@/components/ui/skeleton';
 import {cn} from '@/components/utils';
 
+import {IMAGE_URL} from '../constants';
 import {IUser} from '../entities/user.entity';
 
 export type Option = Record<'value' | 'label', string> & Record<string, string>;
@@ -119,7 +120,7 @@ const SearchBarSuggestion = ({
                         className={cn('flex w-full cursor-pointer items-center gap-2 hover:bg-opacity-50')}
                       >
                         <Image
-                          src={option.avatar || '/images/avatar.png'}
+                          src={option.avatar || IMAGE_URL.USER}
                           width={40}
                           height={40}
                           alt={option.name || ''}

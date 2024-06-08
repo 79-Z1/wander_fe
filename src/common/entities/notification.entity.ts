@@ -7,6 +7,7 @@ export interface INotification {
   content: string;
   url: string;
   seen: boolean;
+  type: 'system' | 'client';
   createdAt?: Date;
   updatedAt?: Date;
 }

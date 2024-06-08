@@ -10,6 +10,8 @@ import {Command, CommandGroup, CommandItem} from '@/components/ui/command';
 
 import {IComponentBaseProps} from '@/common/interfaces';
 
+import {IMAGE_URL} from '../constants';
+
 export type TFriendsSuggestionProps = IComponentBaseProps & {
   friends: IUser[];
   defaultSelectedList?: any[];
@@ -93,7 +95,7 @@ const FriendsSuggestion: FC<TFriendsSuggestionProps> = ({friends, defaultSelecte
                 width={32}
                 height={32}
                 className="rounded-lg"
-                src={user.avatar || '/images/avatar.png'}
+                src={user.avatar || IMAGE_URL.USER}
                 alt={user.name || ''}
               />
               <span className="ml-2 text-base text-orange-500">{user.name}</span>
@@ -139,7 +141,7 @@ const FriendsSuggestion: FC<TFriendsSuggestionProps> = ({friends, defaultSelecte
                   onSelect={() => handleSelect(user)}
                   className="cursor-pointer"
                 >
-                  <Image width={32} height={32} src={user.avatar || '/images/avatar.png'} alt={user.name || ''} />
+                  <Image width={32} height={32} src={user.avatar || IMAGE_URL.USER} alt={user.name || ''} />
                   <span className="ml-2 text-base text-orange-500">{user.name}</span>
                 </CommandItem>
               ))}

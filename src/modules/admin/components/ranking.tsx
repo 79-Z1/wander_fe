@@ -1,6 +1,6 @@
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 
-export default function RecentSales() {
+export default function Ranking() {
   return (
     <div className="space-y-8">
       <div className="flex items-center">

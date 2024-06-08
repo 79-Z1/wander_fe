@@ -6,6 +6,8 @@ import {cn} from '@/components/utils';
 
 import Ellipse from '@/common/components/ellipse';
 
+import {IMAGE_URL} from '@/common/constants';
+
 import {IComponentBaseProps} from '@/common/interfaces';
 
 import AIImage from '@/assets/images/ai-avatar.png';
@@ -45,10 +47,10 @@ const FriendAvatarSection: FC<TFriendAvatarSectionProps> = ({
     >
       <div className="relative h-[44px] w-[44px]">
         {isAI ? (
-          <Image src={AIImage} alt="avatar" width={44} height={44} />
+          <Image className="rounded-lg" src={AIImage} alt="avatar" width={44} height={44} />
         ) : (
           <Image
-            src={contact?.imageUrl || '/images/avatar.png'}
+            src={contact?.imageUrl || IMAGE_URL.USER}
             fill
             alt="avatar"
             className="absolute rounded-lg bg-black object-cover object-center"
@@ -57,13 +59,7 @@ const FriendAvatarSection: FC<TFriendAvatarSectionProps> = ({
       </div>
       <div className="flex flex-1 flex-col gap-y-2">
         <p className="flex items-center justify-between text-sm font-bold">
-          {isAI ? (
-            'Gemini'
-          ) : (
-            <>
-              <span>{contact?.name}</span>
-            </>
-          )}
+          <span>{contact?.name}</span>
         </p>
         <div className="flex items-center justify-between text-xs text-[#8B8D97]">
           <div className="flex items-center gap-x-1">

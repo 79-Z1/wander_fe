@@ -13,6 +13,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {cn} from '@/components/utils';
 
+import {IMAGE_URL} from '@/common/constants';
+
 import {IComponentBaseProps} from '@/common/interfaces';
 
 export type TUserPopOverProps = IComponentBaseProps & {
@@ -28,7 +30,7 @@ const UserPopOver: FC<TUserPopOverProps> = ({className, avatar, id}) => {
         <DropdownMenuTrigger asChild>
           <div className="relative h-[40px] w-[40px] cursor-pointer">
             <Image
-              src={avatar || '/images/avatar.png'}
+              src={avatar || IMAGE_URL.USER}
               fill
               alt="avatar"
               className="absolute rounded-lg bg-black object-cover object-center"

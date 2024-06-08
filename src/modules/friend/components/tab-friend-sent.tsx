@@ -11,7 +11,7 @@ import useFriendState from '@/common/hooks/use-friend-state';
 
 import Line from '@/common/components/line';
 
-import {ENUM_FRIEND_TAB} from '@/common/constants';
+import {ENUM_FRIEND_TAB, IMAGE_URL} from '@/common/constants';
 
 import {formatVNDate} from '@/common/utils';
 
@@ -45,7 +45,7 @@ const TabFriendSent: FC<TTabFriendSentProps> = ({className, userId, value, frien
                   <div className="relative mr-2 h-[40px] w-[40px] lg:h-[60px] lg:w-[60px]">
                     <Image
                       alt=""
-                      src={value?.user?.avatar}
+                      src={value?.user?.avatar || IMAGE_URL.USER}
                       fill
                       className="absolute rounded-lg object-cover object-center"
                     />

@@ -8,19 +8,23 @@ const getUsers = async () => {
 };
 
 const updateUser = async (data: IUser) => {
-  return await HttpRequest.patch<IUser>('/admin/user', data);
+  return await HttpRequest.patch<IUser>('admin/user', data);
 };
 
 const getStatistic = async () => {
-  return await HttpRequest.get<IStatistic[]>('/admin/statistic');
+  return await HttpRequest.get<IStatistic[]>('admin/statistic');
 };
 
 const getUserStatistic = async () => {
-  return await HttpRequest.get<IStaticThisMonth>('/admin/statistic/user');
+  return await HttpRequest.get<IStaticThisMonth>('admin/statistic/user');
 };
 
 const getScheduleStatistic = async () => {
-  return await HttpRequest.get<IStaticThisMonth>('/admin/statistic/schedule');
+  return await HttpRequest.get<IStaticThisMonth>('admin/statistic/schedule');
+};
+
+const getRanking = async () => {
+  return await HttpRequest.get<any[]>('admin/ranking');
 };
 
 export const AdminApi = {
@@ -28,7 +32,8 @@ export const AdminApi = {
   updateUser,
   getStatistic,
   getUserStatistic,
-  getScheduleStatistic
+  getScheduleStatistic,
+  getRanking
 };
 
 export default AdminApi;

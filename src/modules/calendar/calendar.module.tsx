@@ -1,7 +1,7 @@
 'use client';
 import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {useRouter} from 'next/navigation';
-import ScheduleApi from '@/common/api/schedule.api';
+import {useSession} from 'next-auth/react';
 import UserApi from '@/common/api/user.api';
 import {IUser} from '@/common/entities';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -12,8 +12,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import {cn} from '@/components/utils';
 
 import useGeolocation from '@/common/hooks/use-geo-location';
-
-import Line from '@/common/components/line';
 
 import {formatToAMPM} from '@/common/utils';
 
@@ -27,22 +25,12 @@ export type TCalendarModuleProps = IComponentBaseProps & {
   calendars?: any;
 };
 
-const CalendarModule: FC<TCalendarModuleProps> = ({className}) => {
+const CalendarModule: FC<TCalendarModuleProps> = ({className, calendars}) => {
   const router = useRouter();
+  const session = useSession();
   const {data, isLoading} = useGeolocation();
   const [friendSuggestions, setFriendSuggestions] = useState<(IUser & {distance?: number})[]>([]);
   const [isLargeScreen, setIsLargeScreen] = useState(false);
-  const [calendars, setCalendars] = useState<any[]>([]);
-
-  useEffect(() => {
-    async function getCalendars() {
-      const res = await ScheduleApi.readUserCalendars();
-      if (res) {
-        setCalendars(res.metadata);
-      }
-    }
-    getCalendars();
-  }, []);
 
   useEffect(() => {
     async function updateUserLocationAndGetFriendSuggestions() {
@@ -141,12 +129,7 @@ const CalendarModule: FC<TCalendarModuleProps> = ({className}) => {
         </div>
         <div className="overflow-y-auto rounded-lg border bg-zinc-50 md:col-span-4">
           <p className="p-3 text-center text-lg font-bold">Gợi ý cho bạn</p>
-          {friendSuggestions.map((value, index) => (
-            <div key={index}>
-              {index !== 0 && <Line className="my-1 !border-[#E5E7EB] md:my-3" />}
-              <FriendSuggestion user={value} />
-            </div>
-          ))}
+          <FriendSuggestion userId={session.data?.user.id} users={friendSuggestions} />
         </div>
       </div>
     </div>

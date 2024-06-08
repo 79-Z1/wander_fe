@@ -91,7 +91,9 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
   const handleDateStart = (date: Date) => {
     if (date) {
       form.setValue('startDate', date);
-      form.setValue(`plans.${0}.startAt`, date);
+      if (planList.length > 0) {
+        form.setValue(`plans.${0}.startAt`, date);
+      }
       setDateRange(prev => ({...prev, from: date}));
     }
   };
@@ -110,12 +112,11 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
     setPlanList([
       ...planList,
       {
-        address: '',
-        cost: 0,
-        title: ''
+        startAt: dateRange.from,
+        cost: 0
       } as IPlan
     ]);
-    setValue(`plans`, [...planList, {address: '', cost: 0, title: '', startAt: dateRange.from} as IPlan]);
+    setValue(`plans`, [...planList, {startAt: dateRange.from, cost: 0} as IPlan]);
   }
 
   function handleRemovePlan(index: number) {
@@ -261,7 +262,6 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
                 maxLength={140}
                 {...register('description')}
               />
-              <span>{form.getValues('description').length}/140</span>
               {errors?.description && <span className="text-rose-500">{errors?.description?.message?.toString()}</span>}
             </div>
           </div>
@@ -384,7 +384,7 @@ const FormTrip: FC<TFormTripProps> = ({className, defaultValues, onSubmit, ...re
             onClick={handleAddPlan}
           >
             <Icon name="ico-plus" />
-            Thêm lịch trình
+            Thêm kế hoạch
           </button>
           <button
             type="submit"

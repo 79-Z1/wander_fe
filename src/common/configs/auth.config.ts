@@ -61,7 +61,8 @@ export const authOptions: NextAuthOptions = {
               description: signInRes.metadata.user.description,
               isVerified: signInRes.metadata.user.isVerified,
               provider: signInRes.metadata.user.provider,
-              role: signInRes.metadata.user.role
+              role: signInRes.metadata.user.role,
+              isActive: signInRes.metadata.user.isActive
             };
           }
         } catch (error) {
@@ -88,11 +89,9 @@ export const authOptions: NextAuthOptions = {
           user.email = googleResponse.metadata.user.email;
           user.accessToken = googleResponse.metadata.accessToken;
           user.refreshToken = googleResponse.metadata.refreshToken;
-          user.slug = googleResponse.metadata.user.slug;
-          user.description = googleResponse.metadata.user.description;
-          user.isVerified = googleResponse.metadata.user.isVerified;
           user.provider = ENUM_O_AUTH_PROVIDER.GOOGLE;
           user.role = googleResponse.metadata.user.role;
+          user.isActive = googleResponse.metadata.user.isActive;
 
           return true;
         }
@@ -128,11 +127,9 @@ export const authOptions: NextAuthOptions = {
         token.avatar = user.avatar;
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
-        token.slug = user.slug;
-        token.description = user.description;
-        token.isVerified = user.isVerified;
         token.provider = user.provider;
         token.role = user.role;
+        token.isActive = user.isActive;
       }
       return token;
     },
@@ -144,16 +141,11 @@ export const authOptions: NextAuthOptions = {
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.avatar = token.avatar;
-        session.user.career = token.career;
-        session.user.gender = token.gender;
-        session.user.dateOfBirth = token.dateOfBirth;
         session.user.accessToken = token.accessToken;
         session.user.refreshToken = token.refreshToken;
-        session.user.slug = token.slug;
-        session.user.description = token.description;
-        session.user.isVerified = token.isVerified;
         session.user.provider = token.provider;
         session.user.role = token.role;
+        session.user.isActive = token.isActive;
       }
 
       return session;

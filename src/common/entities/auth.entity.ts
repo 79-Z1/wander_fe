@@ -52,6 +52,7 @@ export interface IAuthResponse {
     isVerified?: boolean;
     provider?: ENUM_O_AUTH_PROVIDER;
     role?: UserRole;
+    isActive?: boolean;
   };
   accessToken: string;
   refreshToken: string;

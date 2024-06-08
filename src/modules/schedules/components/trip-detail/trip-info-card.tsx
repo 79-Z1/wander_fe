@@ -5,7 +5,7 @@ import {IScheduleDetail} from '@/common/entities';
 import {Progress} from '@/components/ui/progress';
 import {cn} from '@/components/utils';
 
-import {ENUM_MEMBER_PERMISSION} from '@/common/constants';
+import {ENUM_MEMBER_PERMISSION, IMAGE_URL} from '@/common/constants';
 
 import {formatVNDate} from '@/common/utils';
 
@@ -37,7 +37,7 @@ const TripInfoCard: FC<TTripInfoCardProps> = ({
       <div className="relative w-full pb-[50%] lg:pb-[30%]">
         <Image
           alt={schedule?.topic || 'Trip'}
-          src={schedule?.imageUrl || ''}
+          src={schedule?.imageUrl || IMAGE_URL.TRIP}
           fill
           className="absolute rounded-lg bg-black object-contain object-center"
         />

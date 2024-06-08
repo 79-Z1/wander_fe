@@ -11,6 +11,7 @@ import {cn} from '@/components/utils';
 
 import useFriendState from '@/common/hooks/use-friend-state';
 
+import {IMAGE_URL} from '@/common/constants';
 import {ENUM_SOCKET_EMIT} from '@/common/constants/socket.enum';
 
 import {IComponentBaseProps} from '@/common/interfaces';
@@ -69,6 +70,11 @@ const ProfileModule: FC<TProfileModuleProps> = ({className, slug}) => {
         break;
       case 'request-received':
         friendState.acceptFriendRequest(session.data?.user.id || '', userProfile?.user._id || '', GlobalConnectSocket);
+        GlobalConnectSocket.emit(ENUM_SOCKET_EMIT.PUSH_NOTIFICATION, {
+          userId: userProfile?.user._id || '',
+          content: `${session.data?.user.name} đã chấp nhận lời mời kết bạn`,
+          url: `/profile/${session.data?.user.id}`
+        });
         setButtonText('Bạn bè');
         break;
       case 'request-sent':
@@ -103,7 +109,7 @@ const ProfileModule: FC<TProfileModuleProps> = ({className, slug}) => {
             <div className="relative h-12 w-12 lg:h-[90px] lg:w-[90px]">
               <Image
                 fill
-                src={userProfile?.user.avatar || '/images/avatar.png'}
+                src={userProfile?.user.avatar || IMAGE_URL.USER}
                 alt={userProfile?.user.name || ''}
                 className="absolute rounded-lg bg-black object-cover object-center"
               />

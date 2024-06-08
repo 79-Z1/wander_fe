@@ -4,20 +4,21 @@ export const TripValidator = zod
   .object({
     topic: zod.string().min(1, 'Không được để trống tiêu đề'),
     description: zod.string().min(1, 'Không được để trống mô tả'),
-    startDate: zod.date().optional(),
-    endDate: zod.date().optional(),
+    startDate: zod.any(),
+    endDate: zod.any(),
     total: zod.number().optional().default(0),
     imageUrl: zod.string().optional(),
     plans: zod
       .array(
         zod.object({
           address: zod.string().min(1, 'Không được để trống điểm đến'),
-          startAt: zod.string().min(1, 'Không được để trống thời gian'),
+          startAt: zod.any().optional(),
           title: zod.string().min(1, 'Không được để trống tên'),
           cost: zod.number().default(0)
         })
       )
       .optional()
+      .default([])
   })
   .superRefine((data, ctx) => {
     const {total, plans} = data;

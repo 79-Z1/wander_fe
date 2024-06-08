@@ -63,11 +63,11 @@ const AIMessageSection: FC<TAIMessageSectionProps> = ({userId, conversation}) =>
           <Image src={AIImage} fill alt="avatar" className="absolute rounded-lg object-cover object-center" />
         </div>
         <div className="flex flex-col gap-y-3">
-          <p className="flex items-center justify-between text-sm font-bold">{'Gemini'}</p>
+          <p className="flex items-center justify-between text-sm font-bold">{'Trợ lý ảo Wander'}</p>
           <div className="flex items-center justify-between text-xs text-[#8B8D97]">
             <div className="flex items-center gap-x-1">
               <p className="flex items-center gap-x-1">
-                <Ellipse className="bg-red-500" />
+                <Ellipse className="bg-green-500" />
                 <span>Trực tuyến</span>
               </p>{' '}
             </div>

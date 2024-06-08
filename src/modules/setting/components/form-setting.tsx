@@ -11,6 +11,8 @@ import {Button} from '@/components/ui/button';
 import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import {cn} from '@/components/utils';
 
+import {IMAGE_URL} from '@/common/constants';
+
 import {IComponentBaseProps} from '@/common/interfaces';
 
 import {SettingValidator} from '../validators/setting.validator';
@@ -37,7 +39,7 @@ const FomSetting: FC<TFomSettingProps> = ({className, defaultValues, onSave}) =>
 
   const [gender, setGender] = useState(defaultValues?.gender || '');
   const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(defaultValues?.dateOfBirth);
-  const [avatar, setAvatar] = useState<string>(defaultValues?.avatar || '/images/avatar.png');
+  const [avatar, setAvatar] = useState<string>(defaultValues?.avatar || IMAGE_URL.USER);
 
   const onSubmit: SubmitHandler<IFormData> = async formData => {
     formData.email = formData?.email?.toLowerCase();

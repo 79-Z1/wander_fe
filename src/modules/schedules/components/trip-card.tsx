@@ -11,7 +11,7 @@ import {cn} from '@/components/utils';
 
 import useScheduleState from '@/common/hooks/use-schedule-state';
 
-import {ENUM_MEMBER_PERMISSION} from '@/common/constants';
+import {ENUM_MEMBER_PERMISSION, IMAGE_URL} from '@/common/constants';
 
 import {IComponentBaseProps} from '@/common/interfaces';
 
@@ -83,7 +83,7 @@ const TripCard: FC<TTripCardProps> = ({className, schedule, showAction = true, o
       <div className="flex items-center justify-between">
         <div className="flex">
           <Image
-            src={session?.data?.user?.avatar || '/images/avatar.png'}
+            src={session?.data?.user?.avatar || IMAGE_URL.USER}
             alt="Avatar"
             className={cn('rounded-full border-[1px] border-gray-300 bg-black', {
               '-mr-4': schedule?.members.length > 0
@@ -94,7 +94,7 @@ const TripCard: FC<TTripCardProps> = ({className, schedule, showAction = true, o
           {(schedule?.members as IUser[])?.map((member, index) => (
             <Image
               key={index}
-              src={member?.avatar || '/images/avatar.png'}
+              src={member?.avatar || IMAGE_URL.USER}
               alt="Avatar"
               className={cn('rounded-full border-[1px] border-gray-300 bg-black', {
                 '-mr-4': schedule?.members.length > 1

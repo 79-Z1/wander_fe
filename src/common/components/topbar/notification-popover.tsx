@@ -15,6 +15,7 @@ import {cn} from '@/components/utils';
 
 import useNotificationState from '@/common/hooks/use-notification-state';
 
+import {IMAGE_URL} from '@/common/constants';
 import {ENUM_SOCKET_EMIT} from '@/common/constants/socket.enum';
 
 import {forMatMessageTime} from '@/common/utils';
@@ -63,7 +64,9 @@ const NotificationPopover: FC<TNotificationPopoverProps> = ({className}) => {
                   onClick={() => router.push(notification.url)}
                 >
                   <Image
-                    src={notification?.emitter?.avatar || '/images/avatar.png'}
+                    src={
+                      notification.type === 'system' ? IMAGE_URL.LOGO : notification?.emitter?.avatar || IMAGE_URL.USER
+                    }
                     alt="avatar"
                     width={30}
                     height={30}

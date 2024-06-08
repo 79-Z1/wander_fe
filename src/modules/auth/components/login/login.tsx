@@ -27,12 +27,15 @@ const Login: FC<TLoginProps> = ({className}) => {
   const router = useRouter();
 
   const handleSignInGoogle = async () => {
-    signIn('google', {callbackUrl: '/calendar'});
+    const resp = await signIn('google', {callbackUrl: '/'});
+    if (resp?.url) {
+      router.push(resp.url);
+    }
   };
 
   const handleSignForm = async (formData: IFormData) => {
     const resp = await signIn(ENUM_O_AUTH_PROVIDER.CREDENTIALS, {...formData, callbackUrl: '/', redirect: false});
-    if (resp?.error && JSON.parse(resp.error).status === 401) {
+    if (resp?.error && JSON.parse(resp.error).status === 400) {
       toast({title: 'Đăng nhập', description: 'Email hoặc mật khẩu bạn nhập không chính xác', variant: 'destructive'});
     }
     if (resp?.url) {

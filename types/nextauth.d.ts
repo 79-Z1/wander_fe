@@ -20,6 +20,7 @@ declare module 'next-auth' {
     isVerified?: boolean;
     provider?: ENUM_O_AUTH_PROVIDER;
     role?: UserRole;
+    isActive?: boolean;
   }
 
   interface Account {
@@ -72,5 +73,6 @@ declare module 'next-auth/jwt' {
     isVerified?: boolean;
     provider?: ENUM_O_AUTH_PROVIDER;
     role?: UserRole;
+    isActive?: boolean;
   }
 }

@@ -3,6 +3,7 @@ export * from './aspect-ratios.constant';
 export * from './auth.constant';
 export * from './file';
 export * from './friend.enum';
+export * from './image.constant';
 export * from './navigation.constan';
 export * from './resize-image';
 export * from './schedule.enum';

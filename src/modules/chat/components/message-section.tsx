@@ -11,6 +11,7 @@ import useChatState from '@/common/hooks/use-chat-state';
 
 import Ellipse from '@/common/components/ellipse';
 
+import {IMAGE_URL} from '@/common/constants';
 import {ENUM_SOCKET_EMIT} from '@/common/constants/socket.enum';
 
 import {IComponentBaseProps, IConversation} from '@/common/interfaces';
@@ -58,7 +59,7 @@ const MessageSection: FC<TMessageSectionProps> = ({userId, conversation}) => {
       <div className="flex items-center gap-x-2 border-b border-slate-300 p-3">
         <div className="relative h-[44px] w-[44px]">
           <Image
-            src={conversation?.imageUrl || '/images/avatar.png'}
+            src={conversation?.imageUrl || IMAGE_URL.USER}
             fill
             alt="avatar"
             className="absolute rounded-lg object-cover object-center"

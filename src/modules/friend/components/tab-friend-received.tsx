@@ -11,7 +11,7 @@ import useFriendState from '@/common/hooks/use-friend-state';
 
 import Line from '@/common/components/line';
 
-import {ENUM_FRIEND_TAB} from '@/common/constants';
+import {ENUM_FRIEND_TAB, IMAGE_URL} from '@/common/constants';
 
 import {formatVNDate} from '@/common/utils';
 
@@ -49,8 +49,8 @@ const TabFriendRecieved: FC<TTabFriendRecievedProps> = ({className, value, userI
                 <div className="flex w-fit items-center gap-1" onClick={() => onClick(value.user._id)}>
                   <div className="relative mr-2 h-[40px] w-[40px] lg:h-[60px] lg:w-[60px]">
                     <Image
-                      alt={value.user.name}
-                      src={value.user.avatar}
+                      alt={value?.user?.name || ''}
+                      src={value?.user?.avatar || IMAGE_URL.USER}
                       fill
                       className="absolute rounded-lg object-cover object-center"
                     />

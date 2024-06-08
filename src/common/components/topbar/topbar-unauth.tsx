@@ -20,13 +20,18 @@ const TopbarUnauth: FC<TTopbarUnauthProps> = ({className}) => {
       className={cn('TopbarUnauth flex w-full items-center justify-between gap-4 bg-gray-100 px-[80px]', className)}
       data-testid="TopbarUnauth"
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4" onClick={() => router.push('/')}>
         <Image src={logo} alt="Wander" width={48} height={48} />
         <p className="text-xl font-bold text-[#EF7A6F]">Wander</p>
       </div>
-      <Button className="hover:bg-orange-600" onClick={() => router.push('/login')}>
-        Đăng nhập
-      </Button>
+      <div className="space-x-2">
+        <Button className="hover:bg-orange-600" onClick={() => router.push('/login')}>
+          Đăng nhập
+        </Button>
+        <Button className="hover:bg-orange-600" onClick={() => router.push('/register')}>
+          Đăng kí
+        </Button>
+      </div>
     </div>
   );
 };

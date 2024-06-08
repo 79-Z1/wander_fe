@@ -11,9 +11,9 @@ import {IComponentBaseProps} from '@/common/interfaces';
 import {IStaticThisMonth, IStatistic} from '@/common/interfaces/admin.interface';
 
 import Overview from '../../modules/admin/components/overview';
-import RecentSales from '../../modules/admin/components/recent-sales';
 
 import AdminCard from './components/card';
+import Ranking from './components/ranking';
 
 export type TAdminOverviewModuleProps = IComponentBaseProps;
 
@@ -21,6 +21,7 @@ const AdminOverviewModule: FC<TAdminOverviewModuleProps> = ({className}) => {
   const [scheduleStatistic, setScheduleStatistic] = React.useState<IStatistic[]>([]);
   const [userCount, setUserCount] = React.useState<IStaticThisMonth>();
   const [scheduleCount, setScheduleCount] = React.useState<IStaticThisMonth>();
+  const [ranking, setRanking] = React.useState<any[]>([]);
 
   useEffect(() => {
     const getScheduleData = async () => {
@@ -32,12 +33,18 @@ const AdminOverviewModule: FC<TAdminOverviewModuleProps> = ({className}) => {
     const getScheduleCount = async () => {
       return await AdminApi.getScheduleStatistic();
     };
+    const getRanking = async () => {
+      return await AdminApi.getRanking();
+    };
     const getData = async () => {
-      await Promise.all([getScheduleData(), getUserCount(), getScheduleCount()]).then(([data, user, schedule]) => {
-        setScheduleStatistic(data.metadata);
-        setUserCount(user.metadata);
-        setScheduleCount(schedule.metadata);
-      });
+      await Promise.all([getScheduleData(), getUserCount(), getScheduleCount(), getRanking()]).then(
+        ([data, user, schedule, ranking]) => {
+          setScheduleStatistic(data.metadata);
+          setUserCount(user.metadata);
+          setScheduleCount(schedule.metadata);
+          setRanking(ranking.metadata);
+        }
+      );
     };
     getData();
   }, []);
@@ -80,7 +87,7 @@ const AdminOverviewModule: FC<TAdminOverviewModuleProps> = ({className}) => {
             <CardTitle>Bảng xếp hạng</CardTitle>
           </CardHeader>
           <CardContent>
-            <RecentSales />
+            <Ranking />
           </CardContent>
         </Card>
       </div>

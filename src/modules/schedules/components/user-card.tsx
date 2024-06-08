@@ -4,7 +4,7 @@ import {IUser} from '@/common/entities';
 
 import {cn} from '@/components/utils';
 
-import {ENUM_MEMBER_PERMISSION} from '@/common/constants';
+import {ENUM_MEMBER_PERMISSION, IMAGE_URL} from '@/common/constants';
 
 import {IComponentBaseProps} from '@/common/interfaces';
 
@@ -31,7 +31,7 @@ const UserCard: FC<TUserCardProps> = ({className, member, isOwner, ownerId, onEd
       <div className="flex items-center gap-2">
         <Image
           alt={member?.name || 'Member'}
-          src={member?.avatar || ''}
+          src={member?.avatar || IMAGE_URL.USER}
           width={40}
           height={40}
           className="rounded-lg bg-black object-cover object-center"
